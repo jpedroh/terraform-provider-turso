@@ -1,0 +1,1 @@
+terraform import turso_database.example_database organization_name/database_name
