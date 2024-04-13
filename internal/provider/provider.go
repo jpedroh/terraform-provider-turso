@@ -97,7 +97,9 @@ func (p *TursoProvider) Resources(ctx context.Context) []func() resource.Resourc
 }
 
 func (p *TursoProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
-	return []func() datasource.DataSource{}
+	return []func() datasource.DataSource{
+		NewDatabaseDataSource,
+	}
 }
 
 func (p *TursoProvider) Functions(ctx context.Context) []func() function.Function {

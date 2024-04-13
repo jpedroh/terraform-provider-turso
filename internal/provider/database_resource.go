@@ -186,7 +186,7 @@ func (r *DatabaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 
 	switch p := res.(type) {
 	case *client.V1OrganizationsOrganizationNameDatabasesDatabaseNameGetOK:
-		data.DbId = types.StringValue(string(p.Database.Value.DbId.Value)) //nolint:all
+		data.DbId = types.StringValue(string(p.Database.Value.DbId.Value))         //nolint:all
 		data.Hostname = types.StringValue(string(p.Database.Value.Hostname.Value)) //nolint:all
 	}
 
