@@ -118,7 +118,7 @@ func (r *DatabaseTokenResource) Create(ctx context.Context, req resource.CreateR
 	})
 
 	if err != nil {
-		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create database, got error: %s", err.Error()))
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to create database token, got error: %s", err.Error()))
 		return
 	}
 
