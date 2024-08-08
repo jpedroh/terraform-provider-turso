@@ -132,13 +132,13 @@ func (r *DatabaseResource) Create(ctx context.Context, req resource.CreateReques
 		return
 	}
 
-	res, err := r.client.V1OrganizationsOrganizationNameDatabasesPost(ctx, &client.CreateDatabaseInput{
+	res, err := r.client.CreateDatabase(ctx, &client.CreateDatabaseInput{
 		Name:      data.Name.ValueString(),
 		Group:     data.Group.ValueString(),
 		SizeLimit: client.NewOptString(data.SizeLimit.ValueString()),
 		Schema:    client.NewOptString(data.Schema.ValueString()),
 		IsSchema:  client.NewOptBool(data.IsSchema.ValueBool()),
-	}, client.V1OrganizationsOrganizationNameDatabasesPostParams{
+	}, client.CreateDatabaseParams{
 		OrganizationName: data.OrganizationName.ValueString(),
 	})
 
@@ -151,7 +151,7 @@ func (r *DatabaseResource) Create(ctx context.Context, req resource.CreateReques
 	// save into the Terraform state.
 
 	switch p := res.(type) {
-	case *client.V1OrganizationsOrganizationNameDatabasesPostOK:
+	case *client.CreateDatabaseOK:
 		data.DbId = types.StringValue(string(p.Database.Value.DbId.Value))
 		data.Hostname = types.StringValue(string(p.Database.Value.Hostname.Value))
 	}
@@ -174,7 +174,7 @@ func (r *DatabaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 		return
 	}
 
-	res, err := r.client.V1OrganizationsOrganizationNameDatabasesDatabaseNameGet(ctx, client.V1OrganizationsOrganizationNameDatabasesDatabaseNameGetParams{
+	res, err := r.client.GetDatabase(ctx, client.GetDatabaseParams{
 		OrganizationName: data.OrganizationName.ValueString(),
 		DatabaseName:     data.Name.ValueString(),
 	})
@@ -185,7 +185,7 @@ func (r *DatabaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 
 	switch p := res.(type) {
-	case *client.V1OrganizationsOrganizationNameDatabasesDatabaseNameGetOK:
+	case *client.GetDatabaseOK:
 		data.DbId = types.StringValue(string(p.Database.Value.DbId.Value))         //nolint:all
 		data.Hostname = types.StringValue(string(p.Database.Value.Hostname.Value)) //nolint:all
 	}
@@ -204,9 +204,9 @@ func (r *DatabaseResource) Update(ctx context.Context, req resource.UpdateReques
 		return
 	}
 
-	_, err := r.client.V1OrganizationsOrganizationNameDatabasesDatabaseNameConfigurationPatch(ctx, &client.DatabaseConfigurationInput{
+	_, err := r.client.UpdateDatabaseConfiguration(ctx, &client.DatabaseConfigurationInput{
 		SizeLimit: client.NewOptString(data.SizeLimit.ValueString()),
-	}, client.V1OrganizationsOrganizationNameDatabasesDatabaseNameConfigurationPatchParams{
+	}, client.UpdateDatabaseConfigurationParams{
 		OrganizationName: data.OrganizationName.ValueString(),
 		DatabaseName:     data.Name.ValueString(),
 	})
@@ -230,7 +230,7 @@ func (r *DatabaseResource) Delete(ctx context.Context, req resource.DeleteReques
 		return
 	}
 
-	_, err := r.client.V1OrganizationsOrganizationNameDatabasesDatabaseNameDelete(ctx, client.V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteParams{
+	_, err := r.client.DeleteDatabase(ctx, client.DeleteDatabaseParams{
 		OrganizationName: data.OrganizationName.ValueString(),
 		DatabaseName:     data.Name.ValueString(),
 	})

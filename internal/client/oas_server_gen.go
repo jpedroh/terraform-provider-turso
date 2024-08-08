@@ -10,219 +10,261 @@ import (
 
 // Handler handles operations described by OpenAPI v3 specification.
 type Handler interface {
-	// V1AuthAPITokensGet implements GET /v1/auth/api-tokens operation.
+	// AddLocationToGroup implements addLocationToGroup operation.
 	//
-	// Returns a list of API tokens belonging to a user.
+	// Adds a location to the specified group.
 	//
-	// GET /v1/auth/api-tokens
-	V1AuthAPITokensGet(ctx context.Context) (*V1AuthAPITokensGetOK, error)
-	// V1AuthAPITokensTokenNameDelete implements DELETE /v1/auth/api-tokens/{tokenName} operation.
+	// POST /v1/organizations/{organizationName}/groups/{groupName}/locations/{location}
+	AddLocationToGroup(ctx context.Context, params AddLocationToGroupParams) (AddLocationToGroupRes, error)
+	// AddOrganizationMember implements addOrganizationMember operation.
 	//
-	// Revokes the provided API token belonging to a user.
+	// Add an existing Turso user to an organization.
 	//
-	// DELETE /v1/auth/api-tokens/{tokenName}
-	V1AuthAPITokensTokenNameDelete(ctx context.Context, params V1AuthAPITokensTokenNameDeleteParams) (jx.Raw, error)
-	// V1AuthAPITokensTokenNamePost implements POST /v1/auth/api-tokens/{tokenName} operation.
+	// POST /v1/organizations/{organizationName}/members
+	AddOrganizationMember(ctx context.Context, req *AddOrganizationMemberReq, params AddOrganizationMemberParams) (AddOrganizationMemberRes, error)
+	// CreateAPIToken implements createAPIToken operation.
 	//
 	// Returns a new API token belonging to a user.
 	//
 	// POST /v1/auth/api-tokens/{tokenName}
-	V1AuthAPITokensTokenNamePost(ctx context.Context, params V1AuthAPITokensTokenNamePostParams) (jx.Raw, error)
-	// V1AuthValidateGet implements GET /v1/auth/validate operation.
+	CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (jx.Raw, error)
+	// CreateDatabase implements createDatabase operation.
 	//
-	// Validates an API token belonging to a user.
+	// Creates a new database in a group for the organization or user.
 	//
-	// GET /v1/auth/validate
-	V1AuthValidateGet(ctx context.Context) (*V1AuthValidateGetOK, error)
-	// V1LocationsGet implements GET /v1/locations operation.
-	//
-	// Returns a list of locations where you can create or replicate databases.
-	//
-	// GET /v1/locations
-	V1LocationsGet(ctx context.Context) (*V1LocationsGetOK, error)
-	// V1OrganizationsGet implements GET /v1/organizations operation.
-	//
-	// Returns a list of organizations the authenticated user owns or is a member of.
-	//
-	// GET /v1/organizations
-	V1OrganizationsGet(ctx context.Context) ([]Organization, error)
-	// V1OrganizationsOrganizationNameAuditLogsGet implements GET /v1/organizations/{organizationName}/audit-logs operation.
-	//
-	// Return the audit logs for the given organization, ordered by the `created_at` field in descending
-	// order.
-	//
-	// GET /v1/organizations/{organizationName}/audit-logs
-	V1OrganizationsOrganizationNameAuditLogsGet(ctx context.Context, params V1OrganizationsOrganizationNameAuditLogsGetParams) (*V1OrganizationsOrganizationNameAuditLogsGetOK, error)
-	// V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePost implements POST /v1/organizations/{organizationName}/databases/{databaseName}/auth/rotate operation.
-	//
-	// Invalidates all authorization tokens for the specified database.
-	//
-	// POST /v1/organizations/{organizationName}/databases/{databaseName}/auth/rotate
-	V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePost(ctx context.Context, params V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePostParams) (V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePostRes, error)
-	// V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPost implements POST /v1/organizations/{organizationName}/databases/{databaseName}/auth/tokens operation.
+	// POST /v1/organizations/{organizationName}/databases
+	CreateDatabase(ctx context.Context, req *CreateDatabaseInput, params CreateDatabaseParams) (CreateDatabaseRes, error)
+	// CreateDatabaseToken implements createDatabaseToken operation.
 	//
 	// Generates an authorization token for the specified database.
 	//
 	// POST /v1/organizations/{organizationName}/databases/{databaseName}/auth/tokens
-	V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPost(ctx context.Context, req OptCreateTokenInput, params V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostParams) (V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostRes, error)
-	// V1OrganizationsOrganizationNameDatabasesDatabaseNameConfigurationPatch implements PATCH /v1/organizations/{organizationName}/databases/{databaseName}/configuration operation.
+	CreateDatabaseToken(ctx context.Context, req OptCreateTokenInput, params CreateDatabaseTokenParams) (CreateDatabaseTokenRes, error)
+	// CreateGroup implements createGroup operation.
 	//
-	// Update a database configuration belonging to the organization or user.
+	// Creates a new group for the organization or user.
 	//
-	// PATCH /v1/organizations/{organizationName}/databases/{databaseName}/configuration
-	V1OrganizationsOrganizationNameDatabasesDatabaseNameConfigurationPatch(ctx context.Context, req *DatabaseConfigurationInput, params V1OrganizationsOrganizationNameDatabasesDatabaseNameConfigurationPatchParams) (*DatabaseConfigurationResponse, error)
-	// V1OrganizationsOrganizationNameDatabasesDatabaseNameDelete implements DELETE /v1/organizations/{organizationName}/databases/{databaseName} operation.
+	// POST /v1/organizations/{organizationName}/groups
+	CreateGroup(ctx context.Context, req *NewGroup, params CreateGroupParams) (CreateGroupRes, error)
+	// CreateGroupToken implements createGroupToken operation.
+	//
+	// Generates an authorization token for the specified group.
+	//
+	// POST /v1/organizations/{organizationName}/groups/{groupName}/auth/tokens
+	CreateGroupToken(ctx context.Context, req OptCreateTokenInput, params CreateGroupTokenParams) (CreateGroupTokenRes, error)
+	// DeleteDatabase implements deleteDatabase operation.
 	//
 	// Delete a database belonging to the organization or user.
 	//
 	// DELETE /v1/organizations/{organizationName}/databases/{databaseName}
-	V1OrganizationsOrganizationNameDatabasesDatabaseNameDelete(ctx context.Context, params V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteParams) (V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteRes, error)
-	// V1OrganizationsOrganizationNameDatabasesDatabaseNameGet implements GET /v1/organizations/{organizationName}/databases/{databaseName} operation.
+	DeleteDatabase(ctx context.Context, params DeleteDatabaseParams) (DeleteDatabaseRes, error)
+	// DeleteGroup implements deleteGroup operation.
+	//
+	// Delete a group belonging to the organization or user.
+	//
+	// DELETE /v1/organizations/{organizationName}/groups/{groupName}
+	DeleteGroup(ctx context.Context, params DeleteGroupParams) (DeleteGroupRes, error)
+	// DeleteOrganizationInviteByEmail implements deleteOrganizationInviteByEmail operation.
+	//
+	// Delete an invite for the organization by email.
+	//
+	// DELETE /v1/organizations/{organizationName}/invites/{email}
+	DeleteOrganizationInviteByEmail(ctx context.Context, params DeleteOrganizationInviteByEmailParams) (DeleteOrganizationInviteByEmailRes, error)
+	// GetDatabase implements getDatabase operation.
 	//
 	// Returns a database belonging to the organization or user.
 	//
 	// GET /v1/organizations/{organizationName}/databases/{databaseName}
-	V1OrganizationsOrganizationNameDatabasesDatabaseNameGet(ctx context.Context, params V1OrganizationsOrganizationNameDatabasesDatabaseNameGetParams) (V1OrganizationsOrganizationNameDatabasesDatabaseNameGetRes, error)
-	// V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGet implements GET /v1/organizations/{organizationName}/databases/{databaseName}/instances operation.
+	GetDatabase(ctx context.Context, params GetDatabaseParams) (GetDatabaseRes, error)
+	// GetDatabaseConfiguration implements getDatabaseConfiguration operation.
+	//
+	// Retrieve an individual database configuration belonging to the organization or user.
+	//
+	// GET /v1/organizations/{organizationName}/databases/{databaseName}/configuration
+	GetDatabaseConfiguration(ctx context.Context, params GetDatabaseConfigurationParams) (*DatabaseConfigurationResponse, error)
+	// GetDatabaseInstance implements getDatabaseInstance operation.
+	//
+	// Return the individual database instance by name.
+	//
+	// GET /v1/organizations/{organizationName}/databases/{databaseName}/instances/{instanceName}
+	GetDatabaseInstance(ctx context.Context, params GetDatabaseInstanceParams) (*GetDatabaseInstanceOK, error)
+	// GetDatabaseStats implements getDatabaseStats operation.
+	//
+	// Fetch the top queries of a database, including the count of rows read and written.
+	//
+	// GET /v1/organizations/{organizationName}/databases/{databaseName}/stats
+	GetDatabaseStats(ctx context.Context, params GetDatabaseStatsParams) (GetDatabaseStatsRes, error)
+	// GetDatabaseUsage implements getDatabaseUsage operation.
+	//
+	// Fetch activity usage for a database in a given time period.
+	//
+	// GET /v1/organizations/{organizationName}/databases/{databaseName}/usage
+	GetDatabaseUsage(ctx context.Context, params GetDatabaseUsageParams) (GetDatabaseUsageRes, error)
+	// GetGroup implements getGroup operation.
+	//
+	// Returns a group belonging to the organization or user.
+	//
+	// GET /v1/organizations/{organizationName}/groups/{groupName}
+	GetGroup(ctx context.Context, params GetGroupParams) (GetGroupRes, error)
+	// GetOrganizationSubscription implements getOrganizationSubscription operation.
+	//
+	// Returns the current subscription details for the organization.
+	//
+	// GET /v1/organizations/{organizationName}/subscription
+	GetOrganizationSubscription(ctx context.Context, params GetOrganizationSubscriptionParams) (*GetOrganizationSubscriptionOK, error)
+	// GetOrganizationUsage implements getOrganizationUsage operation.
+	//
+	// Fetch current billing cycle usage for an organization.
+	//
+	// GET /v1/organizations/{organizationName}/usage
+	GetOrganizationUsage(ctx context.Context, params GetOrganizationUsageParams) (*GetOrganizationUsageOK, error)
+	// InvalidateDatabaseTokens implements invalidateDatabaseTokens operation.
+	//
+	// Invalidates all authorization tokens for the specified database.
+	//
+	// POST /v1/organizations/{organizationName}/databases/{databaseName}/auth/rotate
+	InvalidateDatabaseTokens(ctx context.Context, params InvalidateDatabaseTokensParams) (InvalidateDatabaseTokensRes, error)
+	// InvalidateGroupTokens implements invalidateGroupTokens operation.
+	//
+	// Invalidates all authorization tokens for the specified group.
+	//
+	// POST /v1/organizations/{organizationName}/groups/{groupName}/auth/rotate
+	InvalidateGroupTokens(ctx context.Context, params InvalidateGroupTokensParams) (InvalidateGroupTokensRes, error)
+	// InviteOrganizationMember implements inviteOrganizationMember operation.
+	//
+	// Invite a user (who isn't already a Turso user) to an organization.
+	//
+	// POST /v1/organizations/{organizationName}/invites
+	InviteOrganizationMember(ctx context.Context, req *InviteOrganizationMemberReq, params InviteOrganizationMemberParams) (*InviteOrganizationMemberOK, error)
+	// ListAPITokens implements listAPITokens operation.
+	//
+	// Returns a list of API tokens belonging to a user.
+	//
+	// GET /v1/auth/api-tokens
+	ListAPITokens(ctx context.Context) (*ListAPITokensOK, error)
+	// ListDatabaseInstances implements listDatabaseInstances operation.
 	//
 	// Returns a list of instances of a database. Instances are the individual primary or replica
 	// databases in each region defined by the group.
 	//
 	// GET /v1/organizations/{organizationName}/databases/{databaseName}/instances
-	V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGet(ctx context.Context, params V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetParams) (*V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetOK, error)
-	// V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGet implements GET /v1/organizations/{organizationName}/databases/{databaseName}/instances/{instanceName} operation.
+	ListDatabaseInstances(ctx context.Context, params ListDatabaseInstancesParams) (*ListDatabaseInstancesOK, error)
+	// ListDatabases implements listDatabases operation.
 	//
-	// Return the individual database instance by name.
+	// Returns a list of databases belonging to the organization or user.
 	//
-	// GET /v1/organizations/{organizationName}/databases/{databaseName}/instances/{instanceName}
-	V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGet(ctx context.Context, params V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetParams) (*V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetOK, error)
-	// V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGet implements GET /v1/organizations/{organizationName}/databases/{databaseName}/stats operation.
+	// GET /v1/organizations/{organizationName}/databases
+	ListDatabases(ctx context.Context, params ListDatabasesParams) (*ListDatabasesOK, error)
+	// ListGroups implements listGroups operation.
 	//
-	// Fetch the top queries of a database, including the count of rows read and written.
+	// Returns a list of groups belonging to the organization or user.
 	//
-	// GET /v1/organizations/{organizationName}/databases/{databaseName}/stats
-	V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGet(ctx context.Context, params V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetParams) (V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetRes, error)
-	// V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGet implements GET /v1/organizations/{organizationName}/databases/{databaseName}/usage operation.
+	// GET /v1/organizations/{organizationName}/groups
+	ListGroups(ctx context.Context, params ListGroupsParams) (*ListGroupsOK, error)
+	// ListLocations implements listLocations operation.
 	//
-	// Fetch activity usage for a database in a given time period.
+	// Returns a list of locations where you can create or replicate databases.
 	//
-	// GET /v1/organizations/{organizationName}/databases/{databaseName}/usage
-	V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGet(ctx context.Context, params V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetParams) (V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetRes, error)
-	// V1OrganizationsOrganizationNameDatabasesDumpsPost implements POST /v1/organizations/{organizationName}/databases/dumps operation.
+	// GET /v1/locations
+	ListLocations(ctx context.Context) (*ListLocationsOK, error)
+	// ListOrganizationAuditLogs implements listOrganizationAuditLogs operation.
+	//
+	// Return the audit logs for the given organization, ordered by the `created_at` field in descending
+	// order.
+	//
+	// GET /v1/organizations/{organizationName}/audit-logs
+	ListOrganizationAuditLogs(ctx context.Context, params ListOrganizationAuditLogsParams) (*ListOrganizationAuditLogsOK, error)
+	// ListOrganizationInvites implements listOrganizationInvites operation.
+	//
+	// Returns a list of invites for the organization.
+	//
+	// GET /v1/organizations/{organizationName}/invites
+	ListOrganizationInvites(ctx context.Context, params ListOrganizationInvitesParams) (*ListOrganizationInvitesOK, error)
+	// ListOrganizationInvoices implements listOrganizationInvoices operation.
+	//
+	// Returns a list of invoices for the organization.
+	//
+	// GET /v1/organizations/{organizationName}/invoices
+	ListOrganizationInvoices(ctx context.Context, params ListOrganizationInvoicesParams) (*ListOrganizationInvoicesOK, error)
+	// ListOrganizationMembers implements listOrganizationMembers operation.
+	//
+	// Returns a list of members part of the organization.
+	//
+	// GET /v1/organizations/{organizationName}/members
+	ListOrganizationMembers(ctx context.Context, params ListOrganizationMembersParams) (*ListOrganizationMembersOK, error)
+	// ListOrganizationPlans implements listOrganizationPlans operation.
+	//
+	// Returns a list of available plans and their quotas.
+	//
+	// GET /v1/organizations/{organizationName}/plans
+	ListOrganizationPlans(ctx context.Context, params ListOrganizationPlansParams) (*ListOrganizationPlansOK, error)
+	// ListOrganizations implements listOrganizations operation.
+	//
+	// Returns a list of organizations the authenticated user owns or is a member of.
+	//
+	// GET /v1/organizations
+	ListOrganizations(ctx context.Context) ([]Organization, error)
+	// RemoveLocationFromGroup implements removeLocationFromGroup operation.
+	//
+	// Removes a location from the specified group.
+	//
+	// DELETE /v1/organizations/{organizationName}/groups/{groupName}/locations/{location}
+	RemoveLocationFromGroup(ctx context.Context, params RemoveLocationFromGroupParams) (RemoveLocationFromGroupRes, error)
+	// RemoveOrganizationMember implements removeOrganizationMember operation.
+	//
+	// Remove a user from the organization by username.
+	//
+	// DELETE /v1/organizations/{organizationName}/members/{username}
+	RemoveOrganizationMember(ctx context.Context, params RemoveOrganizationMemberParams) (RemoveOrganizationMemberRes, error)
+	// RevokeAPIToken implements revokeAPIToken operation.
+	//
+	// Revokes the provided API token belonging to a user.
+	//
+	// DELETE /v1/auth/api-tokens/{tokenName}
+	RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (jx.Raw, error)
+	// TransferGroup implements transferGroup operation.
+	//
+	// Transfer a group to another organization that you own or a member of.
+	//
+	// POST /v1/organizations/{organizationName}/groups/{groupName}/transfer
+	TransferGroup(ctx context.Context, req *TransferGroupReq, params TransferGroupParams) (TransferGroupRes, error)
+	// UnarchiveGroup implements unarchiveGroup operation.
+	//
+	// Unarchive a group that has been archived due to inactivity.
+	//
+	// POST /v1/organizations/{organizationName}/groups/{groupName}/unarchive
+	UnarchiveGroup(ctx context.Context, params UnarchiveGroupParams) (UnarchiveGroupRes, error)
+	// UpdateDatabaseConfiguration implements updateDatabaseConfiguration operation.
+	//
+	// Update a database configuration belonging to the organization or user.
+	//
+	// PATCH /v1/organizations/{organizationName}/databases/{databaseName}/configuration
+	UpdateDatabaseConfiguration(ctx context.Context, req *DatabaseConfigurationInput, params UpdateDatabaseConfigurationParams) (*DatabaseConfigurationResponse, error)
+	// UpdateGroupDatabases implements updateGroupDatabases operation.
+	//
+	// Updates all databases in the group to the latest libSQL version.
+	//
+	// POST /v1/organizations/{organizationName}/groups/{groupName}/update
+	UpdateGroupDatabases(ctx context.Context, params UpdateGroupDatabasesParams) (UpdateGroupDatabasesRes, error)
+	// UpdateOrganization implements updateOrganization operation.
+	//
+	// Update an organization you own or are a member of.
+	//
+	// PATCH /v1/organizations/{organizationName}
+	UpdateOrganization(ctx context.Context, req *UpdateOrganizationReq, params UpdateOrganizationParams) (*UpdateOrganizationOK, error)
+	// UploadDatabaseDump implements uploadDatabaseDump operation.
 	//
 	// Upload a SQL dump to be used when [creating a new database](/api-reference/databases/create) from
 	// seed.
 	//
 	// POST /v1/organizations/{organizationName}/databases/dumps
-	V1OrganizationsOrganizationNameDatabasesDumpsPost(ctx context.Context, req *V1OrganizationsOrganizationNameDatabasesDumpsPostReq, params V1OrganizationsOrganizationNameDatabasesDumpsPostParams) (*V1OrganizationsOrganizationNameDatabasesDumpsPostOK, error)
-	// V1OrganizationsOrganizationNameDatabasesGet implements GET /v1/organizations/{organizationName}/databases operation.
+	UploadDatabaseDump(ctx context.Context, req *UploadDatabaseDumpReq, params UploadDatabaseDumpParams) (*UploadDatabaseDumpOK, error)
+	// ValidateAPIToken implements validateAPIToken operation.
 	//
-	// Returns a list of databases belonging to the organization or user.
+	// Validates an API token belonging to a user.
 	//
-	// GET /v1/organizations/{organizationName}/databases
-	V1OrganizationsOrganizationNameDatabasesGet(ctx context.Context, params V1OrganizationsOrganizationNameDatabasesGetParams) (*V1OrganizationsOrganizationNameDatabasesGetOK, error)
-	// V1OrganizationsOrganizationNameDatabasesPost implements POST /v1/organizations/{organizationName}/databases operation.
-	//
-	// Creates a new database in a group for the organization or user.
-	//
-	// POST /v1/organizations/{organizationName}/databases
-	V1OrganizationsOrganizationNameDatabasesPost(ctx context.Context, req *CreateDatabaseInput, params V1OrganizationsOrganizationNameDatabasesPostParams) (V1OrganizationsOrganizationNameDatabasesPostRes, error)
-	// V1OrganizationsOrganizationNameGroupsGet implements GET /v1/organizations/{organizationName}/groups operation.
-	//
-	// Returns a list of groups belonging to the organization or user.
-	//
-	// GET /v1/organizations/{organizationName}/groups
-	V1OrganizationsOrganizationNameGroupsGet(ctx context.Context, params V1OrganizationsOrganizationNameGroupsGetParams) (*V1OrganizationsOrganizationNameGroupsGetOK, error)
-	// V1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePost implements POST /v1/organizations/{organizationName}/groups/{groupName}/auth/rotate operation.
-	//
-	// Invalidates all authorization tokens for the specified group.
-	//
-	// POST /v1/organizations/{organizationName}/groups/{groupName}/auth/rotate
-	V1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePost(ctx context.Context, params V1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePostParams) (V1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePostRes, error)
-	// V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPost implements POST /v1/organizations/{organizationName}/groups/{groupName}/auth/tokens operation.
-	//
-	// Generates an authorization token for the specified group.
-	//
-	// POST /v1/organizations/{organizationName}/groups/{groupName}/auth/tokens
-	V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPost(ctx context.Context, req OptCreateTokenInput, params V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostParams) (V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostRes, error)
-	// V1OrganizationsOrganizationNameGroupsGroupNameDelete implements DELETE /v1/organizations/{organizationName}/groups/{groupName} operation.
-	//
-	// Delete a group belonging to the organization or user.
-	//
-	// DELETE /v1/organizations/{organizationName}/groups/{groupName}
-	V1OrganizationsOrganizationNameGroupsGroupNameDelete(ctx context.Context, params V1OrganizationsOrganizationNameGroupsGroupNameDeleteParams) (V1OrganizationsOrganizationNameGroupsGroupNameDeleteRes, error)
-	// V1OrganizationsOrganizationNameGroupsGroupNameGet implements GET /v1/organizations/{organizationName}/groups/{groupName} operation.
-	//
-	// Returns a group belonging to the organization or user.
-	//
-	// GET /v1/organizations/{organizationName}/groups/{groupName}
-	V1OrganizationsOrganizationNameGroupsGroupNameGet(ctx context.Context, params V1OrganizationsOrganizationNameGroupsGroupNameGetParams) (V1OrganizationsOrganizationNameGroupsGroupNameGetRes, error)
-	// V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDelete implements DELETE /v1/organizations/{organizationName}/groups/{groupName}/locations/{location} operation.
-	//
-	// Removes a location from the specified group.
-	//
-	// DELETE /v1/organizations/{organizationName}/groups/{groupName}/locations/{location}
-	V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDelete(ctx context.Context, params V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteParams) (V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteRes, error)
-	// V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPost implements POST /v1/organizations/{organizationName}/groups/{groupName}/locations/{location} operation.
-	//
-	// Adds a location to the specified group.
-	//
-	// POST /v1/organizations/{organizationName}/groups/{groupName}/locations/{location}
-	V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPost(ctx context.Context, params V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostParams) (V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostRes, error)
-	// V1OrganizationsOrganizationNameGroupsGroupNameTransferPost implements POST /v1/organizations/{organizationName}/groups/{groupName}/transfer operation.
-	//
-	// Transfer a group to another organization that you own or a member of.
-	//
-	// POST /v1/organizations/{organizationName}/groups/{groupName}/transfer
-	V1OrganizationsOrganizationNameGroupsGroupNameTransferPost(ctx context.Context, req *V1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq, params V1OrganizationsOrganizationNameGroupsGroupNameTransferPostParams) (V1OrganizationsOrganizationNameGroupsGroupNameTransferPostRes, error)
-	// V1OrganizationsOrganizationNameGroupsGroupNameUpdatePost implements POST /v1/organizations/{organizationName}/groups/{groupName}/update operation.
-	//
-	// Updates all databases in the group to the latest libSQL version.
-	//
-	// POST /v1/organizations/{organizationName}/groups/{groupName}/update
-	V1OrganizationsOrganizationNameGroupsGroupNameUpdatePost(ctx context.Context, params V1OrganizationsOrganizationNameGroupsGroupNameUpdatePostParams) (V1OrganizationsOrganizationNameGroupsGroupNameUpdatePostRes, error)
-	// V1OrganizationsOrganizationNameGroupsPost implements POST /v1/organizations/{organizationName}/groups operation.
-	//
-	// Creates a new group for the organization or user.
-	//
-	// POST /v1/organizations/{organizationName}/groups
-	V1OrganizationsOrganizationNameGroupsPost(ctx context.Context, req *NewGroup, params V1OrganizationsOrganizationNameGroupsPostParams) (V1OrganizationsOrganizationNameGroupsPostRes, error)
-	// V1OrganizationsOrganizationNameInvitesGet implements GET /v1/organizations/{organizationName}/invites operation.
-	//
-	// Returns a list of invites for the organization.
-	//
-	// GET /v1/organizations/{organizationName}/invites
-	V1OrganizationsOrganizationNameInvitesGet(ctx context.Context, params V1OrganizationsOrganizationNameInvitesGetParams) (*V1OrganizationsOrganizationNameInvitesGetOK, error)
-	// V1OrganizationsOrganizationNameInvitesPost implements POST /v1/organizations/{organizationName}/invites operation.
-	//
-	// Invite a user to an organization.
-	//
-	// POST /v1/organizations/{organizationName}/invites
-	V1OrganizationsOrganizationNameInvitesPost(ctx context.Context, req *V1OrganizationsOrganizationNameInvitesPostReq, params V1OrganizationsOrganizationNameInvitesPostParams) (*V1OrganizationsOrganizationNameInvitesPostOK, error)
-	// V1OrganizationsOrganizationNameMembersGet implements GET /v1/organizations/{organizationName}/members operation.
-	//
-	// Returns a list of members part of the organization.
-	//
-	// GET /v1/organizations/{organizationName}/members
-	V1OrganizationsOrganizationNameMembersGet(ctx context.Context, params V1OrganizationsOrganizationNameMembersGetParams) (*V1OrganizationsOrganizationNameMembersGetOK, error)
-	// V1OrganizationsOrganizationNameMembersPost implements POST /v1/organizations/{organizationName}/members operation.
-	//
-	// Add an existing Turso user to an organization.
-	//
-	// POST /v1/organizations/{organizationName}/members
-	V1OrganizationsOrganizationNameMembersPost(ctx context.Context, req *V1OrganizationsOrganizationNameMembersPostReq, params V1OrganizationsOrganizationNameMembersPostParams) (V1OrganizationsOrganizationNameMembersPostRes, error)
-	// V1OrganizationsOrganizationNameMembersUsernameDelete implements DELETE /v1/organizations/{organizationName}/members/{username} operation.
-	//
-	// Remove a user from the organization by username.
-	//
-	// DELETE /v1/organizations/{organizationName}/members/{username}
-	V1OrganizationsOrganizationNameMembersUsernameDelete(ctx context.Context, params V1OrganizationsOrganizationNameMembersUsernameDeleteParams) (V1OrganizationsOrganizationNameMembersUsernameDeleteRes, error)
-	// V1OrganizationsOrganizationNamePatch implements PATCH /v1/organizations/{organizationName} operation.
-	//
-	// Update an organization you own or are a member of.
-	//
-	// PATCH /v1/organizations/{organizationName}
-	V1OrganizationsOrganizationNamePatch(ctx context.Context, req *V1OrganizationsOrganizationNamePatchReq, params V1OrganizationsOrganizationNamePatchParams) (*V1OrganizationsOrganizationNamePatchOK, error)
+	// GET /v1/auth/validate
+	ValidateAPIToken(ctx context.Context) (*ValidateAPITokenOK, error)
 }
 
 // Server implements http server based on OpenAPI v3 specification and

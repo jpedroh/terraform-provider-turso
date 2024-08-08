@@ -19,9 +19,26 @@
       "get": {
         "summary": "List Databases",
         "description": "Returns a list of databases belonging to the organization or user.",
+        "operationId": "listDatabases",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter databases by group name."
+          },
+          {
+            "name": "schema",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "description": "The schema database name that can be used to get databases that belong to that parent schema."
           }
         ],
         "responses": {
@@ -48,6 +65,7 @@
       "post": {
         "summary": "Create Database",
         "description": "Creates a new database in a group for the organization or user.",
+        "operationId": "createDatabase",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -123,6 +141,7 @@
       "get": {
         "summary": "Retrieve Database",
         "description": "Returns a database belonging to the organization or user.",
+        "operationId": "getDatabase",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -156,6 +175,7 @@
       "delete": {
         "summary": "Delete Database",
         "description": "Delete a database belonging to the organization or user.",
+        "operationId": "deleteDatabase",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -190,9 +210,35 @@
     },
 
     "/v1/organizations/{organizationName}/databases/{databaseName}/configuration": {
+      "get": {
+        "summary": "Retrieve Database Configuration",
+        "description": "Retrieve an individual database configuration belonging to the organization or user.",
+        "operationId": "getDatabaseConfiguration",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationName"
+          },
+          {
+            "$ref": "#/components/parameters/databaseName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DatabaseConfigurationResponse"
+                }
+              }
+            }
+          }
+        }
+      },
       "patch": {
         "summary": "Update Database Configuration",
         "description": "Update a database configuration belonging to the organization or user.",
+        "operationId": "updateDatabaseConfiguration",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -234,8 +280,9 @@
         }
       ],
       "post": {
-        "summary": "Upload Dump",
+        "summary": "Upload SQLite Dump",
         "description": "Upload a SQL dump to be used when [creating a new database](/api-reference/databases/create) from seed.",
+        "operationId": "uploadDatabaseDump",
         "requestBody": {
           "description": "Database dump file to be uploaded.",
           "content": {
@@ -281,6 +328,7 @@
       "get": {
         "summary": "List Database Instances",
         "description": "Returns a list of instances of a database. Instances are the individual primary or replica databases in each region defined by the group.",
+        "operationId": "listDatabaseInstances",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -316,6 +364,7 @@
       "get": {
         "summary": "Retrieve Database Instance",
         "description": "Return the individual database instance by name.",
+        "operationId": "getDatabaseInstance",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -351,6 +400,7 @@
       "post": {
         "summary": "Generate Database Auth Token",
         "description": "Generates an authorization token for the specified database.",
+        "operationId": "createDatabaseToken",
         "parameters": [
           { "$ref": "#/components/parameters/organizationName" },
           { "$ref": "#/components/parameters/databaseName" },
@@ -430,6 +480,7 @@
       "get": {
         "summary": "Retrieve Database Usage",
         "description": "Fetch activity usage for a database in a given time period.",
+        "operationId": "getDatabaseUsage",
         "parameters": [
           { "$ref": "#/components/parameters/organizationName" },
           { "$ref": "#/components/parameters/databaseName" },
@@ -498,6 +549,7 @@
       "get": {
         "summary": "Retrieve Database Stats",
         "description": "Fetch the top queries of a database, including the count of rows read and written.",
+        "operationId": "getDatabaseStats",
         "parameters": [
           { "$ref": "#/components/parameters/organizationName" },
           { "$ref": "#/components/parameters/databaseName" }
@@ -533,6 +585,7 @@
       "post": {
         "summary": "Invalidate All Database Auth Tokens",
         "description": "Invalidates all authorization tokens for the specified database.",
+        "operationId": "invalidateDatabaseTokens",
         "parameters": [
           { "$ref": "#/components/parameters/organizationName" },
           { "$ref": "#/components/parameters/databaseName" }
@@ -552,6 +605,7 @@
       "get": {
         "summary": "List Groups",
         "description": "Returns a list of groups belonging to the organization or user.",
+        "operationId": "listGroups",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -581,6 +635,7 @@
       "post": {
         "summary": "Create Group",
         "description": "Creates a new group for the organization or user.",
+        "operationId": "createGroup",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -639,6 +694,7 @@
       "get": {
         "summary": "Retrieve Group",
         "description": "Returns a group belonging to the organization or user.",
+        "operationId": "getGroup",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -671,6 +727,7 @@
       "delete": {
         "summary": "Delete Group",
         "description": "Delete a group belonging to the organization or user.",
+        "operationId": "deleteGroup",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -706,6 +763,7 @@
       "post": {
         "summary": "Transfer Group",
         "description": "Transfer a group to another organization that you own or a member of.",
+        "operationId": "transferGroup",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -749,10 +807,47 @@
       }
     },
 
+    "/v1/organizations/{organizationName}/groups/{groupName}/unarchive": {
+      "post": {
+        "summary": "Unarchive Group",
+        "description": "Unarchive a group that has been archived due to inactivity.",
+        "operationId": "unarchiveGroup",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationName"
+          },
+          {
+            "$ref": "#/components/parameters/groupName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "group": {
+                      "$ref": "#/components/schemas/Group",
+                      "description": "The group that was unarchived"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/GroupNotFoundResponse"
+          }
+        }
+      }
+    },
     "/v1/organizations/{organizationName}/groups/{groupName}/locations/{location}": {
       "post": {
         "summary": "Add Location to Group",
         "description": "Adds a location to the specified group.",
+        "operationId": "addLocationToGroup",
         "parameters": [
           { "$ref": "#/components/parameters/organizationName" },
           { "$ref": "#/components/parameters/groupName" },
@@ -816,6 +911,7 @@
       "delete": {
         "summary": "Remove Location from Group",
         "description": "Removes a location from the specified group.",
+        "operationId": "removeLocationFromGroup",
         "parameters": [
           { "$ref": "#/components/parameters/organizationName" },
           { "$ref": "#/components/parameters/groupName" },
@@ -881,6 +977,7 @@
       "post": {
         "summary": "Update Databases in a Group",
         "description": "Updates all databases in the group to the latest libSQL version.",
+        "operationId": "updateGroupDatabases",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -904,6 +1001,7 @@
       "post": {
         "summary": "Create Group Auth Token",
         "description": "Generates an authorization token for the specified group.",
+        "operationId": "createGroupToken",
         "parameters": [
           { "$ref": "#/components/parameters/organizationName" },
           { "$ref": "#/components/parameters/groupName" },
@@ -983,6 +1081,7 @@
       "post": {
         "summary": "Invalidate All Group Auth Tokens",
         "description": "Invalidates all authorization tokens for the specified group.",
+        "operationId": "invalidateGroupTokens",
         "parameters": [
           { "$ref": "#/components/parameters/organizationName" },
           { "$ref": "#/components/parameters/groupName" }
@@ -1002,6 +1101,7 @@
       "get": {
         "summary": "List Locations",
         "description": "Returns a list of locations where you can create or replicate databases.",
+        "operationId": "listLocations",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -1069,6 +1169,7 @@
       "get": {
         "summary": "List Organizations",
         "description": "Returns a list of organizations the authenticated user owns or is a member of.",
+        "operationId": "listOrganizations",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -1091,6 +1192,7 @@
       "patch": {
         "summary": "Update Organization",
         "description": "Update an organization you own or are a member of.",
+        "operationId": "updateOrganization",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -1134,10 +1236,258 @@
       }
     },
 
+    "/v1/organizations/{organizationName}/plans": {
+      "get": {
+        "summary": "List Plans",
+        "description": "Returns a list of available plans and their quotas.",
+        "operationId": "listOrganizationPlans",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "description": "The name of the plan.",
+                      "example": "starter"
+                    },
+                    "price": {
+                      "type": "string",
+                      "description": "The monthly price of the plan.",
+                      "example": "0"
+                    },
+                    "quotas": {
+                      "$ref": "#/components/schemas/PlanQuotas"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organizationName}/invoices": {
+      "get": {
+        "summary": "List Invoices",
+        "description": "Returns a list of invoices for the organization.",
+        "operationId": "listOrganizationInvoices",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationName"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "upcoming",
+                "issued"
+              ]
+            },
+            "description": "The type of invoice to retrieve."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "invoices": {
+                      "type": "array",
+                      "description": "The list of invoices for the organization.",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "invoice_number": {
+                            "type": "string",
+                            "description": "The unique ID for the invoice.",
+                            "example": "LFONTK-00001"
+                          },
+                          "amount_due": {
+                            "type": "string",
+                            "description": "The formatted price in USD for the invoice.",
+                            "example": "10.29"
+                          },
+                          "due_date": {
+                            "type": "string",
+                            "description": "The due date for the invoice.",
+                            "example": "2024-01-01T05:00:00+00:00"
+                          },
+                          "paid_at": {
+                            "type": "string",
+                            "description": "The date the invoice was paid.",
+                            "example": "2024-01-01T05:00:00+00:00"
+                          },
+                          "payment_failed_at": {
+                            "type": "string",
+                            "description": "The date the invoice payment last failed.",
+                            "example": "2024-01-01T05:00:00+00:00"
+                          },
+                          "invoice_pdf": {
+                            "type": "string",
+                            "description": "The link to the invoice PDF you can download.",
+                            "example": "https://assets.withorb.com/invoice/..."
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organizationName}/subscription": {
+      "get": {
+        "summary": "Current Subscription",
+        "description": "Returns the current subscription details for the organization.",
+        "operationId": "getOrganizationSubscription",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "subscription": {
+                      "type": "string",
+                      "description": "The name of the plan for the current subscription.",
+                      "example": "scaler"
+                    },
+                    "overages": {
+                      "type": "boolean",
+                      "description": "Whether overages are enabled for the organization."
+                    },
+                    "plan": {
+                      "type": "string",
+                      "description": "The name of the plan for the current subscription.",
+                      "example": "scaler"
+                    },
+                    "timeline": {
+                      "type": "string",
+                      "description": "Whether the plan is billed monthly or yearly.",
+                      "example": "monthly"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/organizations/{organizationName}/usage": {
+      "get": {
+        "summary": "Organization Usage",
+        "description": "Fetch current billing cycle usage for an organization.",
+        "operationId": "getOrganizationUsage",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "organization": {
+                      "type": "object",
+                      "description": "The organization usage object, containing the total usage for rows read and written, as well as the total storage size (in bytes).",
+                      "properties": {
+                        "uuid": {
+                          "type": "string",
+                          "description": "The UUID of the organization.",
+                          "example": "fa72ba58-7db3-436b-bcab-14b83eb1dd88"
+                        },
+                        "usage": {
+                          "type": "object",
+                          "description": "The usage object for the organization.",
+                          "properties": {
+                            "rows_read": {
+                              "type": "integer",
+                              "description": "The number of rows read allowed for the specific plan.",
+                              "example": 1000000000
+                            },
+                            "rows_written": {
+                              "type": "integer",
+                              "description": "The number of rows written allowed for the specific plan.",
+                              "example": 25000000
+                            },
+                            "databases": {
+                              "type": "integer",
+                              "description": "The number of databases allowed for the specific plan.",
+                              "example": 500
+                            },
+                            "locations": {
+                              "type": "integer",
+                              "description": "The number of locations allowed for the specific plan.",
+                              "example": 3
+                            },
+                            "storage": {
+                              "type": "integer",
+                              "description": "The amount of storage allowed for the specific plan, in bytes.",
+                              "example": 9000000000
+                            },
+                            "groups": {
+                              "type": "integer",
+                              "description": "The number of groups allowed for the specific plan.",
+                              "example": 1
+                            },
+                            "bytes_synced": {
+                              "type": "integer",
+                              "description": "The number of bytes synced allowed for the specific plan, in bytes.",
+                              "example": 3000000000
+                            }
+                          }
+                        },
+                        "databases": {
+                          "type": "array",
+                          "description": "The databases for the organization and their usage.",
+                          "items": {
+                            "$ref": "#/components/schemas/DatabaseUsageOutput"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/organizations/{organizationName}/members": {
       "get": {
         "summary": "List Members",
         "description": "Returns a list of members part of the organization.",
+        "operationId": "listOrganizationMembers",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -1167,6 +1517,7 @@
       "post": {
         "summary": "Add Member",
         "description": "Add an existing Turso user to an organization.",
+        "operationId": "addOrganizationMember",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -1257,6 +1608,7 @@
       "delete": {
         "summary": "Remove Member",
         "description": "Remove a user from the organization by username.",
+        "operationId": "removeOrganizationMember",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -1306,6 +1658,7 @@
       "get": {
         "summary": "List Invites",
         "description": "Returns a list of invites for the organization.",
+        "operationId": "listOrganizationInvites",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -1333,8 +1686,9 @@
         }
       },
       "post": {
-        "summary": "Invite User",
-        "description": "Invite a user to an organization.",
+        "summary": "Invite Organization Member",
+        "description": "Invite a user (who isn't already a Turso user) to an organization.",
+        "operationId": "inviteOrganizationMember",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -1384,10 +1738,59 @@
       }
     },
 
+    "/v1/organizations/{organizationName}/invites/{email}": {
+      "delete": {
+        "summary": "Delete Invite",
+        "description": "Delete an invite for the organization by email.",
+        "operationId": "deleteOrganizationInviteByEmail",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/organizationName"
+          },
+          {
+            "in": "path",
+            "name": "email",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "The email of the user invited.",
+              "example": "iku@turso.tech"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response (No Content)"
+          },
+          "404": {
+            "description": "Invite not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "description": "The error code"
+                    },
+                    "error": {
+                      "type": "string",
+                      "description": "The error message (human readable)",
+                      "example": "invite not found"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/v1/auth/validate": {
       "get": {
         "summary": "Validate API Token",
         "description": "Validates an API token belonging to a user.",
+        "operationId": "validateAPIToken",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -1414,6 +1817,7 @@
       "get": {
         "summary": "List API Tokens",
         "description": "Returns a list of API tokens belonging to a user.",
+        "operationId": "listAPITokens",
         "responses": {
           "200": {
             "description": "Successful response",
@@ -1440,6 +1844,7 @@
       "post": {
         "summary": "Create API Token",
         "description": "Returns a new API token belonging to a user.",
+        "operationId": "createAPIToken",
         "parameters": [
           {
             "$ref": "#/components/parameters/tokenName"
@@ -1473,6 +1878,7 @@
       "delete": {
         "summary": "Revoke API Token",
         "description": "Revokes the provided API token belonging to a user.",
+        "operationId": "revokeAPIToken",
         "parameters": [
           {
             "$ref": "#/components/parameters/tokenName"
@@ -1503,6 +1909,7 @@
       "get": {
         "summary": "List Audit Logs",
         "description": "Return the audit logs for the given organization, ordered by the `created_at` field in descending order.",
+        "operationId": "listOrganizationAuditLogs",
         "parameters": [
           {
             "$ref": "#/components/parameters/organizationName"
@@ -1659,7 +2066,6 @@
           "ID": {
             "type": "integer",
             "description": "The unique ID for the invite.",
-
             "example": 1
           },
           "CreatedAt": {
@@ -1680,17 +2086,17 @@
           "Role": {
             "type": "string",
             "enum": ["admin", "member"],
-            "description": "The unique ID for the invite.",
+            "description": "The assigned role for the invited user.",
             "example": "member"
           },
           "Email": {
             "type": "string",
-            "description": "The unique ID for the invite.",
+            "description": "The email of the person invited.",
             "example": "iku@turso.tech"
           },
           "OrganizationID": {
             "type": "integer",
-            "description": "The unique ID for the invite.",
+            "description": "The ID of the organization the user was invited to.",
             "example": 1
           },
           "Token": {
@@ -1754,7 +2160,9 @@
               "org-plan-update",
               "org-set-overages",
               "group-create",
-              "group-delete"
+              "group-delete",
+              "mfa-enable",
+              "mfa-disable"
             ]
           },
           "message": {
@@ -1856,9 +2264,9 @@
             "description": "The name of the parent database that owns the schema for this database. See [Multi-DB Schemas](/features/multi-db-schemas).",
             "example": ""
           },
-          "sleeping": {
+          "archived": {
             "type": "boolean",
-            "description": "The current status of the database. If `true`, the database is sleeping and requires a manual wakeup.",
+            "description": "The current status of the database. If `true`, the database is archived and requires a manual unarchive step.",
             "example": false
           }
         }
@@ -1901,7 +2309,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "The name of the new database. Must contain only lowercase letters, numbers, dashes. No longer than 32 characters."
+            "description": "The name of the new database. Must contain only lowercase letters, numbers, dashes. No longer than 64 characters."
           },
           "group": {
             "type": "string",
@@ -2047,17 +2455,17 @@
           "rows_read": {
             "type": "integer",
             "example": 0,
-            "description": "Test"
+            "description": "The total rows read in the time period."
           },
           "rows_written": {
             "type": "integer",
             "example": 0,
-            "description": "Test"
+            "description": "The total rows written in the time period."
           },
           "storage_bytes": {
             "type": "integer",
             "example": 0,
-            "description": "Test"
+            "description": "The total storage used."
           }
         }
       },
@@ -2096,6 +2504,16 @@
           "allow_attach": {
             "type": "boolean",
             "description": "Allow or disallow attaching databases to the current database."
+          },
+          "block_reads": {
+            "type": "boolean",
+            "description": "Block all database reads.",
+            "example": false
+          },
+          "block_writes": {
+            "type": "boolean",
+            "description": "Block all database writes.",
+            "example": false
           }
         }
       },
@@ -2111,6 +2529,16 @@
             "type": "boolean",
             "description": "Allow or disallow attaching databases to the current database.",
             "example": true
+          },
+          "block_reads": {
+            "type": "boolean",
+            "description": "The current status for blocked reads.",
+            "example": false
+          },
+          "block_writes": {
+            "type": "boolean",
+            "description": "The current status for blocked writes.",
+            "example": false
           }
         }
       },
@@ -2148,12 +2576,52 @@
           },
           "archived": {
             "type": "boolean",
-            "description": "Groups on the free tier go to sleep after some inactivity.",
+            "description": "Groups on the free tier get archived after some inactivity.",
             "example": false
           }
         }
       },
 
+      "PlanQuotas": {
+        "type": "object",
+        "properties": {
+          "rowsRead": {
+            "type": "integer",
+            "description": "The number of rows read allowed for the specific plan.",
+            "example": 1000000000
+          },
+          "rowsWritten": {
+            "type": "integer",
+            "description": "The number of rows written allowed for the specific plan.",
+            "example": 25000000
+          },
+          "databases": {
+            "type": "integer",
+            "description": "The number of databases allowed for the specific plan.",
+            "example": 500
+          },
+          "locations": {
+            "type": "integer",
+            "description": "The number of locations allowed for the specific plan.",
+            "example": 3
+          },
+          "storage": {
+            "type": "integer",
+            "description": "The amount of storage allowed for the specific plan, in bytes.",
+            "example": 9000000000
+          },
+          "groups": {
+            "type": "integer",
+            "description": "The number of groups allowed for the specific plan.",
+            "example": 1
+          },
+          "bytesSynced": {
+            "type": "integer",
+            "description": "The number of bytes synced allowed for the specific plan, in bytes.",
+            "example": 3000000000
+          }
+        }
+      },
       "NewGroup": {
         "type": "object",
         "properties": {
@@ -2292,13 +2760,6 @@
           "type": "integer"
         },
         "description": "The page number to return. Defaults to 1."
-      }
-    },
-    "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
       }
     }
   }

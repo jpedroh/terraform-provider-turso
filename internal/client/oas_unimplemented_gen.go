@@ -15,320 +15,383 @@ type UnimplementedHandler struct{}
 
 var _ Handler = UnimplementedHandler{}
 
-// V1AuthAPITokensGet implements GET /v1/auth/api-tokens operation.
+// AddLocationToGroup implements addLocationToGroup operation.
 //
-// Returns a list of API tokens belonging to a user.
+// Adds a location to the specified group.
 //
-// GET /v1/auth/api-tokens
-func (UnimplementedHandler) V1AuthAPITokensGet(ctx context.Context) (r *V1AuthAPITokensGetOK, _ error) {
+// POST /v1/organizations/{organizationName}/groups/{groupName}/locations/{location}
+func (UnimplementedHandler) AddLocationToGroup(ctx context.Context, params AddLocationToGroupParams) (r AddLocationToGroupRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// V1AuthAPITokensTokenNameDelete implements DELETE /v1/auth/api-tokens/{tokenName} operation.
+// AddOrganizationMember implements addOrganizationMember operation.
 //
-// Revokes the provided API token belonging to a user.
+// Add an existing Turso user to an organization.
 //
-// DELETE /v1/auth/api-tokens/{tokenName}
-func (UnimplementedHandler) V1AuthAPITokensTokenNameDelete(ctx context.Context, params V1AuthAPITokensTokenNameDeleteParams) (r jx.Raw, _ error) {
+// POST /v1/organizations/{organizationName}/members
+func (UnimplementedHandler) AddOrganizationMember(ctx context.Context, req *AddOrganizationMemberReq, params AddOrganizationMemberParams) (r AddOrganizationMemberRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// V1AuthAPITokensTokenNamePost implements POST /v1/auth/api-tokens/{tokenName} operation.
+// CreateAPIToken implements createAPIToken operation.
 //
 // Returns a new API token belonging to a user.
 //
 // POST /v1/auth/api-tokens/{tokenName}
-func (UnimplementedHandler) V1AuthAPITokensTokenNamePost(ctx context.Context, params V1AuthAPITokensTokenNamePostParams) (r jx.Raw, _ error) {
+func (UnimplementedHandler) CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (r jx.Raw, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// V1AuthValidateGet implements GET /v1/auth/validate operation.
+// CreateDatabase implements createDatabase operation.
 //
-// Validates an API token belonging to a user.
+// Creates a new database in a group for the organization or user.
 //
-// GET /v1/auth/validate
-func (UnimplementedHandler) V1AuthValidateGet(ctx context.Context) (r *V1AuthValidateGetOK, _ error) {
+// POST /v1/organizations/{organizationName}/databases
+func (UnimplementedHandler) CreateDatabase(ctx context.Context, req *CreateDatabaseInput, params CreateDatabaseParams) (r CreateDatabaseRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// V1LocationsGet implements GET /v1/locations operation.
-//
-// Returns a list of locations where you can create or replicate databases.
-//
-// GET /v1/locations
-func (UnimplementedHandler) V1LocationsGet(ctx context.Context) (r *V1LocationsGetOK, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsGet implements GET /v1/organizations operation.
-//
-// Returns a list of organizations the authenticated user owns or is a member of.
-//
-// GET /v1/organizations
-func (UnimplementedHandler) V1OrganizationsGet(ctx context.Context) (r []Organization, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameAuditLogsGet implements GET /v1/organizations/{organizationName}/audit-logs operation.
-//
-// Return the audit logs for the given organization, ordered by the `created_at` field in descending
-// order.
-//
-// GET /v1/organizations/{organizationName}/audit-logs
-func (UnimplementedHandler) V1OrganizationsOrganizationNameAuditLogsGet(ctx context.Context, params V1OrganizationsOrganizationNameAuditLogsGetParams) (r *V1OrganizationsOrganizationNameAuditLogsGetOK, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePost implements POST /v1/organizations/{organizationName}/databases/{databaseName}/auth/rotate operation.
-//
-// Invalidates all authorization tokens for the specified database.
-//
-// POST /v1/organizations/{organizationName}/databases/{databaseName}/auth/rotate
-func (UnimplementedHandler) V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePost(ctx context.Context, params V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePostParams) (r V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPost implements POST /v1/organizations/{organizationName}/databases/{databaseName}/auth/tokens operation.
+// CreateDatabaseToken implements createDatabaseToken operation.
 //
 // Generates an authorization token for the specified database.
 //
 // POST /v1/organizations/{organizationName}/databases/{databaseName}/auth/tokens
-func (UnimplementedHandler) V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPost(ctx context.Context, req OptCreateTokenInput, params V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostParams) (r V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostRes, _ error) {
+func (UnimplementedHandler) CreateDatabaseToken(ctx context.Context, req OptCreateTokenInput, params CreateDatabaseTokenParams) (r CreateDatabaseTokenRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// V1OrganizationsOrganizationNameDatabasesDatabaseNameConfigurationPatch implements PATCH /v1/organizations/{organizationName}/databases/{databaseName}/configuration operation.
+// CreateGroup implements createGroup operation.
 //
-// Update a database configuration belonging to the organization or user.
+// Creates a new group for the organization or user.
 //
-// PATCH /v1/organizations/{organizationName}/databases/{databaseName}/configuration
-func (UnimplementedHandler) V1OrganizationsOrganizationNameDatabasesDatabaseNameConfigurationPatch(ctx context.Context, req *DatabaseConfigurationInput, params V1OrganizationsOrganizationNameDatabasesDatabaseNameConfigurationPatchParams) (r *DatabaseConfigurationResponse, _ error) {
+// POST /v1/organizations/{organizationName}/groups
+func (UnimplementedHandler) CreateGroup(ctx context.Context, req *NewGroup, params CreateGroupParams) (r CreateGroupRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// V1OrganizationsOrganizationNameDatabasesDatabaseNameDelete implements DELETE /v1/organizations/{organizationName}/databases/{databaseName} operation.
+// CreateGroupToken implements createGroupToken operation.
+//
+// Generates an authorization token for the specified group.
+//
+// POST /v1/organizations/{organizationName}/groups/{groupName}/auth/tokens
+func (UnimplementedHandler) CreateGroupToken(ctx context.Context, req OptCreateTokenInput, params CreateGroupTokenParams) (r CreateGroupTokenRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// DeleteDatabase implements deleteDatabase operation.
 //
 // Delete a database belonging to the organization or user.
 //
 // DELETE /v1/organizations/{organizationName}/databases/{databaseName}
-func (UnimplementedHandler) V1OrganizationsOrganizationNameDatabasesDatabaseNameDelete(ctx context.Context, params V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteParams) (r V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteRes, _ error) {
+func (UnimplementedHandler) DeleteDatabase(ctx context.Context, params DeleteDatabaseParams) (r DeleteDatabaseRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// V1OrganizationsOrganizationNameDatabasesDatabaseNameGet implements GET /v1/organizations/{organizationName}/databases/{databaseName} operation.
+// DeleteGroup implements deleteGroup operation.
+//
+// Delete a group belonging to the organization or user.
+//
+// DELETE /v1/organizations/{organizationName}/groups/{groupName}
+func (UnimplementedHandler) DeleteGroup(ctx context.Context, params DeleteGroupParams) (r DeleteGroupRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// DeleteOrganizationInviteByEmail implements deleteOrganizationInviteByEmail operation.
+//
+// Delete an invite for the organization by email.
+//
+// DELETE /v1/organizations/{organizationName}/invites/{email}
+func (UnimplementedHandler) DeleteOrganizationInviteByEmail(ctx context.Context, params DeleteOrganizationInviteByEmailParams) (r DeleteOrganizationInviteByEmailRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// GetDatabase implements getDatabase operation.
 //
 // Returns a database belonging to the organization or user.
 //
 // GET /v1/organizations/{organizationName}/databases/{databaseName}
-func (UnimplementedHandler) V1OrganizationsOrganizationNameDatabasesDatabaseNameGet(ctx context.Context, params V1OrganizationsOrganizationNameDatabasesDatabaseNameGetParams) (r V1OrganizationsOrganizationNameDatabasesDatabaseNameGetRes, _ error) {
+func (UnimplementedHandler) GetDatabase(ctx context.Context, params GetDatabaseParams) (r GetDatabaseRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGet implements GET /v1/organizations/{organizationName}/databases/{databaseName}/instances operation.
+// GetDatabaseConfiguration implements getDatabaseConfiguration operation.
+//
+// Retrieve an individual database configuration belonging to the organization or user.
+//
+// GET /v1/organizations/{organizationName}/databases/{databaseName}/configuration
+func (UnimplementedHandler) GetDatabaseConfiguration(ctx context.Context, params GetDatabaseConfigurationParams) (r *DatabaseConfigurationResponse, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// GetDatabaseInstance implements getDatabaseInstance operation.
+//
+// Return the individual database instance by name.
+//
+// GET /v1/organizations/{organizationName}/databases/{databaseName}/instances/{instanceName}
+func (UnimplementedHandler) GetDatabaseInstance(ctx context.Context, params GetDatabaseInstanceParams) (r *GetDatabaseInstanceOK, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// GetDatabaseStats implements getDatabaseStats operation.
+//
+// Fetch the top queries of a database, including the count of rows read and written.
+//
+// GET /v1/organizations/{organizationName}/databases/{databaseName}/stats
+func (UnimplementedHandler) GetDatabaseStats(ctx context.Context, params GetDatabaseStatsParams) (r GetDatabaseStatsRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// GetDatabaseUsage implements getDatabaseUsage operation.
+//
+// Fetch activity usage for a database in a given time period.
+//
+// GET /v1/organizations/{organizationName}/databases/{databaseName}/usage
+func (UnimplementedHandler) GetDatabaseUsage(ctx context.Context, params GetDatabaseUsageParams) (r GetDatabaseUsageRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// GetGroup implements getGroup operation.
+//
+// Returns a group belonging to the organization or user.
+//
+// GET /v1/organizations/{organizationName}/groups/{groupName}
+func (UnimplementedHandler) GetGroup(ctx context.Context, params GetGroupParams) (r GetGroupRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// GetOrganizationSubscription implements getOrganizationSubscription operation.
+//
+// Returns the current subscription details for the organization.
+//
+// GET /v1/organizations/{organizationName}/subscription
+func (UnimplementedHandler) GetOrganizationSubscription(ctx context.Context, params GetOrganizationSubscriptionParams) (r *GetOrganizationSubscriptionOK, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// GetOrganizationUsage implements getOrganizationUsage operation.
+//
+// Fetch current billing cycle usage for an organization.
+//
+// GET /v1/organizations/{organizationName}/usage
+func (UnimplementedHandler) GetOrganizationUsage(ctx context.Context, params GetOrganizationUsageParams) (r *GetOrganizationUsageOK, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// InvalidateDatabaseTokens implements invalidateDatabaseTokens operation.
+//
+// Invalidates all authorization tokens for the specified database.
+//
+// POST /v1/organizations/{organizationName}/databases/{databaseName}/auth/rotate
+func (UnimplementedHandler) InvalidateDatabaseTokens(ctx context.Context, params InvalidateDatabaseTokensParams) (r InvalidateDatabaseTokensRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// InvalidateGroupTokens implements invalidateGroupTokens operation.
+//
+// Invalidates all authorization tokens for the specified group.
+//
+// POST /v1/organizations/{organizationName}/groups/{groupName}/auth/rotate
+func (UnimplementedHandler) InvalidateGroupTokens(ctx context.Context, params InvalidateGroupTokensParams) (r InvalidateGroupTokensRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// InviteOrganizationMember implements inviteOrganizationMember operation.
+//
+// Invite a user (who isn't already a Turso user) to an organization.
+//
+// POST /v1/organizations/{organizationName}/invites
+func (UnimplementedHandler) InviteOrganizationMember(ctx context.Context, req *InviteOrganizationMemberReq, params InviteOrganizationMemberParams) (r *InviteOrganizationMemberOK, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ListAPITokens implements listAPITokens operation.
+//
+// Returns a list of API tokens belonging to a user.
+//
+// GET /v1/auth/api-tokens
+func (UnimplementedHandler) ListAPITokens(ctx context.Context) (r *ListAPITokensOK, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ListDatabaseInstances implements listDatabaseInstances operation.
 //
 // Returns a list of instances of a database. Instances are the individual primary or replica
 // databases in each region defined by the group.
 //
 // GET /v1/organizations/{organizationName}/databases/{databaseName}/instances
-func (UnimplementedHandler) V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGet(ctx context.Context, params V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetParams) (r *V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetOK, _ error) {
+func (UnimplementedHandler) ListDatabaseInstances(ctx context.Context, params ListDatabaseInstancesParams) (r *ListDatabaseInstancesOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGet implements GET /v1/organizations/{organizationName}/databases/{databaseName}/instances/{instanceName} operation.
+// ListDatabases implements listDatabases operation.
 //
-// Return the individual database instance by name.
+// Returns a list of databases belonging to the organization or user.
 //
-// GET /v1/organizations/{organizationName}/databases/{databaseName}/instances/{instanceName}
-func (UnimplementedHandler) V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGet(ctx context.Context, params V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetParams) (r *V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetOK, _ error) {
+// GET /v1/organizations/{organizationName}/databases
+func (UnimplementedHandler) ListDatabases(ctx context.Context, params ListDatabasesParams) (r *ListDatabasesOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGet implements GET /v1/organizations/{organizationName}/databases/{databaseName}/stats operation.
+// ListGroups implements listGroups operation.
 //
-// Fetch the top queries of a database, including the count of rows read and written.
+// Returns a list of groups belonging to the organization or user.
 //
-// GET /v1/organizations/{organizationName}/databases/{databaseName}/stats
-func (UnimplementedHandler) V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGet(ctx context.Context, params V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetParams) (r V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetRes, _ error) {
+// GET /v1/organizations/{organizationName}/groups
+func (UnimplementedHandler) ListGroups(ctx context.Context, params ListGroupsParams) (r *ListGroupsOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGet implements GET /v1/organizations/{organizationName}/databases/{databaseName}/usage operation.
+// ListLocations implements listLocations operation.
 //
-// Fetch activity usage for a database in a given time period.
+// Returns a list of locations where you can create or replicate databases.
 //
-// GET /v1/organizations/{organizationName}/databases/{databaseName}/usage
-func (UnimplementedHandler) V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGet(ctx context.Context, params V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetParams) (r V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetRes, _ error) {
+// GET /v1/locations
+func (UnimplementedHandler) ListLocations(ctx context.Context) (r *ListLocationsOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// V1OrganizationsOrganizationNameDatabasesDumpsPost implements POST /v1/organizations/{organizationName}/databases/dumps operation.
+// ListOrganizationAuditLogs implements listOrganizationAuditLogs operation.
+//
+// Return the audit logs for the given organization, ordered by the `created_at` field in descending
+// order.
+//
+// GET /v1/organizations/{organizationName}/audit-logs
+func (UnimplementedHandler) ListOrganizationAuditLogs(ctx context.Context, params ListOrganizationAuditLogsParams) (r *ListOrganizationAuditLogsOK, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ListOrganizationInvites implements listOrganizationInvites operation.
+//
+// Returns a list of invites for the organization.
+//
+// GET /v1/organizations/{organizationName}/invites
+func (UnimplementedHandler) ListOrganizationInvites(ctx context.Context, params ListOrganizationInvitesParams) (r *ListOrganizationInvitesOK, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ListOrganizationInvoices implements listOrganizationInvoices operation.
+//
+// Returns a list of invoices for the organization.
+//
+// GET /v1/organizations/{organizationName}/invoices
+func (UnimplementedHandler) ListOrganizationInvoices(ctx context.Context, params ListOrganizationInvoicesParams) (r *ListOrganizationInvoicesOK, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ListOrganizationMembers implements listOrganizationMembers operation.
+//
+// Returns a list of members part of the organization.
+//
+// GET /v1/organizations/{organizationName}/members
+func (UnimplementedHandler) ListOrganizationMembers(ctx context.Context, params ListOrganizationMembersParams) (r *ListOrganizationMembersOK, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ListOrganizationPlans implements listOrganizationPlans operation.
+//
+// Returns a list of available plans and their quotas.
+//
+// GET /v1/organizations/{organizationName}/plans
+func (UnimplementedHandler) ListOrganizationPlans(ctx context.Context, params ListOrganizationPlansParams) (r *ListOrganizationPlansOK, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// ListOrganizations implements listOrganizations operation.
+//
+// Returns a list of organizations the authenticated user owns or is a member of.
+//
+// GET /v1/organizations
+func (UnimplementedHandler) ListOrganizations(ctx context.Context) (r []Organization, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// RemoveLocationFromGroup implements removeLocationFromGroup operation.
+//
+// Removes a location from the specified group.
+//
+// DELETE /v1/organizations/{organizationName}/groups/{groupName}/locations/{location}
+func (UnimplementedHandler) RemoveLocationFromGroup(ctx context.Context, params RemoveLocationFromGroupParams) (r RemoveLocationFromGroupRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// RemoveOrganizationMember implements removeOrganizationMember operation.
+//
+// Remove a user from the organization by username.
+//
+// DELETE /v1/organizations/{organizationName}/members/{username}
+func (UnimplementedHandler) RemoveOrganizationMember(ctx context.Context, params RemoveOrganizationMemberParams) (r RemoveOrganizationMemberRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// RevokeAPIToken implements revokeAPIToken operation.
+//
+// Revokes the provided API token belonging to a user.
+//
+// DELETE /v1/auth/api-tokens/{tokenName}
+func (UnimplementedHandler) RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (r jx.Raw, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// TransferGroup implements transferGroup operation.
+//
+// Transfer a group to another organization that you own or a member of.
+//
+// POST /v1/organizations/{organizationName}/groups/{groupName}/transfer
+func (UnimplementedHandler) TransferGroup(ctx context.Context, req *TransferGroupReq, params TransferGroupParams) (r TransferGroupRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// UnarchiveGroup implements unarchiveGroup operation.
+//
+// Unarchive a group that has been archived due to inactivity.
+//
+// POST /v1/organizations/{organizationName}/groups/{groupName}/unarchive
+func (UnimplementedHandler) UnarchiveGroup(ctx context.Context, params UnarchiveGroupParams) (r UnarchiveGroupRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// UpdateDatabaseConfiguration implements updateDatabaseConfiguration operation.
+//
+// Update a database configuration belonging to the organization or user.
+//
+// PATCH /v1/organizations/{organizationName}/databases/{databaseName}/configuration
+func (UnimplementedHandler) UpdateDatabaseConfiguration(ctx context.Context, req *DatabaseConfigurationInput, params UpdateDatabaseConfigurationParams) (r *DatabaseConfigurationResponse, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// UpdateGroupDatabases implements updateGroupDatabases operation.
+//
+// Updates all databases in the group to the latest libSQL version.
+//
+// POST /v1/organizations/{organizationName}/groups/{groupName}/update
+func (UnimplementedHandler) UpdateGroupDatabases(ctx context.Context, params UpdateGroupDatabasesParams) (r UpdateGroupDatabasesRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// UpdateOrganization implements updateOrganization operation.
+//
+// Update an organization you own or are a member of.
+//
+// PATCH /v1/organizations/{organizationName}
+func (UnimplementedHandler) UpdateOrganization(ctx context.Context, req *UpdateOrganizationReq, params UpdateOrganizationParams) (r *UpdateOrganizationOK, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// UploadDatabaseDump implements uploadDatabaseDump operation.
 //
 // Upload a SQL dump to be used when [creating a new database](/api-reference/databases/create) from
 // seed.
 //
 // POST /v1/organizations/{organizationName}/databases/dumps
-func (UnimplementedHandler) V1OrganizationsOrganizationNameDatabasesDumpsPost(ctx context.Context, req *V1OrganizationsOrganizationNameDatabasesDumpsPostReq, params V1OrganizationsOrganizationNameDatabasesDumpsPostParams) (r *V1OrganizationsOrganizationNameDatabasesDumpsPostOK, _ error) {
+func (UnimplementedHandler) UploadDatabaseDump(ctx context.Context, req *UploadDatabaseDumpReq, params UploadDatabaseDumpParams) (r *UploadDatabaseDumpOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
-// V1OrganizationsOrganizationNameDatabasesGet implements GET /v1/organizations/{organizationName}/databases operation.
+// ValidateAPIToken implements validateAPIToken operation.
 //
-// Returns a list of databases belonging to the organization or user.
+// Validates an API token belonging to a user.
 //
-// GET /v1/organizations/{organizationName}/databases
-func (UnimplementedHandler) V1OrganizationsOrganizationNameDatabasesGet(ctx context.Context, params V1OrganizationsOrganizationNameDatabasesGetParams) (r *V1OrganizationsOrganizationNameDatabasesGetOK, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameDatabasesPost implements POST /v1/organizations/{organizationName}/databases operation.
-//
-// Creates a new database in a group for the organization or user.
-//
-// POST /v1/organizations/{organizationName}/databases
-func (UnimplementedHandler) V1OrganizationsOrganizationNameDatabasesPost(ctx context.Context, req *CreateDatabaseInput, params V1OrganizationsOrganizationNameDatabasesPostParams) (r V1OrganizationsOrganizationNameDatabasesPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameGroupsGet implements GET /v1/organizations/{organizationName}/groups operation.
-//
-// Returns a list of groups belonging to the organization or user.
-//
-// GET /v1/organizations/{organizationName}/groups
-func (UnimplementedHandler) V1OrganizationsOrganizationNameGroupsGet(ctx context.Context, params V1OrganizationsOrganizationNameGroupsGetParams) (r *V1OrganizationsOrganizationNameGroupsGetOK, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePost implements POST /v1/organizations/{organizationName}/groups/{groupName}/auth/rotate operation.
-//
-// Invalidates all authorization tokens for the specified group.
-//
-// POST /v1/organizations/{organizationName}/groups/{groupName}/auth/rotate
-func (UnimplementedHandler) V1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePost(ctx context.Context, params V1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePostParams) (r V1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPost implements POST /v1/organizations/{organizationName}/groups/{groupName}/auth/tokens operation.
-//
-// Generates an authorization token for the specified group.
-//
-// POST /v1/organizations/{organizationName}/groups/{groupName}/auth/tokens
-func (UnimplementedHandler) V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPost(ctx context.Context, req OptCreateTokenInput, params V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostParams) (r V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameGroupsGroupNameDelete implements DELETE /v1/organizations/{organizationName}/groups/{groupName} operation.
-//
-// Delete a group belonging to the organization or user.
-//
-// DELETE /v1/organizations/{organizationName}/groups/{groupName}
-func (UnimplementedHandler) V1OrganizationsOrganizationNameGroupsGroupNameDelete(ctx context.Context, params V1OrganizationsOrganizationNameGroupsGroupNameDeleteParams) (r V1OrganizationsOrganizationNameGroupsGroupNameDeleteRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameGroupsGroupNameGet implements GET /v1/organizations/{organizationName}/groups/{groupName} operation.
-//
-// Returns a group belonging to the organization or user.
-//
-// GET /v1/organizations/{organizationName}/groups/{groupName}
-func (UnimplementedHandler) V1OrganizationsOrganizationNameGroupsGroupNameGet(ctx context.Context, params V1OrganizationsOrganizationNameGroupsGroupNameGetParams) (r V1OrganizationsOrganizationNameGroupsGroupNameGetRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDelete implements DELETE /v1/organizations/{organizationName}/groups/{groupName}/locations/{location} operation.
-//
-// Removes a location from the specified group.
-//
-// DELETE /v1/organizations/{organizationName}/groups/{groupName}/locations/{location}
-func (UnimplementedHandler) V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDelete(ctx context.Context, params V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteParams) (r V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPost implements POST /v1/organizations/{organizationName}/groups/{groupName}/locations/{location} operation.
-//
-// Adds a location to the specified group.
-//
-// POST /v1/organizations/{organizationName}/groups/{groupName}/locations/{location}
-func (UnimplementedHandler) V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPost(ctx context.Context, params V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostParams) (r V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameGroupsGroupNameTransferPost implements POST /v1/organizations/{organizationName}/groups/{groupName}/transfer operation.
-//
-// Transfer a group to another organization that you own or a member of.
-//
-// POST /v1/organizations/{organizationName}/groups/{groupName}/transfer
-func (UnimplementedHandler) V1OrganizationsOrganizationNameGroupsGroupNameTransferPost(ctx context.Context, req *V1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq, params V1OrganizationsOrganizationNameGroupsGroupNameTransferPostParams) (r V1OrganizationsOrganizationNameGroupsGroupNameTransferPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameGroupsGroupNameUpdatePost implements POST /v1/organizations/{organizationName}/groups/{groupName}/update operation.
-//
-// Updates all databases in the group to the latest libSQL version.
-//
-// POST /v1/organizations/{organizationName}/groups/{groupName}/update
-func (UnimplementedHandler) V1OrganizationsOrganizationNameGroupsGroupNameUpdatePost(ctx context.Context, params V1OrganizationsOrganizationNameGroupsGroupNameUpdatePostParams) (r V1OrganizationsOrganizationNameGroupsGroupNameUpdatePostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameGroupsPost implements POST /v1/organizations/{organizationName}/groups operation.
-//
-// Creates a new group for the organization or user.
-//
-// POST /v1/organizations/{organizationName}/groups
-func (UnimplementedHandler) V1OrganizationsOrganizationNameGroupsPost(ctx context.Context, req *NewGroup, params V1OrganizationsOrganizationNameGroupsPostParams) (r V1OrganizationsOrganizationNameGroupsPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameInvitesGet implements GET /v1/organizations/{organizationName}/invites operation.
-//
-// Returns a list of invites for the organization.
-//
-// GET /v1/organizations/{organizationName}/invites
-func (UnimplementedHandler) V1OrganizationsOrganizationNameInvitesGet(ctx context.Context, params V1OrganizationsOrganizationNameInvitesGetParams) (r *V1OrganizationsOrganizationNameInvitesGetOK, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameInvitesPost implements POST /v1/organizations/{organizationName}/invites operation.
-//
-// Invite a user to an organization.
-//
-// POST /v1/organizations/{organizationName}/invites
-func (UnimplementedHandler) V1OrganizationsOrganizationNameInvitesPost(ctx context.Context, req *V1OrganizationsOrganizationNameInvitesPostReq, params V1OrganizationsOrganizationNameInvitesPostParams) (r *V1OrganizationsOrganizationNameInvitesPostOK, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameMembersGet implements GET /v1/organizations/{organizationName}/members operation.
-//
-// Returns a list of members part of the organization.
-//
-// GET /v1/organizations/{organizationName}/members
-func (UnimplementedHandler) V1OrganizationsOrganizationNameMembersGet(ctx context.Context, params V1OrganizationsOrganizationNameMembersGetParams) (r *V1OrganizationsOrganizationNameMembersGetOK, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameMembersPost implements POST /v1/organizations/{organizationName}/members operation.
-//
-// Add an existing Turso user to an organization.
-//
-// POST /v1/organizations/{organizationName}/members
-func (UnimplementedHandler) V1OrganizationsOrganizationNameMembersPost(ctx context.Context, req *V1OrganizationsOrganizationNameMembersPostReq, params V1OrganizationsOrganizationNameMembersPostParams) (r V1OrganizationsOrganizationNameMembersPostRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNameMembersUsernameDelete implements DELETE /v1/organizations/{organizationName}/members/{username} operation.
-//
-// Remove a user from the organization by username.
-//
-// DELETE /v1/organizations/{organizationName}/members/{username}
-func (UnimplementedHandler) V1OrganizationsOrganizationNameMembersUsernameDelete(ctx context.Context, params V1OrganizationsOrganizationNameMembersUsernameDeleteParams) (r V1OrganizationsOrganizationNameMembersUsernameDeleteRes, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// V1OrganizationsOrganizationNamePatch implements PATCH /v1/organizations/{organizationName} operation.
-//
-// Update an organization you own or are a member of.
-//
-// PATCH /v1/organizations/{organizationName}
-func (UnimplementedHandler) V1OrganizationsOrganizationNamePatch(ctx context.Context, req *V1OrganizationsOrganizationNamePatchReq, params V1OrganizationsOrganizationNamePatchParams) (r *V1OrganizationsOrganizationNamePatchOK, _ error) {
+// GET /v1/auth/validate
+func (UnimplementedHandler) ValidateAPIToken(ctx context.Context) (r *ValidateAPITokenOK, _ error) {
 	return r, ht.ErrNotImplemented
 }

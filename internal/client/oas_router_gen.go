@@ -84,7 +84,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					if len(elem) == 0 {
 						switch r.Method {
 						case "GET":
-							s.handleV1AuthAPITokensGetRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleListAPITokensRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "GET")
 						}
@@ -109,11 +109,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							// Leaf node.
 							switch r.Method {
 							case "DELETE":
-								s.handleV1AuthAPITokensTokenNameDeleteRequest([1]string{
+								s.handleRevokeAPITokenRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
 							case "POST":
-								s.handleV1AuthAPITokensTokenNamePostRequest([1]string{
+								s.handleCreateAPITokenRequest([1]string{
 									args[0],
 								}, elemIsEscaped, w, r)
 							default:
@@ -139,7 +139,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						// Leaf node.
 						switch r.Method {
 						case "GET":
-							s.handleV1AuthValidateGetRequest([0]string{}, elemIsEscaped, w, r)
+							s.handleValidateAPITokenRequest([0]string{}, elemIsEscaped, w, r)
 						default:
 							s.notAllowed(w, r, "GET")
 						}
@@ -163,7 +163,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					// Leaf node.
 					switch r.Method {
 					case "GET":
-						s.handleV1LocationsGetRequest([0]string{}, elemIsEscaped, w, r)
+						s.handleListLocationsRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
 					}
@@ -183,7 +183,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 				if len(elem) == 0 {
 					switch r.Method {
 					case "GET":
-						s.handleV1OrganizationsGetRequest([0]string{}, elemIsEscaped, w, r)
+						s.handleListOrganizationsRequest([0]string{}, elemIsEscaped, w, r)
 					default:
 						s.notAllowed(w, r, "GET")
 					}
@@ -211,7 +211,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 					if len(elem) == 0 {
 						switch r.Method {
 						case "PATCH":
-							s.handleV1OrganizationsOrganizationNamePatchRequest([1]string{
+							s.handleUpdateOrganizationRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
 						default:
@@ -245,7 +245,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								// Leaf node.
 								switch r.Method {
 								case "GET":
-									s.handleV1OrganizationsOrganizationNameAuditLogsGetRequest([1]string{
+									s.handleListOrganizationAuditLogsRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
 								default:
@@ -267,11 +267,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							if len(elem) == 0 {
 								switch r.Method {
 								case "GET":
-									s.handleV1OrganizationsOrganizationNameDatabasesGetRequest([1]string{
+									s.handleListDatabasesRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
 								case "POST":
-									s.handleV1OrganizationsOrganizationNameDatabasesPostRequest([1]string{
+									s.handleCreateDatabaseRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
 								default:
@@ -305,7 +305,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 										// Leaf node.
 										switch r.Method {
 										case "POST":
-											s.handleV1OrganizationsOrganizationNameDatabasesDumpsPostRequest([1]string{
+											s.handleUploadDatabaseDumpRequest([1]string{
 												args[0],
 											}, elemIsEscaped, w, r)
 										default:
@@ -329,12 +329,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								if len(elem) == 0 {
 									switch r.Method {
 									case "DELETE":
-										s.handleV1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteRequest([2]string{
+										s.handleDeleteDatabaseRequest([2]string{
 											args[0],
 											args[1],
 										}, elemIsEscaped, w, r)
 									case "GET":
-										s.handleV1OrganizationsOrganizationNameDatabasesDatabaseNameGetRequest([2]string{
+										s.handleGetDatabaseRequest([2]string{
 											args[0],
 											args[1],
 										}, elemIsEscaped, w, r)
@@ -381,7 +381,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 												// Leaf node.
 												switch r.Method {
 												case "POST":
-													s.handleV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePostRequest([2]string{
+													s.handleInvalidateDatabaseTokensRequest([2]string{
 														args[0],
 														args[1],
 													}, elemIsEscaped, w, r)
@@ -405,7 +405,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 												// Leaf node.
 												switch r.Method {
 												case "POST":
-													s.handleV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostRequest([2]string{
+													s.handleCreateDatabaseTokenRequest([2]string{
 														args[0],
 														args[1],
 													}, elemIsEscaped, w, r)
@@ -431,13 +431,18 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 										if len(elem) == 0 {
 											// Leaf node.
 											switch r.Method {
+											case "GET":
+												s.handleGetDatabaseConfigurationRequest([2]string{
+													args[0],
+													args[1],
+												}, elemIsEscaped, w, r)
 											case "PATCH":
-												s.handleV1OrganizationsOrganizationNameDatabasesDatabaseNameConfigurationPatchRequest([2]string{
+												s.handleUpdateDatabaseConfigurationRequest([2]string{
 													args[0],
 													args[1],
 												}, elemIsEscaped, w, r)
 											default:
-												s.notAllowed(w, r, "PATCH")
+												s.notAllowed(w, r, "GET,PATCH")
 											}
 
 											return
@@ -455,7 +460,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 										if len(elem) == 0 {
 											switch r.Method {
 											case "GET":
-												s.handleV1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetRequest([2]string{
+												s.handleListDatabaseInstancesRequest([2]string{
 													args[0],
 													args[1],
 												}, elemIsEscaped, w, r)
@@ -483,7 +488,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 												// Leaf node.
 												switch r.Method {
 												case "GET":
-													s.handleV1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetRequest([3]string{
+													s.handleGetDatabaseInstanceRequest([3]string{
 														args[0],
 														args[1],
 														args[2],
@@ -511,7 +516,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 											// Leaf node.
 											switch r.Method {
 											case "GET":
-												s.handleV1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetRequest([2]string{
+												s.handleGetDatabaseStatsRequest([2]string{
 													args[0],
 													args[1],
 												}, elemIsEscaped, w, r)
@@ -535,7 +540,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 											// Leaf node.
 											switch r.Method {
 											case "GET":
-												s.handleV1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetRequest([2]string{
+												s.handleGetDatabaseUsageRequest([2]string{
 													args[0],
 													args[1],
 												}, elemIsEscaped, w, r)
@@ -567,11 +572,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							if len(elem) == 0 {
 								switch r.Method {
 								case "GET":
-									s.handleV1OrganizationsOrganizationNameGroupsGetRequest([1]string{
+									s.handleListGroupsRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
 								case "POST":
-									s.handleV1OrganizationsOrganizationNameGroupsPostRequest([1]string{
+									s.handleCreateGroupRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
 								default:
@@ -601,12 +606,12 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								if len(elem) == 0 {
 									switch r.Method {
 									case "DELETE":
-										s.handleV1OrganizationsOrganizationNameGroupsGroupNameDeleteRequest([2]string{
+										s.handleDeleteGroupRequest([2]string{
 											args[0],
 											args[1],
 										}, elemIsEscaped, w, r)
 									case "GET":
-										s.handleV1OrganizationsOrganizationNameGroupsGroupNameGetRequest([2]string{
+										s.handleGetGroupRequest([2]string{
 											args[0],
 											args[1],
 										}, elemIsEscaped, w, r)
@@ -653,7 +658,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 												// Leaf node.
 												switch r.Method {
 												case "POST":
-													s.handleV1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePostRequest([2]string{
+													s.handleInvalidateGroupTokensRequest([2]string{
 														args[0],
 														args[1],
 													}, elemIsEscaped, w, r)
@@ -677,7 +682,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 												// Leaf node.
 												switch r.Method {
 												case "POST":
-													s.handleV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostRequest([2]string{
+													s.handleCreateGroupTokenRequest([2]string{
 														args[0],
 														args[1],
 													}, elemIsEscaped, w, r)
@@ -709,13 +714,13 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 											// Leaf node.
 											switch r.Method {
 											case "DELETE":
-												s.handleV1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteRequest([3]string{
+												s.handleRemoveLocationFromGroupRequest([3]string{
 													args[0],
 													args[1],
 													args[2],
 												}, elemIsEscaped, w, r)
 											case "POST":
-												s.handleV1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostRequest([3]string{
+												s.handleAddLocationToGroupRequest([3]string{
 													args[0],
 													args[1],
 													args[2],
@@ -740,7 +745,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 											// Leaf node.
 											switch r.Method {
 											case "POST":
-												s.handleV1OrganizationsOrganizationNameGroupsGroupNameTransferPostRequest([2]string{
+												s.handleTransferGroupRequest([2]string{
 													args[0],
 													args[1],
 												}, elemIsEscaped, w, r)
@@ -752,27 +757,66 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 										}
 
 										elem = origElem
-									case 'u': // Prefix: "update"
+									case 'u': // Prefix: "u"
 										origElem := elem
-										if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+										if l := len("u"); len(elem) >= l && elem[0:l] == "u" {
 											elem = elem[l:]
 										} else {
 											break
 										}
 
 										if len(elem) == 0 {
-											// Leaf node.
-											switch r.Method {
-											case "POST":
-												s.handleV1OrganizationsOrganizationNameGroupsGroupNameUpdatePostRequest([2]string{
-													args[0],
-													args[1],
-												}, elemIsEscaped, w, r)
-											default:
-												s.notAllowed(w, r, "POST")
+											break
+										}
+										switch elem[0] {
+										case 'n': // Prefix: "narchive"
+											origElem := elem
+											if l := len("narchive"); len(elem) >= l && elem[0:l] == "narchive" {
+												elem = elem[l:]
+											} else {
+												break
 											}
 
-											return
+											if len(elem) == 0 {
+												// Leaf node.
+												switch r.Method {
+												case "POST":
+													s.handleUnarchiveGroupRequest([2]string{
+														args[0],
+														args[1],
+													}, elemIsEscaped, w, r)
+												default:
+													s.notAllowed(w, r, "POST")
+												}
+
+												return
+											}
+
+											elem = origElem
+										case 'p': // Prefix: "pdate"
+											origElem := elem
+											if l := len("pdate"); len(elem) >= l && elem[0:l] == "pdate" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch r.Method {
+												case "POST":
+													s.handleUpdateGroupDatabasesRequest([2]string{
+														args[0],
+														args[1],
+													}, elemIsEscaped, w, r)
+												default:
+													s.notAllowed(w, r, "POST")
+												}
+
+												return
+											}
+
+											elem = origElem
 										}
 
 										elem = origElem
@@ -785,30 +829,98 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							}
 
 							elem = origElem
-						case 'i': // Prefix: "invites"
+						case 'i': // Prefix: "inv"
 							origElem := elem
-							if l := len("invites"); len(elem) >= l && elem[0:l] == "invites" {
+							if l := len("inv"); len(elem) >= l && elem[0:l] == "inv" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
-								// Leaf node.
-								switch r.Method {
-								case "GET":
-									s.handleV1OrganizationsOrganizationNameInvitesGetRequest([1]string{
-										args[0],
-									}, elemIsEscaped, w, r)
-								case "POST":
-									s.handleV1OrganizationsOrganizationNameInvitesPostRequest([1]string{
-										args[0],
-									}, elemIsEscaped, w, r)
-								default:
-									s.notAllowed(w, r, "GET,POST")
+								break
+							}
+							switch elem[0] {
+							case 'i': // Prefix: "ites"
+								origElem := elem
+								if l := len("ites"); len(elem) >= l && elem[0:l] == "ites" {
+									elem = elem[l:]
+								} else {
+									break
 								}
 
-								return
+								if len(elem) == 0 {
+									switch r.Method {
+									case "GET":
+										s.handleListOrganizationInvitesRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									case "POST":
+										s.handleInviteOrganizationMemberRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "GET,POST")
+									}
+
+									return
+								}
+								switch elem[0] {
+								case '/': // Prefix: "/"
+									origElem := elem
+									if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									// Param: "email"
+									// Leaf parameter
+									args[1] = elem
+									elem = ""
+
+									if len(elem) == 0 {
+										// Leaf node.
+										switch r.Method {
+										case "DELETE":
+											s.handleDeleteOrganizationInviteByEmailRequest([2]string{
+												args[0],
+												args[1],
+											}, elemIsEscaped, w, r)
+										default:
+											s.notAllowed(w, r, "DELETE")
+										}
+
+										return
+									}
+
+									elem = origElem
+								}
+
+								elem = origElem
+							case 'o': // Prefix: "oices"
+								origElem := elem
+								if l := len("oices"); len(elem) >= l && elem[0:l] == "oices" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch r.Method {
+									case "GET":
+										s.handleListOrganizationInvoicesRequest([1]string{
+											args[0],
+										}, elemIsEscaped, w, r)
+									default:
+										s.notAllowed(w, r, "GET")
+									}
+
+									return
+								}
+
+								elem = origElem
 							}
 
 							elem = origElem
@@ -823,11 +935,11 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 							if len(elem) == 0 {
 								switch r.Method {
 								case "GET":
-									s.handleV1OrganizationsOrganizationNameMembersGetRequest([1]string{
+									s.handleListOrganizationMembersRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
 								case "POST":
-									s.handleV1OrganizationsOrganizationNameMembersPostRequest([1]string{
+									s.handleAddOrganizationMemberRequest([1]string{
 										args[0],
 									}, elemIsEscaped, w, r)
 								default:
@@ -854,7 +966,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 									// Leaf node.
 									switch r.Method {
 									case "DELETE":
-										s.handleV1OrganizationsOrganizationNameMembersUsernameDeleteRequest([2]string{
+										s.handleRemoveOrganizationMemberRequest([2]string{
 											args[0],
 											args[1],
 										}, elemIsEscaped, w, r)
@@ -866,6 +978,75 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 								}
 
 								elem = origElem
+							}
+
+							elem = origElem
+						case 'p': // Prefix: "plans"
+							origElem := elem
+							if l := len("plans"); len(elem) >= l && elem[0:l] == "plans" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleListOrganizationPlansRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 's': // Prefix: "subscription"
+							origElem := elem
+							if l := len("subscription"); len(elem) >= l && elem[0:l] == "subscription" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleGetOrganizationSubscriptionRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
+							}
+
+							elem = origElem
+						case 'u': // Prefix: "usage"
+							origElem := elem
+							if l := len("usage"); len(elem) >= l && elem[0:l] == "usage" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch r.Method {
+								case "GET":
+									s.handleGetOrganizationUsageRequest([1]string{
+										args[0],
+									}, elemIsEscaped, w, r)
+								default:
+									s.notAllowed(w, r, "GET")
+								}
+
+								return
 							}
 
 							elem = origElem
@@ -996,9 +1177,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "GET":
-							r.name = "V1AuthAPITokensGet"
+							r.name = "ListAPITokens"
 							r.summary = "List API Tokens"
-							r.operationID = ""
+							r.operationID = "listAPITokens"
 							r.pathPattern = "/v1/auth/api-tokens"
 							r.args = args
 							r.count = 0
@@ -1022,21 +1203,20 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						elem = ""
 
 						if len(elem) == 0 {
+							// Leaf node.
 							switch method {
 							case "DELETE":
-								// Leaf: V1AuthAPITokensTokenNameDelete
-								r.name = "V1AuthAPITokensTokenNameDelete"
+								r.name = "RevokeAPIToken"
 								r.summary = "Revoke API Token"
-								r.operationID = ""
+								r.operationID = "revokeAPIToken"
 								r.pathPattern = "/v1/auth/api-tokens/{tokenName}"
 								r.args = args
 								r.count = 1
 								return r, true
 							case "POST":
-								// Leaf: V1AuthAPITokensTokenNamePost
-								r.name = "V1AuthAPITokensTokenNamePost"
+								r.name = "CreateAPIToken"
 								r.summary = "Create API Token"
-								r.operationID = ""
+								r.operationID = "createAPIToken"
 								r.pathPattern = "/v1/auth/api-tokens/{tokenName}"
 								r.args = args
 								r.count = 1
@@ -1059,12 +1239,12 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					}
 
 					if len(elem) == 0 {
+						// Leaf node.
 						switch method {
 						case "GET":
-							// Leaf: V1AuthValidateGet
-							r.name = "V1AuthValidateGet"
+							r.name = "ValidateAPIToken"
 							r.summary = "Validate API Token"
-							r.operationID = ""
+							r.operationID = "validateAPIToken"
 							r.pathPattern = "/v1/auth/validate"
 							r.args = args
 							r.count = 0
@@ -1087,12 +1267,12 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				}
 
 				if len(elem) == 0 {
+					// Leaf node.
 					switch method {
 					case "GET":
-						// Leaf: V1LocationsGet
-						r.name = "V1LocationsGet"
+						r.name = "ListLocations"
 						r.summary = "List Locations"
-						r.operationID = ""
+						r.operationID = "listLocations"
 						r.pathPattern = "/v1/locations"
 						r.args = args
 						r.count = 0
@@ -1114,9 +1294,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						r.name = "V1OrganizationsGet"
+						r.name = "ListOrganizations"
 						r.summary = "List Organizations"
-						r.operationID = ""
+						r.operationID = "listOrganizations"
 						r.pathPattern = "/v1/organizations"
 						r.args = args
 						r.count = 0
@@ -1146,9 +1326,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "PATCH":
-							r.name = "V1OrganizationsOrganizationNamePatch"
+							r.name = "UpdateOrganization"
 							r.summary = "Update Organization"
-							r.operationID = ""
+							r.operationID = "updateOrganization"
 							r.pathPattern = "/v1/organizations/{organizationName}"
 							r.args = args
 							r.count = 1
@@ -1179,12 +1359,12 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							}
 
 							if len(elem) == 0 {
+								// Leaf node.
 								switch method {
 								case "GET":
-									// Leaf: V1OrganizationsOrganizationNameAuditLogsGet
-									r.name = "V1OrganizationsOrganizationNameAuditLogsGet"
+									r.name = "ListOrganizationAuditLogs"
 									r.summary = "List Audit Logs"
-									r.operationID = ""
+									r.operationID = "listOrganizationAuditLogs"
 									r.pathPattern = "/v1/organizations/{organizationName}/audit-logs"
 									r.args = args
 									r.count = 1
@@ -1206,17 +1386,17 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							if len(elem) == 0 {
 								switch method {
 								case "GET":
-									r.name = "V1OrganizationsOrganizationNameDatabasesGet"
+									r.name = "ListDatabases"
 									r.summary = "List Databases"
-									r.operationID = ""
+									r.operationID = "listDatabases"
 									r.pathPattern = "/v1/organizations/{organizationName}/databases"
 									r.args = args
 									r.count = 1
 									return r, true
 								case "POST":
-									r.name = "V1OrganizationsOrganizationNameDatabasesPost"
+									r.name = "CreateDatabase"
 									r.summary = "Create Database"
-									r.operationID = ""
+									r.operationID = "createDatabase"
 									r.pathPattern = "/v1/organizations/{organizationName}/databases"
 									r.args = args
 									r.count = 1
@@ -1247,12 +1427,12 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									}
 
 									if len(elem) == 0 {
+										// Leaf node.
 										switch method {
 										case "POST":
-											// Leaf: V1OrganizationsOrganizationNameDatabasesDumpsPost
-											r.name = "V1OrganizationsOrganizationNameDatabasesDumpsPost"
-											r.summary = "Upload Dump"
-											r.operationID = ""
+											r.name = "UploadDatabaseDump"
+											r.summary = "Upload SQLite Dump"
+											r.operationID = "uploadDatabaseDump"
 											r.pathPattern = "/v1/organizations/{organizationName}/databases/dumps"
 											r.args = args
 											r.count = 1
@@ -1276,17 +1456,17 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								if len(elem) == 0 {
 									switch method {
 									case "DELETE":
-										r.name = "V1OrganizationsOrganizationNameDatabasesDatabaseNameDelete"
+										r.name = "DeleteDatabase"
 										r.summary = "Delete Database"
-										r.operationID = ""
+										r.operationID = "deleteDatabase"
 										r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}"
 										r.args = args
 										r.count = 2
 										return r, true
 									case "GET":
-										r.name = "V1OrganizationsOrganizationNameDatabasesDatabaseNameGet"
+										r.name = "GetDatabase"
 										r.summary = "Retrieve Database"
-										r.operationID = ""
+										r.operationID = "getDatabase"
 										r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}"
 										r.args = args
 										r.count = 2
@@ -1329,12 +1509,12 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 											}
 
 											if len(elem) == 0 {
+												// Leaf node.
 												switch method {
 												case "POST":
-													// Leaf: V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePost
-													r.name = "V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePost"
+													r.name = "InvalidateDatabaseTokens"
 													r.summary = "Invalidate All Database Auth Tokens"
-													r.operationID = ""
+													r.operationID = "invalidateDatabaseTokens"
 													r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}/auth/rotate"
 													r.args = args
 													r.count = 2
@@ -1354,12 +1534,12 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 											}
 
 											if len(elem) == 0 {
+												// Leaf node.
 												switch method {
 												case "POST":
-													// Leaf: V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPost
-													r.name = "V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPost"
+													r.name = "CreateDatabaseToken"
 													r.summary = "Generate Database Auth Token"
-													r.operationID = ""
+													r.operationID = "createDatabaseToken"
 													r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}/auth/tokens"
 													r.args = args
 													r.count = 2
@@ -1382,12 +1562,20 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										}
 
 										if len(elem) == 0 {
+											// Leaf node.
 											switch method {
+											case "GET":
+												r.name = "GetDatabaseConfiguration"
+												r.summary = "Retrieve Database Configuration"
+												r.operationID = "getDatabaseConfiguration"
+												r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}/configuration"
+												r.args = args
+												r.count = 2
+												return r, true
 											case "PATCH":
-												// Leaf: V1OrganizationsOrganizationNameDatabasesDatabaseNameConfigurationPatch
-												r.name = "V1OrganizationsOrganizationNameDatabasesDatabaseNameConfigurationPatch"
+												r.name = "UpdateDatabaseConfiguration"
 												r.summary = "Update Database Configuration"
-												r.operationID = ""
+												r.operationID = "updateDatabaseConfiguration"
 												r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}/configuration"
 												r.args = args
 												r.count = 2
@@ -1409,9 +1597,9 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										if len(elem) == 0 {
 											switch method {
 											case "GET":
-												r.name = "V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGet"
+												r.name = "ListDatabaseInstances"
 												r.summary = "List Database Instances"
-												r.operationID = ""
+												r.operationID = "listDatabaseInstances"
 												r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}/instances"
 												r.args = args
 												r.count = 2
@@ -1435,12 +1623,12 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 											elem = ""
 
 											if len(elem) == 0 {
+												// Leaf node.
 												switch method {
 												case "GET":
-													// Leaf: V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGet
-													r.name = "V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGet"
+													r.name = "GetDatabaseInstance"
 													r.summary = "Retrieve Database Instance"
-													r.operationID = ""
+													r.operationID = "getDatabaseInstance"
 													r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}/instances/{instanceName}"
 													r.args = args
 													r.count = 3
@@ -1463,12 +1651,12 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										}
 
 										if len(elem) == 0 {
+											// Leaf node.
 											switch method {
 											case "GET":
-												// Leaf: V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGet
-												r.name = "V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGet"
+												r.name = "GetDatabaseStats"
 												r.summary = "Retrieve Database Stats"
-												r.operationID = ""
+												r.operationID = "getDatabaseStats"
 												r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}/stats"
 												r.args = args
 												r.count = 2
@@ -1488,12 +1676,12 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										}
 
 										if len(elem) == 0 {
+											// Leaf node.
 											switch method {
 											case "GET":
-												// Leaf: V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGet
-												r.name = "V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGet"
+												r.name = "GetDatabaseUsage"
 												r.summary = "Retrieve Database Usage"
-												r.operationID = ""
+												r.operationID = "getDatabaseUsage"
 												r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}/usage"
 												r.args = args
 												r.count = 2
@@ -1524,17 +1712,17 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							if len(elem) == 0 {
 								switch method {
 								case "GET":
-									r.name = "V1OrganizationsOrganizationNameGroupsGet"
+									r.name = "ListGroups"
 									r.summary = "List Groups"
-									r.operationID = ""
+									r.operationID = "listGroups"
 									r.pathPattern = "/v1/organizations/{organizationName}/groups"
 									r.args = args
 									r.count = 1
 									return r, true
 								case "POST":
-									r.name = "V1OrganizationsOrganizationNameGroupsPost"
+									r.name = "CreateGroup"
 									r.summary = "Create Group"
-									r.operationID = ""
+									r.operationID = "createGroup"
 									r.pathPattern = "/v1/organizations/{organizationName}/groups"
 									r.args = args
 									r.count = 1
@@ -1564,17 +1752,17 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								if len(elem) == 0 {
 									switch method {
 									case "DELETE":
-										r.name = "V1OrganizationsOrganizationNameGroupsGroupNameDelete"
+										r.name = "DeleteGroup"
 										r.summary = "Delete Group"
-										r.operationID = ""
+										r.operationID = "deleteGroup"
 										r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}"
 										r.args = args
 										r.count = 2
 										return r, true
 									case "GET":
-										r.name = "V1OrganizationsOrganizationNameGroupsGroupNameGet"
+										r.name = "GetGroup"
 										r.summary = "Retrieve Group"
-										r.operationID = ""
+										r.operationID = "getGroup"
 										r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}"
 										r.args = args
 										r.count = 2
@@ -1617,12 +1805,12 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 											}
 
 											if len(elem) == 0 {
+												// Leaf node.
 												switch method {
 												case "POST":
-													// Leaf: V1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePost
-													r.name = "V1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePost"
+													r.name = "InvalidateGroupTokens"
 													r.summary = "Invalidate All Group Auth Tokens"
-													r.operationID = ""
+													r.operationID = "invalidateGroupTokens"
 													r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}/auth/rotate"
 													r.args = args
 													r.count = 2
@@ -1642,12 +1830,12 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 											}
 
 											if len(elem) == 0 {
+												// Leaf node.
 												switch method {
 												case "POST":
-													// Leaf: V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPost
-													r.name = "V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPost"
+													r.name = "CreateGroupToken"
 													r.summary = "Create Group Auth Token"
-													r.operationID = ""
+													r.operationID = "createGroupToken"
 													r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}/auth/tokens"
 													r.args = args
 													r.count = 2
@@ -1675,21 +1863,20 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										elem = ""
 
 										if len(elem) == 0 {
+											// Leaf node.
 											switch method {
 											case "DELETE":
-												// Leaf: V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDelete
-												r.name = "V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDelete"
+												r.name = "RemoveLocationFromGroup"
 												r.summary = "Remove Location from Group"
-												r.operationID = ""
+												r.operationID = "removeLocationFromGroup"
 												r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}/locations/{location}"
 												r.args = args
 												r.count = 3
 												return r, true
 											case "POST":
-												// Leaf: V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPost
-												r.name = "V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPost"
+												r.name = "AddLocationToGroup"
 												r.summary = "Add Location to Group"
-												r.operationID = ""
+												r.operationID = "addLocationToGroup"
 												r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}/locations/{location}"
 												r.args = args
 												r.count = 3
@@ -1709,12 +1896,12 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										}
 
 										if len(elem) == 0 {
+											// Leaf node.
 											switch method {
 											case "POST":
-												// Leaf: V1OrganizationsOrganizationNameGroupsGroupNameTransferPost
-												r.name = "V1OrganizationsOrganizationNameGroupsGroupNameTransferPost"
+												r.name = "TransferGroup"
 												r.summary = "Transfer Group"
-												r.operationID = ""
+												r.operationID = "transferGroup"
 												r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}/transfer"
 												r.args = args
 												r.count = 2
@@ -1725,28 +1912,68 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										}
 
 										elem = origElem
-									case 'u': // Prefix: "update"
+									case 'u': // Prefix: "u"
 										origElem := elem
-										if l := len("update"); len(elem) >= l && elem[0:l] == "update" {
+										if l := len("u"); len(elem) >= l && elem[0:l] == "u" {
 											elem = elem[l:]
 										} else {
 											break
 										}
 
 										if len(elem) == 0 {
-											switch method {
-											case "POST":
-												// Leaf: V1OrganizationsOrganizationNameGroupsGroupNameUpdatePost
-												r.name = "V1OrganizationsOrganizationNameGroupsGroupNameUpdatePost"
-												r.summary = "Update Databases in a Group"
-												r.operationID = ""
-												r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}/update"
-												r.args = args
-												r.count = 2
-												return r, true
-											default:
-												return
+											break
+										}
+										switch elem[0] {
+										case 'n': // Prefix: "narchive"
+											origElem := elem
+											if l := len("narchive"); len(elem) >= l && elem[0:l] == "narchive" {
+												elem = elem[l:]
+											} else {
+												break
 											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch method {
+												case "POST":
+													r.name = "UnarchiveGroup"
+													r.summary = "Unarchive Group"
+													r.operationID = "unarchiveGroup"
+													r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}/unarchive"
+													r.args = args
+													r.count = 2
+													return r, true
+												default:
+													return
+												}
+											}
+
+											elem = origElem
+										case 'p': // Prefix: "pdate"
+											origElem := elem
+											if l := len("pdate"); len(elem) >= l && elem[0:l] == "pdate" {
+												elem = elem[l:]
+											} else {
+												break
+											}
+
+											if len(elem) == 0 {
+												// Leaf node.
+												switch method {
+												case "POST":
+													r.name = "UpdateGroupDatabases"
+													r.summary = "Update Databases in a Group"
+													r.operationID = "updateGroupDatabases"
+													r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}/update"
+													r.args = args
+													r.count = 2
+													return r, true
+												default:
+													return
+												}
+											}
+
+											elem = origElem
 										}
 
 										elem = origElem
@@ -1759,37 +1986,107 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							}
 
 							elem = origElem
-						case 'i': // Prefix: "invites"
+						case 'i': // Prefix: "inv"
 							origElem := elem
-							if l := len("invites"); len(elem) >= l && elem[0:l] == "invites" {
+							if l := len("inv"); len(elem) >= l && elem[0:l] == "inv" {
 								elem = elem[l:]
 							} else {
 								break
 							}
 
 							if len(elem) == 0 {
-								switch method {
-								case "GET":
-									// Leaf: V1OrganizationsOrganizationNameInvitesGet
-									r.name = "V1OrganizationsOrganizationNameInvitesGet"
-									r.summary = "List Invites"
-									r.operationID = ""
-									r.pathPattern = "/v1/organizations/{organizationName}/invites"
-									r.args = args
-									r.count = 1
-									return r, true
-								case "POST":
-									// Leaf: V1OrganizationsOrganizationNameInvitesPost
-									r.name = "V1OrganizationsOrganizationNameInvitesPost"
-									r.summary = "Invite User"
-									r.operationID = ""
-									r.pathPattern = "/v1/organizations/{organizationName}/invites"
-									r.args = args
-									r.count = 1
-									return r, true
-								default:
-									return
+								break
+							}
+							switch elem[0] {
+							case 'i': // Prefix: "ites"
+								origElem := elem
+								if l := len("ites"); len(elem) >= l && elem[0:l] == "ites" {
+									elem = elem[l:]
+								} else {
+									break
 								}
+
+								if len(elem) == 0 {
+									switch method {
+									case "GET":
+										r.name = "ListOrganizationInvites"
+										r.summary = "List Invites"
+										r.operationID = "listOrganizationInvites"
+										r.pathPattern = "/v1/organizations/{organizationName}/invites"
+										r.args = args
+										r.count = 1
+										return r, true
+									case "POST":
+										r.name = "InviteOrganizationMember"
+										r.summary = "Invite Organization Member"
+										r.operationID = "inviteOrganizationMember"
+										r.pathPattern = "/v1/organizations/{organizationName}/invites"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
+								}
+								switch elem[0] {
+								case '/': // Prefix: "/"
+									origElem := elem
+									if l := len("/"); len(elem) >= l && elem[0:l] == "/" {
+										elem = elem[l:]
+									} else {
+										break
+									}
+
+									// Param: "email"
+									// Leaf parameter
+									args[1] = elem
+									elem = ""
+
+									if len(elem) == 0 {
+										// Leaf node.
+										switch method {
+										case "DELETE":
+											r.name = "DeleteOrganizationInviteByEmail"
+											r.summary = "Delete Invite"
+											r.operationID = "deleteOrganizationInviteByEmail"
+											r.pathPattern = "/v1/organizations/{organizationName}/invites/{email}"
+											r.args = args
+											r.count = 2
+											return r, true
+										default:
+											return
+										}
+									}
+
+									elem = origElem
+								}
+
+								elem = origElem
+							case 'o': // Prefix: "oices"
+								origElem := elem
+								if l := len("oices"); len(elem) >= l && elem[0:l] == "oices" {
+									elem = elem[l:]
+								} else {
+									break
+								}
+
+								if len(elem) == 0 {
+									// Leaf node.
+									switch method {
+									case "GET":
+										r.name = "ListOrganizationInvoices"
+										r.summary = "List Invoices"
+										r.operationID = "listOrganizationInvoices"
+										r.pathPattern = "/v1/organizations/{organizationName}/invoices"
+										r.args = args
+										r.count = 1
+										return r, true
+									default:
+										return
+									}
+								}
+
+								elem = origElem
 							}
 
 							elem = origElem
@@ -1804,17 +2101,17 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							if len(elem) == 0 {
 								switch method {
 								case "GET":
-									r.name = "V1OrganizationsOrganizationNameMembersGet"
+									r.name = "ListOrganizationMembers"
 									r.summary = "List Members"
-									r.operationID = ""
+									r.operationID = "listOrganizationMembers"
 									r.pathPattern = "/v1/organizations/{organizationName}/members"
 									r.args = args
 									r.count = 1
 									return r, true
 								case "POST":
-									r.name = "V1OrganizationsOrganizationNameMembersPost"
+									r.name = "AddOrganizationMember"
 									r.summary = "Add Member"
-									r.operationID = ""
+									r.operationID = "addOrganizationMember"
 									r.pathPattern = "/v1/organizations/{organizationName}/members"
 									r.args = args
 									r.count = 1
@@ -1838,12 +2135,12 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								elem = ""
 
 								if len(elem) == 0 {
+									// Leaf node.
 									switch method {
 									case "DELETE":
-										// Leaf: V1OrganizationsOrganizationNameMembersUsernameDelete
-										r.name = "V1OrganizationsOrganizationNameMembersUsernameDelete"
+										r.name = "RemoveOrganizationMember"
 										r.summary = "Remove Member"
-										r.operationID = ""
+										r.operationID = "removeOrganizationMember"
 										r.pathPattern = "/v1/organizations/{organizationName}/members/{username}"
 										r.args = args
 										r.count = 2
@@ -1854,6 +2151,81 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								}
 
 								elem = origElem
+							}
+
+							elem = origElem
+						case 'p': // Prefix: "plans"
+							origElem := elem
+							if l := len("plans"); len(elem) >= l && elem[0:l] == "plans" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = "ListOrganizationPlans"
+									r.summary = "List Plans"
+									r.operationID = "listOrganizationPlans"
+									r.pathPattern = "/v1/organizations/{organizationName}/plans"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 's': // Prefix: "subscription"
+							origElem := elem
+							if l := len("subscription"); len(elem) >= l && elem[0:l] == "subscription" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = "GetOrganizationSubscription"
+									r.summary = "Current Subscription"
+									r.operationID = "getOrganizationSubscription"
+									r.pathPattern = "/v1/organizations/{organizationName}/subscription"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
+							}
+
+							elem = origElem
+						case 'u': // Prefix: "usage"
+							origElem := elem
+							if l := len("usage"); len(elem) >= l && elem[0:l] == "usage" {
+								elem = elem[l:]
+							} else {
+								break
+							}
+
+							if len(elem) == 0 {
+								// Leaf node.
+								switch method {
+								case "GET":
+									r.name = "GetOrganizationUsage"
+									r.summary = "Organization Usage"
+									r.operationID = "getOrganizationUsage"
+									r.pathPattern = "/v1/organizations/{organizationName}/usage"
+									r.args = args
+									r.count = 1
+									return r, true
+								default:
+									return
+								}
 							}
 
 							elem = origElem

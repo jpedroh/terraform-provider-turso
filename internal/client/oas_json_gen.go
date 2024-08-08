@@ -94,6 +94,459 @@ func (s *APIToken) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
+func (s *AddLocationToGroupBadRequest) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *AddLocationToGroupBadRequest) encodeFields(e *jx.Encoder) {
+	{
+		if s.Error.Set {
+			e.FieldStart("error")
+			s.Error.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfAddLocationToGroupBadRequest = [1]string{
+	0: "error",
+}
+
+// Decode decodes AddLocationToGroupBadRequest from json.
+func (s *AddLocationToGroupBadRequest) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AddLocationToGroupBadRequest to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "error":
+			if err := func() error {
+				s.Error.Reset()
+				if err := s.Error.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"error\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode AddLocationToGroupBadRequest")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *AddLocationToGroupBadRequest) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *AddLocationToGroupBadRequest) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *AddLocationToGroupOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *AddLocationToGroupOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Group.Set {
+			e.FieldStart("group")
+			s.Group.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfAddLocationToGroupOK = [1]string{
+	0: "group",
+}
+
+// Decode decodes AddLocationToGroupOK from json.
+func (s *AddLocationToGroupOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AddLocationToGroupOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "group":
+			if err := func() error {
+				s.Group.Reset()
+				if err := s.Group.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"group\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode AddLocationToGroupOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *AddLocationToGroupOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *AddLocationToGroupOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *AddOrganizationMemberConflict) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *AddOrganizationMemberConflict) encodeFields(e *jx.Encoder) {
+	{
+		if s.Error.Set {
+			e.FieldStart("error")
+			s.Error.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfAddOrganizationMemberConflict = [1]string{
+	0: "error",
+}
+
+// Decode decodes AddOrganizationMemberConflict from json.
+func (s *AddOrganizationMemberConflict) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AddOrganizationMemberConflict to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "error":
+			if err := func() error {
+				s.Error.Reset()
+				if err := s.Error.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"error\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode AddOrganizationMemberConflict")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *AddOrganizationMemberConflict) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *AddOrganizationMemberConflict) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *AddOrganizationMemberNotFound) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *AddOrganizationMemberNotFound) encodeFields(e *jx.Encoder) {
+	{
+		if s.Error.Set {
+			e.FieldStart("error")
+			s.Error.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfAddOrganizationMemberNotFound = [1]string{
+	0: "error",
+}
+
+// Decode decodes AddOrganizationMemberNotFound from json.
+func (s *AddOrganizationMemberNotFound) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AddOrganizationMemberNotFound to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "error":
+			if err := func() error {
+				s.Error.Reset()
+				if err := s.Error.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"error\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode AddOrganizationMemberNotFound")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *AddOrganizationMemberNotFound) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *AddOrganizationMemberNotFound) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *AddOrganizationMemberOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *AddOrganizationMemberOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Member.Set {
+			e.FieldStart("member")
+			s.Member.Encode(e)
+		}
+	}
+	{
+		if s.Role.Set {
+			e.FieldStart("role")
+			s.Role.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfAddOrganizationMemberOK = [2]string{
+	0: "member",
+	1: "role",
+}
+
+// Decode decodes AddOrganizationMemberOK from json.
+func (s *AddOrganizationMemberOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AddOrganizationMemberOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "member":
+			if err := func() error {
+				s.Member.Reset()
+				if err := s.Member.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"member\"")
+			}
+		case "role":
+			if err := func() error {
+				s.Role.Reset()
+				if err := s.Role.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"role\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode AddOrganizationMemberOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *AddOrganizationMemberOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *AddOrganizationMemberOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *AddOrganizationMemberReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *AddOrganizationMemberReq) encodeFields(e *jx.Encoder) {
+	{
+		if s.Username.Set {
+			e.FieldStart("username")
+			s.Username.Encode(e)
+		}
+	}
+	{
+		if s.Role.Set {
+			e.FieldStart("role")
+			s.Role.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfAddOrganizationMemberReq = [2]string{
+	0: "username",
+	1: "role",
+}
+
+// Decode decodes AddOrganizationMemberReq from json.
+func (s *AddOrganizationMemberReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AddOrganizationMemberReq to nil")
+	}
+	s.setDefaults()
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "username":
+			if err := func() error {
+				s.Username.Reset()
+				if err := s.Username.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"username\"")
+			}
+		case "role":
+			if err := func() error {
+				s.Role.Reset()
+				if err := s.Role.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"role\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode AddOrganizationMemberReq")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *AddOrganizationMemberReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *AddOrganizationMemberReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes AddOrganizationMemberReqRole as json.
+func (s AddOrganizationMemberReqRole) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes AddOrganizationMemberReqRole from json.
+func (s *AddOrganizationMemberReqRole) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode AddOrganizationMemberReqRole to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch AddOrganizationMemberReqRole(v) {
+	case AddOrganizationMemberReqRoleAdmin:
+		*s = AddOrganizationMemberReqRoleAdmin
+	case AddOrganizationMemberReqRoleMember:
+		*s = AddOrganizationMemberReqRoleMember
+	default:
+		*s = AddOrganizationMemberReqRole(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s AddOrganizationMemberReqRole) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *AddOrganizationMemberReqRole) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
 func (s *AuditLog) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -287,6 +740,10 @@ func (s *AuditLogCode) Decode(d *jx.Decoder) error {
 		*s = AuditLogCodeGroupCreate
 	case AuditLogCodeGroupDelete:
 		*s = AuditLogCodeGroupDelete
+	case AuditLogCodeMfaEnable:
+		*s = AuditLogCodeMfaEnable
+	case AuditLogCodeMfaDisable:
+		*s = AuditLogCodeMfaDisable
 	default:
 		*s = AuditLogCode(v)
 	}
@@ -347,6 +804,132 @@ func (s *AuditLogData) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *AuditLogData) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CreateDatabaseBadRequest) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CreateDatabaseBadRequest) encodeFields(e *jx.Encoder) {
+	{
+		if s.Error.Set {
+			e.FieldStart("error")
+			s.Error.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfCreateDatabaseBadRequest = [1]string{
+	0: "error",
+}
+
+// Decode decodes CreateDatabaseBadRequest from json.
+func (s *CreateDatabaseBadRequest) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CreateDatabaseBadRequest to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "error":
+			if err := func() error {
+				s.Error.Reset()
+				if err := s.Error.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"error\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode CreateDatabaseBadRequest")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CreateDatabaseBadRequest) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CreateDatabaseBadRequest) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CreateDatabaseConflict) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CreateDatabaseConflict) encodeFields(e *jx.Encoder) {
+	{
+		if s.Error.Set {
+			e.FieldStart("error")
+			s.Error.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfCreateDatabaseConflict = [1]string{
+	0: "error",
+}
+
+// Decode decodes CreateDatabaseConflict from json.
+func (s *CreateDatabaseConflict) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CreateDatabaseConflict to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "error":
+			if err := func() error {
+				s.Error.Reset()
+				if err := s.Error.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"error\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode CreateDatabaseConflict")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CreateDatabaseConflict) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CreateDatabaseConflict) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -687,6 +1270,69 @@ func (s *CreateDatabaseInputSeedType) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
+func (s *CreateDatabaseOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CreateDatabaseOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Database.Set {
+			e.FieldStart("database")
+			s.Database.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfCreateDatabaseOK = [1]string{
+	0: "database",
+}
+
+// Decode decodes CreateDatabaseOK from json.
+func (s *CreateDatabaseOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CreateDatabaseOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "database":
+			if err := func() error {
+				s.Database.Reset()
+				if err := s.Database.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"database\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode CreateDatabaseOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CreateDatabaseOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CreateDatabaseOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
 func (s *CreateDatabaseOutput) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
@@ -779,6 +1425,384 @@ func (s *CreateDatabaseOutput) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *CreateDatabaseOutput) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CreateDatabaseTokenBadRequest) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CreateDatabaseTokenBadRequest) encodeFields(e *jx.Encoder) {
+	{
+		if s.Error.Set {
+			e.FieldStart("error")
+			s.Error.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfCreateDatabaseTokenBadRequest = [1]string{
+	0: "error",
+}
+
+// Decode decodes CreateDatabaseTokenBadRequest from json.
+func (s *CreateDatabaseTokenBadRequest) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CreateDatabaseTokenBadRequest to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "error":
+			if err := func() error {
+				s.Error.Reset()
+				if err := s.Error.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"error\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode CreateDatabaseTokenBadRequest")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CreateDatabaseTokenBadRequest) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CreateDatabaseTokenBadRequest) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CreateDatabaseTokenOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CreateDatabaseTokenOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Jwt.Set {
+			e.FieldStart("jwt")
+			s.Jwt.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfCreateDatabaseTokenOK = [1]string{
+	0: "jwt",
+}
+
+// Decode decodes CreateDatabaseTokenOK from json.
+func (s *CreateDatabaseTokenOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CreateDatabaseTokenOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "jwt":
+			if err := func() error {
+				s.Jwt.Reset()
+				if err := s.Jwt.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"jwt\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode CreateDatabaseTokenOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CreateDatabaseTokenOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CreateDatabaseTokenOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CreateGroupConflict) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CreateGroupConflict) encodeFields(e *jx.Encoder) {
+	{
+		if s.Error.Set {
+			e.FieldStart("error")
+			s.Error.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfCreateGroupConflict = [1]string{
+	0: "error",
+}
+
+// Decode decodes CreateGroupConflict from json.
+func (s *CreateGroupConflict) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CreateGroupConflict to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "error":
+			if err := func() error {
+				s.Error.Reset()
+				if err := s.Error.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"error\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode CreateGroupConflict")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CreateGroupConflict) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CreateGroupConflict) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CreateGroupOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CreateGroupOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Group.Set {
+			e.FieldStart("group")
+			s.Group.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfCreateGroupOK = [1]string{
+	0: "group",
+}
+
+// Decode decodes CreateGroupOK from json.
+func (s *CreateGroupOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CreateGroupOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "group":
+			if err := func() error {
+				s.Group.Reset()
+				if err := s.Group.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"group\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode CreateGroupOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CreateGroupOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CreateGroupOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CreateGroupTokenBadRequest) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CreateGroupTokenBadRequest) encodeFields(e *jx.Encoder) {
+	{
+		if s.Error.Set {
+			e.FieldStart("error")
+			s.Error.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfCreateGroupTokenBadRequest = [1]string{
+	0: "error",
+}
+
+// Decode decodes CreateGroupTokenBadRequest from json.
+func (s *CreateGroupTokenBadRequest) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CreateGroupTokenBadRequest to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "error":
+			if err := func() error {
+				s.Error.Reset()
+				if err := s.Error.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"error\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode CreateGroupTokenBadRequest")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CreateGroupTokenBadRequest) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CreateGroupTokenBadRequest) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *CreateGroupTokenOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *CreateGroupTokenOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Jwt.Set {
+			e.FieldStart("jwt")
+			s.Jwt.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfCreateGroupTokenOK = [1]string{
+	0: "jwt",
+}
+
+// Decode decodes CreateGroupTokenOK from json.
+func (s *CreateGroupTokenOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode CreateGroupTokenOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "jwt":
+			if err := func() error {
+				s.Jwt.Reset()
+				if err := s.Jwt.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"jwt\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode CreateGroupTokenOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *CreateGroupTokenOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *CreateGroupTokenOK) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -1077,9 +2101,9 @@ func (s *Database) encodeFields(e *jx.Encoder) {
 		}
 	}
 	{
-		if s.Sleeping.Set {
-			e.FieldStart("sleeping")
-			s.Sleeping.Encode(e)
+		if s.Archived.Set {
+			e.FieldStart("archived")
+			s.Archived.Encode(e)
 		}
 	}
 }
@@ -1098,7 +2122,7 @@ var jsonFieldsNameOfDatabase = [14]string{
 	10: "group",
 	11: "is_schema",
 	12: "schema",
-	13: "sleeping",
+	13: "archived",
 }
 
 // Decode decodes Database from json.
@@ -1249,15 +2273,15 @@ func (s *Database) Decode(d *jx.Decoder) error {
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"schema\"")
 			}
-		case "sleeping":
+		case "archived":
 			if err := func() error {
-				s.Sleeping.Reset()
-				if err := s.Sleeping.Decode(d); err != nil {
+				s.Archived.Reset()
+				if err := s.Archived.Decode(d); err != nil {
 					return err
 				}
 				return nil
 			}(); err != nil {
-				return errors.Wrap(err, "decode field \"sleeping\"")
+				return errors.Wrap(err, "decode field \"archived\"")
 			}
 		default:
 			return d.Skip()
@@ -1304,11 +2328,25 @@ func (s *DatabaseConfigurationInput) encodeFields(e *jx.Encoder) {
 			s.AllowAttach.Encode(e)
 		}
 	}
+	{
+		if s.BlockReads.Set {
+			e.FieldStart("block_reads")
+			s.BlockReads.Encode(e)
+		}
+	}
+	{
+		if s.BlockWrites.Set {
+			e.FieldStart("block_writes")
+			s.BlockWrites.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfDatabaseConfigurationInput = [2]string{
+var jsonFieldsNameOfDatabaseConfigurationInput = [4]string{
 	0: "size_limit",
 	1: "allow_attach",
+	2: "block_reads",
+	3: "block_writes",
 }
 
 // Decode decodes DatabaseConfigurationInput from json.
@@ -1338,6 +2376,26 @@ func (s *DatabaseConfigurationInput) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"allow_attach\"")
+			}
+		case "block_reads":
+			if err := func() error {
+				s.BlockReads.Reset()
+				if err := s.BlockReads.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"block_reads\"")
+			}
+		case "block_writes":
+			if err := func() error {
+				s.BlockWrites.Reset()
+				if err := s.BlockWrites.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"block_writes\"")
 			}
 		default:
 			return d.Skip()
@@ -1384,11 +2442,25 @@ func (s *DatabaseConfigurationResponse) encodeFields(e *jx.Encoder) {
 			s.AllowAttach.Encode(e)
 		}
 	}
+	{
+		if s.BlockReads.Set {
+			e.FieldStart("block_reads")
+			s.BlockReads.Encode(e)
+		}
+	}
+	{
+		if s.BlockWrites.Set {
+			e.FieldStart("block_writes")
+			s.BlockWrites.Encode(e)
+		}
+	}
 }
 
-var jsonFieldsNameOfDatabaseConfigurationResponse = [2]string{
+var jsonFieldsNameOfDatabaseConfigurationResponse = [4]string{
 	0: "size_limit",
 	1: "allow_attach",
+	2: "block_reads",
+	3: "block_writes",
 }
 
 // Decode decodes DatabaseConfigurationResponse from json.
@@ -1418,6 +2490,26 @@ func (s *DatabaseConfigurationResponse) Decode(d *jx.Decoder) error {
 				return nil
 			}(); err != nil {
 				return errors.Wrap(err, "decode field \"allow_attach\"")
+			}
+		case "block_reads":
+			if err := func() error {
+				s.BlockReads.Reset()
+				if err := s.BlockReads.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"block_reads\"")
+			}
+		case "block_writes":
+			if err := func() error {
+				s.BlockWrites.Reset()
+				if err := s.BlockWrites.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"block_writes\"")
 			}
 		default:
 			return d.Skip()
@@ -1928,6 +3020,212 @@ func (s *DbId) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode implements json.Marshaler.
+func (s *DeleteDatabaseOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *DeleteDatabaseOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Database.Set {
+			e.FieldStart("database")
+			s.Database.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfDeleteDatabaseOK = [1]string{
+	0: "database",
+}
+
+// Decode decodes DeleteDatabaseOK from json.
+func (s *DeleteDatabaseOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode DeleteDatabaseOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "database":
+			if err := func() error {
+				s.Database.Reset()
+				if err := s.Database.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"database\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode DeleteDatabaseOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *DeleteDatabaseOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *DeleteDatabaseOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *DeleteGroupOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *DeleteGroupOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Group.Set {
+			e.FieldStart("group")
+			s.Group.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfDeleteGroupOK = [1]string{
+	0: "group",
+}
+
+// Decode decodes DeleteGroupOK from json.
+func (s *DeleteGroupOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode DeleteGroupOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "group":
+			if err := func() error {
+				s.Group.Reset()
+				if err := s.Group.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"group\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode DeleteGroupOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *DeleteGroupOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *DeleteGroupOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *DeleteOrganizationInviteByEmailNotFound) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *DeleteOrganizationInviteByEmailNotFound) encodeFields(e *jx.Encoder) {
+	{
+		if s.Code.Set {
+			e.FieldStart("code")
+			s.Code.Encode(e)
+		}
+	}
+	{
+		if s.Error.Set {
+			e.FieldStart("error")
+			s.Error.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfDeleteOrganizationInviteByEmailNotFound = [2]string{
+	0: "code",
+	1: "error",
+}
+
+// Decode decodes DeleteOrganizationInviteByEmailNotFound from json.
+func (s *DeleteOrganizationInviteByEmailNotFound) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode DeleteOrganizationInviteByEmailNotFound to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "code":
+			if err := func() error {
+				s.Code.Reset()
+				if err := s.Code.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"code\"")
+			}
+		case "error":
+			if err := func() error {
+				s.Error.Reset()
+				if err := s.Error.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"error\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode DeleteOrganizationInviteByEmailNotFound")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *DeleteOrganizationInviteByEmailNotFound) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *DeleteOrganizationInviteByEmailNotFound) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes Extensions as json.
 func (s Extensions) Encode(e *jx.Encoder) {
 	switch s.Type {
@@ -2076,6 +3374,845 @@ func (s Extensions1Item) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *Extensions1Item) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *GetDatabaseInstanceOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *GetDatabaseInstanceOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Instance.Set {
+			e.FieldStart("instance")
+			s.Instance.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfGetDatabaseInstanceOK = [1]string{
+	0: "instance",
+}
+
+// Decode decodes GetDatabaseInstanceOK from json.
+func (s *GetDatabaseInstanceOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode GetDatabaseInstanceOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "instance":
+			if err := func() error {
+				s.Instance.Reset()
+				if err := s.Instance.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"instance\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode GetDatabaseInstanceOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *GetDatabaseInstanceOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *GetDatabaseInstanceOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *GetDatabaseOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *GetDatabaseOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Database.Set {
+			e.FieldStart("database")
+			s.Database.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfGetDatabaseOK = [1]string{
+	0: "database",
+}
+
+// Decode decodes GetDatabaseOK from json.
+func (s *GetDatabaseOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode GetDatabaseOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "database":
+			if err := func() error {
+				s.Database.Reset()
+				if err := s.Database.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"database\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode GetDatabaseOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *GetDatabaseOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *GetDatabaseOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *GetDatabaseStatsOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *GetDatabaseStatsOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.TopQueries != nil {
+			e.FieldStart("top_queries")
+			e.ArrStart()
+			for _, elem := range s.TopQueries {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+}
+
+var jsonFieldsNameOfGetDatabaseStatsOK = [1]string{
+	0: "top_queries",
+}
+
+// Decode decodes GetDatabaseStatsOK from json.
+func (s *GetDatabaseStatsOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode GetDatabaseStatsOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "top_queries":
+			if err := func() error {
+				s.TopQueries = make([]DatabaseStatsOutput, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem DatabaseStatsOutput
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.TopQueries = append(s.TopQueries, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"top_queries\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode GetDatabaseStatsOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *GetDatabaseStatsOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *GetDatabaseStatsOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *GetDatabaseUsageBadRequest) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *GetDatabaseUsageBadRequest) encodeFields(e *jx.Encoder) {
+	{
+		if s.Error.Set {
+			e.FieldStart("error")
+			s.Error.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfGetDatabaseUsageBadRequest = [1]string{
+	0: "error",
+}
+
+// Decode decodes GetDatabaseUsageBadRequest from json.
+func (s *GetDatabaseUsageBadRequest) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode GetDatabaseUsageBadRequest to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "error":
+			if err := func() error {
+				s.Error.Reset()
+				if err := s.Error.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"error\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode GetDatabaseUsageBadRequest")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *GetDatabaseUsageBadRequest) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *GetDatabaseUsageBadRequest) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *GetDatabaseUsageOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *GetDatabaseUsageOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Database.Set {
+			e.FieldStart("database")
+			s.Database.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfGetDatabaseUsageOK = [1]string{
+	0: "database",
+}
+
+// Decode decodes GetDatabaseUsageOK from json.
+func (s *GetDatabaseUsageOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode GetDatabaseUsageOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "database":
+			if err := func() error {
+				s.Database.Reset()
+				if err := s.Database.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"database\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode GetDatabaseUsageOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *GetDatabaseUsageOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *GetDatabaseUsageOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *GetGroupOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *GetGroupOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Group.Set {
+			e.FieldStart("group")
+			s.Group.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfGetGroupOK = [1]string{
+	0: "group",
+}
+
+// Decode decodes GetGroupOK from json.
+func (s *GetGroupOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode GetGroupOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "group":
+			if err := func() error {
+				s.Group.Reset()
+				if err := s.Group.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"group\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode GetGroupOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *GetGroupOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *GetGroupOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *GetOrganizationSubscriptionOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *GetOrganizationSubscriptionOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Subscription.Set {
+			e.FieldStart("subscription")
+			s.Subscription.Encode(e)
+		}
+	}
+	{
+		if s.Overages.Set {
+			e.FieldStart("overages")
+			s.Overages.Encode(e)
+		}
+	}
+	{
+		if s.Plan.Set {
+			e.FieldStart("plan")
+			s.Plan.Encode(e)
+		}
+	}
+	{
+		if s.Timeline.Set {
+			e.FieldStart("timeline")
+			s.Timeline.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfGetOrganizationSubscriptionOK = [4]string{
+	0: "subscription",
+	1: "overages",
+	2: "plan",
+	3: "timeline",
+}
+
+// Decode decodes GetOrganizationSubscriptionOK from json.
+func (s *GetOrganizationSubscriptionOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode GetOrganizationSubscriptionOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "subscription":
+			if err := func() error {
+				s.Subscription.Reset()
+				if err := s.Subscription.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"subscription\"")
+			}
+		case "overages":
+			if err := func() error {
+				s.Overages.Reset()
+				if err := s.Overages.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"overages\"")
+			}
+		case "plan":
+			if err := func() error {
+				s.Plan.Reset()
+				if err := s.Plan.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"plan\"")
+			}
+		case "timeline":
+			if err := func() error {
+				s.Timeline.Reset()
+				if err := s.Timeline.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"timeline\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode GetOrganizationSubscriptionOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *GetOrganizationSubscriptionOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *GetOrganizationSubscriptionOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *GetOrganizationUsageOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *GetOrganizationUsageOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Organization.Set {
+			e.FieldStart("organization")
+			s.Organization.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfGetOrganizationUsageOK = [1]string{
+	0: "organization",
+}
+
+// Decode decodes GetOrganizationUsageOK from json.
+func (s *GetOrganizationUsageOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode GetOrganizationUsageOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "organization":
+			if err := func() error {
+				s.Organization.Reset()
+				if err := s.Organization.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"organization\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode GetOrganizationUsageOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *GetOrganizationUsageOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *GetOrganizationUsageOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *GetOrganizationUsageOKOrganization) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *GetOrganizationUsageOKOrganization) encodeFields(e *jx.Encoder) {
+	{
+		if s.UUID.Set {
+			e.FieldStart("uuid")
+			s.UUID.Encode(e)
+		}
+	}
+	{
+		if s.Usage.Set {
+			e.FieldStart("usage")
+			s.Usage.Encode(e)
+		}
+	}
+	{
+		if s.Databases != nil {
+			e.FieldStart("databases")
+			e.ArrStart()
+			for _, elem := range s.Databases {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+}
+
+var jsonFieldsNameOfGetOrganizationUsageOKOrganization = [3]string{
+	0: "uuid",
+	1: "usage",
+	2: "databases",
+}
+
+// Decode decodes GetOrganizationUsageOKOrganization from json.
+func (s *GetOrganizationUsageOKOrganization) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode GetOrganizationUsageOKOrganization to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "uuid":
+			if err := func() error {
+				s.UUID.Reset()
+				if err := s.UUID.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"uuid\"")
+			}
+		case "usage":
+			if err := func() error {
+				s.Usage.Reset()
+				if err := s.Usage.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"usage\"")
+			}
+		case "databases":
+			if err := func() error {
+				s.Databases = make([]DatabaseUsageOutput, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem DatabaseUsageOutput
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Databases = append(s.Databases, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"databases\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode GetOrganizationUsageOKOrganization")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *GetOrganizationUsageOKOrganization) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *GetOrganizationUsageOKOrganization) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *GetOrganizationUsageOKOrganizationUsage) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *GetOrganizationUsageOKOrganizationUsage) encodeFields(e *jx.Encoder) {
+	{
+		if s.RowsRead.Set {
+			e.FieldStart("rows_read")
+			s.RowsRead.Encode(e)
+		}
+	}
+	{
+		if s.RowsWritten.Set {
+			e.FieldStart("rows_written")
+			s.RowsWritten.Encode(e)
+		}
+	}
+	{
+		if s.Databases.Set {
+			e.FieldStart("databases")
+			s.Databases.Encode(e)
+		}
+	}
+	{
+		if s.Locations.Set {
+			e.FieldStart("locations")
+			s.Locations.Encode(e)
+		}
+	}
+	{
+		if s.Storage.Set {
+			e.FieldStart("storage")
+			s.Storage.Encode(e)
+		}
+	}
+	{
+		if s.Groups.Set {
+			e.FieldStart("groups")
+			s.Groups.Encode(e)
+		}
+	}
+	{
+		if s.BytesSynced.Set {
+			e.FieldStart("bytes_synced")
+			s.BytesSynced.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfGetOrganizationUsageOKOrganizationUsage = [7]string{
+	0: "rows_read",
+	1: "rows_written",
+	2: "databases",
+	3: "locations",
+	4: "storage",
+	5: "groups",
+	6: "bytes_synced",
+}
+
+// Decode decodes GetOrganizationUsageOKOrganizationUsage from json.
+func (s *GetOrganizationUsageOKOrganizationUsage) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode GetOrganizationUsageOKOrganizationUsage to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "rows_read":
+			if err := func() error {
+				s.RowsRead.Reset()
+				if err := s.RowsRead.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"rows_read\"")
+			}
+		case "rows_written":
+			if err := func() error {
+				s.RowsWritten.Reset()
+				if err := s.RowsWritten.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"rows_written\"")
+			}
+		case "databases":
+			if err := func() error {
+				s.Databases.Reset()
+				if err := s.Databases.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"databases\"")
+			}
+		case "locations":
+			if err := func() error {
+				s.Locations.Reset()
+				if err := s.Locations.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"locations\"")
+			}
+		case "storage":
+			if err := func() error {
+				s.Storage.Reset()
+				if err := s.Storage.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"storage\"")
+			}
+		case "groups":
+			if err := func() error {
+				s.Groups.Reset()
+				if err := s.Groups.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"groups\"")
+			}
+		case "bytes_synced":
+			if err := func() error {
+				s.BytesSynced.Reset()
+				if err := s.BytesSynced.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"bytes_synced\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode GetOrganizationUsageOKOrganizationUsage")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *GetOrganizationUsageOKOrganizationUsage) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *GetOrganizationUsageOKOrganizationUsage) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -2731,6 +4868,223 @@ func (s *Invite) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode implements json.Marshaler.
+func (s *InviteOrganizationMemberOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *InviteOrganizationMemberOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Invited.Set {
+			e.FieldStart("invited")
+			s.Invited.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfInviteOrganizationMemberOK = [1]string{
+	0: "invited",
+}
+
+// Decode decodes InviteOrganizationMemberOK from json.
+func (s *InviteOrganizationMemberOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode InviteOrganizationMemberOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "invited":
+			if err := func() error {
+				s.Invited.Reset()
+				if err := s.Invited.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"invited\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode InviteOrganizationMemberOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *InviteOrganizationMemberOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *InviteOrganizationMemberOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *InviteOrganizationMemberReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *InviteOrganizationMemberReq) encodeFields(e *jx.Encoder) {
+	{
+		e.FieldStart("email")
+		e.Str(s.Email)
+	}
+	{
+		if s.Role.Set {
+			e.FieldStart("role")
+			s.Role.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfInviteOrganizationMemberReq = [2]string{
+	0: "email",
+	1: "role",
+}
+
+// Decode decodes InviteOrganizationMemberReq from json.
+func (s *InviteOrganizationMemberReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode InviteOrganizationMemberReq to nil")
+	}
+	var requiredBitSet [1]uint8
+	s.setDefaults()
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "email":
+			requiredBitSet[0] |= 1 << 0
+			if err := func() error {
+				v, err := d.Str()
+				s.Email = string(v)
+				if err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"email\"")
+			}
+		case "role":
+			if err := func() error {
+				s.Role.Reset()
+				if err := s.Role.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"role\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode InviteOrganizationMemberReq")
+	}
+	// Validate required fields.
+	var failures []validate.FieldError
+	for i, mask := range [1]uint8{
+		0b00000001,
+	} {
+		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
+			// Mask only required fields and check equality to mask using XOR.
+			//
+			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
+			// Bits of fields which would be set are actually bits of missed fields.
+			missed := bits.OnesCount8(result)
+			for bitN := 0; bitN < missed; bitN++ {
+				bitIdx := bits.TrailingZeros8(result)
+				fieldIdx := i*8 + bitIdx
+				var name string
+				if fieldIdx < len(jsonFieldsNameOfInviteOrganizationMemberReq) {
+					name = jsonFieldsNameOfInviteOrganizationMemberReq[fieldIdx]
+				} else {
+					name = strconv.Itoa(fieldIdx)
+				}
+				failures = append(failures, validate.FieldError{
+					Name:  name,
+					Error: validate.ErrFieldRequired,
+				})
+				// Reset bit.
+				result &^= 1 << bitIdx
+			}
+		}
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *InviteOrganizationMemberReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *InviteOrganizationMemberReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes InviteOrganizationMemberReqRole as json.
+func (s InviteOrganizationMemberReqRole) Encode(e *jx.Encoder) {
+	e.Str(string(s))
+}
+
+// Decode decodes InviteOrganizationMemberReqRole from json.
+func (s *InviteOrganizationMemberReqRole) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode InviteOrganizationMemberReqRole to nil")
+	}
+	v, err := d.StrBytes()
+	if err != nil {
+		return err
+	}
+	// Try to use constant string.
+	switch InviteOrganizationMemberReqRole(v) {
+	case InviteOrganizationMemberReqRoleAdmin:
+		*s = InviteOrganizationMemberReqRoleAdmin
+	case InviteOrganizationMemberReqRoleMember:
+		*s = InviteOrganizationMemberReqRoleMember
+	default:
+		*s = InviteOrganizationMemberReqRole(v)
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s InviteOrganizationMemberReqRole) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *InviteOrganizationMemberReqRole) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes InviteRole as json.
 func (s InviteRole) Encode(e *jx.Encoder) {
 	e.Str(string(s))
@@ -2767,6 +5121,1093 @@ func (s InviteRole) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *InviteRole) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *ListAPITokensOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *ListAPITokensOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Tokens != nil {
+			e.FieldStart("tokens")
+			e.ArrStart()
+			for _, elem := range s.Tokens {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+}
+
+var jsonFieldsNameOfListAPITokensOK = [1]string{
+	0: "tokens",
+}
+
+// Decode decodes ListAPITokensOK from json.
+func (s *ListAPITokensOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListAPITokensOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "tokens":
+			if err := func() error {
+				s.Tokens = make([]APIToken, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem APIToken
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Tokens = append(s.Tokens, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"tokens\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode ListAPITokensOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *ListAPITokensOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListAPITokensOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *ListDatabaseInstancesOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *ListDatabaseInstancesOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Instances != nil {
+			e.FieldStart("instances")
+			e.ArrStart()
+			for _, elem := range s.Instances {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+}
+
+var jsonFieldsNameOfListDatabaseInstancesOK = [1]string{
+	0: "instances",
+}
+
+// Decode decodes ListDatabaseInstancesOK from json.
+func (s *ListDatabaseInstancesOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListDatabaseInstancesOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "instances":
+			if err := func() error {
+				s.Instances = make([]Instance, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem Instance
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Instances = append(s.Instances, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"instances\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode ListDatabaseInstancesOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *ListDatabaseInstancesOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListDatabaseInstancesOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *ListDatabasesOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *ListDatabasesOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Databases != nil {
+			e.FieldStart("databases")
+			e.ArrStart()
+			for _, elem := range s.Databases {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+}
+
+var jsonFieldsNameOfListDatabasesOK = [1]string{
+	0: "databases",
+}
+
+// Decode decodes ListDatabasesOK from json.
+func (s *ListDatabasesOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListDatabasesOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "databases":
+			if err := func() error {
+				s.Databases = make([]Database, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem Database
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Databases = append(s.Databases, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"databases\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode ListDatabasesOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *ListDatabasesOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListDatabasesOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *ListGroupsOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *ListGroupsOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Groups != nil {
+			e.FieldStart("groups")
+			e.ArrStart()
+			for _, elem := range s.Groups {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+}
+
+var jsonFieldsNameOfListGroupsOK = [1]string{
+	0: "groups",
+}
+
+// Decode decodes ListGroupsOK from json.
+func (s *ListGroupsOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListGroupsOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "groups":
+			if err := func() error {
+				s.Groups = make([]Group, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem Group
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Groups = append(s.Groups, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"groups\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode ListGroupsOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *ListGroupsOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListGroupsOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *ListLocationsOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *ListLocationsOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Locations.Set {
+			e.FieldStart("locations")
+			s.Locations.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfListLocationsOK = [1]string{
+	0: "locations",
+}
+
+// Decode decodes ListLocationsOK from json.
+func (s *ListLocationsOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListLocationsOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "locations":
+			if err := func() error {
+				s.Locations.Reset()
+				if err := s.Locations.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"locations\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode ListLocationsOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *ListLocationsOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListLocationsOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s ListLocationsOKLocations) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields implements json.Marshaler.
+func (s ListLocationsOKLocations) encodeFields(e *jx.Encoder) {
+	for k, elem := range s {
+		e.FieldStart(k)
+
+		e.Str(elem)
+	}
+}
+
+// Decode decodes ListLocationsOKLocations from json.
+func (s *ListLocationsOKLocations) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListLocationsOKLocations to nil")
+	}
+	m := s.init()
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		var elem string
+		if err := func() error {
+			v, err := d.Str()
+			elem = string(v)
+			if err != nil {
+				return err
+			}
+			return nil
+		}(); err != nil {
+			return errors.Wrapf(err, "decode field %q", k)
+		}
+		m[string(k)] = elem
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode ListLocationsOKLocations")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s ListLocationsOKLocations) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListLocationsOKLocations) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *ListOrganizationAuditLogsOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *ListOrganizationAuditLogsOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.AuditLogs != nil {
+			e.FieldStart("audit_logs")
+			e.ArrStart()
+			for _, elem := range s.AuditLogs {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+	{
+		if s.Pagination.Set {
+			e.FieldStart("pagination")
+			s.Pagination.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfListOrganizationAuditLogsOK = [2]string{
+	0: "audit_logs",
+	1: "pagination",
+}
+
+// Decode decodes ListOrganizationAuditLogsOK from json.
+func (s *ListOrganizationAuditLogsOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListOrganizationAuditLogsOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "audit_logs":
+			if err := func() error {
+				s.AuditLogs = make([]AuditLog, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem AuditLog
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.AuditLogs = append(s.AuditLogs, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"audit_logs\"")
+			}
+		case "pagination":
+			if err := func() error {
+				s.Pagination.Reset()
+				if err := s.Pagination.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"pagination\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode ListOrganizationAuditLogsOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *ListOrganizationAuditLogsOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListOrganizationAuditLogsOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *ListOrganizationAuditLogsOKPagination) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *ListOrganizationAuditLogsOKPagination) encodeFields(e *jx.Encoder) {
+	{
+		if s.Page.Set {
+			e.FieldStart("page")
+			s.Page.Encode(e)
+		}
+	}
+	{
+		if s.PageSize.Set {
+			e.FieldStart("page_size")
+			s.PageSize.Encode(e)
+		}
+	}
+	{
+		if s.TotalPages.Set {
+			e.FieldStart("total_pages")
+			s.TotalPages.Encode(e)
+		}
+	}
+	{
+		if s.TotalRows.Set {
+			e.FieldStart("total_rows")
+			s.TotalRows.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfListOrganizationAuditLogsOKPagination = [4]string{
+	0: "page",
+	1: "page_size",
+	2: "total_pages",
+	3: "total_rows",
+}
+
+// Decode decodes ListOrganizationAuditLogsOKPagination from json.
+func (s *ListOrganizationAuditLogsOKPagination) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListOrganizationAuditLogsOKPagination to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "page":
+			if err := func() error {
+				s.Page.Reset()
+				if err := s.Page.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"page\"")
+			}
+		case "page_size":
+			if err := func() error {
+				s.PageSize.Reset()
+				if err := s.PageSize.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"page_size\"")
+			}
+		case "total_pages":
+			if err := func() error {
+				s.TotalPages.Reset()
+				if err := s.TotalPages.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"total_pages\"")
+			}
+		case "total_rows":
+			if err := func() error {
+				s.TotalRows.Reset()
+				if err := s.TotalRows.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"total_rows\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode ListOrganizationAuditLogsOKPagination")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *ListOrganizationAuditLogsOKPagination) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListOrganizationAuditLogsOKPagination) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *ListOrganizationInvitesOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *ListOrganizationInvitesOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Invites != nil {
+			e.FieldStart("invites")
+			e.ArrStart()
+			for _, elem := range s.Invites {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+}
+
+var jsonFieldsNameOfListOrganizationInvitesOK = [1]string{
+	0: "invites",
+}
+
+// Decode decodes ListOrganizationInvitesOK from json.
+func (s *ListOrganizationInvitesOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListOrganizationInvitesOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "invites":
+			if err := func() error {
+				s.Invites = make([]Invite, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem Invite
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Invites = append(s.Invites, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"invites\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode ListOrganizationInvitesOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *ListOrganizationInvitesOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListOrganizationInvitesOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *ListOrganizationInvoicesOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *ListOrganizationInvoicesOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Invoices != nil {
+			e.FieldStart("invoices")
+			e.ArrStart()
+			for _, elem := range s.Invoices {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+}
+
+var jsonFieldsNameOfListOrganizationInvoicesOK = [1]string{
+	0: "invoices",
+}
+
+// Decode decodes ListOrganizationInvoicesOK from json.
+func (s *ListOrganizationInvoicesOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListOrganizationInvoicesOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "invoices":
+			if err := func() error {
+				s.Invoices = make([]ListOrganizationInvoicesOKInvoicesItem, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem ListOrganizationInvoicesOKInvoicesItem
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Invoices = append(s.Invoices, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"invoices\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode ListOrganizationInvoicesOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *ListOrganizationInvoicesOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListOrganizationInvoicesOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *ListOrganizationInvoicesOKInvoicesItem) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *ListOrganizationInvoicesOKInvoicesItem) encodeFields(e *jx.Encoder) {
+	{
+		if s.InvoiceNumber.Set {
+			e.FieldStart("invoice_number")
+			s.InvoiceNumber.Encode(e)
+		}
+	}
+	{
+		if s.AmountDue.Set {
+			e.FieldStart("amount_due")
+			s.AmountDue.Encode(e)
+		}
+	}
+	{
+		if s.DueDate.Set {
+			e.FieldStart("due_date")
+			s.DueDate.Encode(e)
+		}
+	}
+	{
+		if s.PaidAt.Set {
+			e.FieldStart("paid_at")
+			s.PaidAt.Encode(e)
+		}
+	}
+	{
+		if s.PaymentFailedAt.Set {
+			e.FieldStart("payment_failed_at")
+			s.PaymentFailedAt.Encode(e)
+		}
+	}
+	{
+		if s.InvoicePdf.Set {
+			e.FieldStart("invoice_pdf")
+			s.InvoicePdf.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfListOrganizationInvoicesOKInvoicesItem = [6]string{
+	0: "invoice_number",
+	1: "amount_due",
+	2: "due_date",
+	3: "paid_at",
+	4: "payment_failed_at",
+	5: "invoice_pdf",
+}
+
+// Decode decodes ListOrganizationInvoicesOKInvoicesItem from json.
+func (s *ListOrganizationInvoicesOKInvoicesItem) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListOrganizationInvoicesOKInvoicesItem to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "invoice_number":
+			if err := func() error {
+				s.InvoiceNumber.Reset()
+				if err := s.InvoiceNumber.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"invoice_number\"")
+			}
+		case "amount_due":
+			if err := func() error {
+				s.AmountDue.Reset()
+				if err := s.AmountDue.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"amount_due\"")
+			}
+		case "due_date":
+			if err := func() error {
+				s.DueDate.Reset()
+				if err := s.DueDate.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"due_date\"")
+			}
+		case "paid_at":
+			if err := func() error {
+				s.PaidAt.Reset()
+				if err := s.PaidAt.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"paid_at\"")
+			}
+		case "payment_failed_at":
+			if err := func() error {
+				s.PaymentFailedAt.Reset()
+				if err := s.PaymentFailedAt.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"payment_failed_at\"")
+			}
+		case "invoice_pdf":
+			if err := func() error {
+				s.InvoicePdf.Reset()
+				if err := s.InvoicePdf.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"invoice_pdf\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode ListOrganizationInvoicesOKInvoicesItem")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *ListOrganizationInvoicesOKInvoicesItem) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListOrganizationInvoicesOKInvoicesItem) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *ListOrganizationMembersOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *ListOrganizationMembersOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Members != nil {
+			e.FieldStart("members")
+			e.ArrStart()
+			for _, elem := range s.Members {
+				elem.Encode(e)
+			}
+			e.ArrEnd()
+		}
+	}
+}
+
+var jsonFieldsNameOfListOrganizationMembersOK = [1]string{
+	0: "members",
+}
+
+// Decode decodes ListOrganizationMembersOK from json.
+func (s *ListOrganizationMembersOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListOrganizationMembersOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "members":
+			if err := func() error {
+				s.Members = make([]Member, 0)
+				if err := d.Arr(func(d *jx.Decoder) error {
+					var elem Member
+					if err := elem.Decode(d); err != nil {
+						return err
+					}
+					s.Members = append(s.Members, elem)
+					return nil
+				}); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"members\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode ListOrganizationMembersOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *ListOrganizationMembersOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListOrganizationMembersOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *ListOrganizationPlansOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *ListOrganizationPlansOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Name.Set {
+			e.FieldStart("name")
+			s.Name.Encode(e)
+		}
+	}
+	{
+		if s.Price.Set {
+			e.FieldStart("price")
+			s.Price.Encode(e)
+		}
+	}
+	{
+		if s.Quotas.Set {
+			e.FieldStart("quotas")
+			s.Quotas.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfListOrganizationPlansOK = [3]string{
+	0: "name",
+	1: "price",
+	2: "quotas",
+}
+
+// Decode decodes ListOrganizationPlansOK from json.
+func (s *ListOrganizationPlansOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode ListOrganizationPlansOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "name":
+			if err := func() error {
+				s.Name.Reset()
+				if err := s.Name.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"name\"")
+			}
+		case "price":
+			if err := func() error {
+				s.Price.Reset()
+				if err := s.Price.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"price\"")
+			}
+		case "quotas":
+			if err := func() error {
+				s.Quotas.Reset()
+				if err := s.Quotas.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"quotas\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode ListOrganizationPlansOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *ListOrganizationPlansOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *ListOrganizationPlansOK) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -3076,6 +6517,39 @@ func (s *NewGroup) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *NewGroup) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes AddOrganizationMemberReqRole as json.
+func (o OptAddOrganizationMemberReqRole) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes AddOrganizationMemberReqRole from json.
+func (o *OptAddOrganizationMemberReqRole) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptAddOrganizationMemberReqRole to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptAddOrganizationMemberReqRole) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptAddOrganizationMemberReqRole) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -3511,6 +6985,72 @@ func (s *OptExtensions) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes GetOrganizationUsageOKOrganization as json.
+func (o OptGetOrganizationUsageOKOrganization) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes GetOrganizationUsageOKOrganization from json.
+func (o *OptGetOrganizationUsageOKOrganization) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptGetOrganizationUsageOKOrganization to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptGetOrganizationUsageOKOrganization) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptGetOrganizationUsageOKOrganization) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes GetOrganizationUsageOKOrganizationUsage as json.
+func (o OptGetOrganizationUsageOKOrganizationUsage) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes GetOrganizationUsageOKOrganizationUsage from json.
+func (o *OptGetOrganizationUsageOKOrganizationUsage) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptGetOrganizationUsageOKOrganizationUsage to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptGetOrganizationUsageOKOrganizationUsage) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptGetOrganizationUsageOKOrganizationUsage) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes Group as json.
 func (o OptGroup) Encode(e *jx.Encoder) {
 	if !o.Set {
@@ -3711,6 +7251,39 @@ func (s *OptInvite) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes InviteOrganizationMemberReqRole as json.
+func (o OptInviteOrganizationMemberReqRole) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	e.Str(string(o.Value))
+}
+
+// Decode decodes InviteOrganizationMemberReqRole from json.
+func (o *OptInviteOrganizationMemberReqRole) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptInviteOrganizationMemberReqRole to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptInviteOrganizationMemberReqRole) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptInviteOrganizationMemberReqRole) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes InviteRole as json.
 func (o OptInviteRole) Encode(e *jx.Encoder) {
 	if !o.Set {
@@ -3740,6 +7313,73 @@ func (s OptInviteRole) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptInviteRole) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes ListLocationsOKLocations as json.
+func (o OptListLocationsOKLocations) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes ListLocationsOKLocations from json.
+func (o *OptListLocationsOKLocations) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptListLocationsOKLocations to nil")
+	}
+	o.Set = true
+	o.Value = make(ListLocationsOKLocations)
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptListLocationsOKLocations) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptListLocationsOKLocations) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode encodes ListOrganizationAuditLogsOKPagination as json.
+func (o OptListOrganizationAuditLogsOKPagination) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes ListOrganizationAuditLogsOKPagination from json.
+func (o *OptListOrganizationAuditLogsOKPagination) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptListOrganizationAuditLogsOKPagination to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptListOrganizationAuditLogsOKPagination) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptListOrganizationAuditLogsOKPagination) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -3876,6 +7516,39 @@ func (s *OptOrganizationType) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode encodes PlanQuotas as json.
+func (o OptPlanQuotas) Encode(e *jx.Encoder) {
+	if !o.Set {
+		return
+	}
+	o.Value.Encode(e)
+}
+
+// Decode decodes PlanQuotas from json.
+func (o *OptPlanQuotas) Decode(d *jx.Decoder) error {
+	if o == nil {
+		return errors.New("invalid: unable to decode OptPlanQuotas to nil")
+	}
+	o.Set = true
+	if err := o.Value.Decode(d); err != nil {
+		return err
+	}
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s OptPlanQuotas) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *OptPlanQuotas) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes Role as json.
 func (o OptRole) Encode(e *jx.Encoder) {
 	if !o.Set {
@@ -4008,139 +7681,6 @@ func (s OptUsername) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *OptUsername) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes V1LocationsGetOKLocations as json.
-func (o OptV1LocationsGetOKLocations) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	o.Value.Encode(e)
-}
-
-// Decode decodes V1LocationsGetOKLocations from json.
-func (o *OptV1LocationsGetOKLocations) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptV1LocationsGetOKLocations to nil")
-	}
-	o.Set = true
-	o.Value = make(V1LocationsGetOKLocations)
-	if err := o.Value.Decode(d); err != nil {
-		return err
-	}
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptV1LocationsGetOKLocations) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptV1LocationsGetOKLocations) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes V1OrganizationsOrganizationNameAuditLogsGetOKPagination as json.
-func (o OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	o.Value.Encode(e)
-}
-
-// Decode decodes V1OrganizationsOrganizationNameAuditLogsGetOKPagination from json.
-func (o *OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination to nil")
-	}
-	o.Set = true
-	if err := o.Value.Decode(d); err != nil {
-		return err
-	}
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes V1OrganizationsOrganizationNameInvitesPostReqRole as json.
-func (o OptV1OrganizationsOrganizationNameInvitesPostReqRole) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	e.Str(string(o.Value))
-}
-
-// Decode decodes V1OrganizationsOrganizationNameInvitesPostReqRole from json.
-func (o *OptV1OrganizationsOrganizationNameInvitesPostReqRole) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptV1OrganizationsOrganizationNameInvitesPostReqRole to nil")
-	}
-	o.Set = true
-	if err := o.Value.Decode(d); err != nil {
-		return err
-	}
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptV1OrganizationsOrganizationNameInvitesPostReqRole) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptV1OrganizationsOrganizationNameInvitesPostReqRole) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes V1OrganizationsOrganizationNameMembersPostReqRole as json.
-func (o OptV1OrganizationsOrganizationNameMembersPostReqRole) Encode(e *jx.Encoder) {
-	if !o.Set {
-		return
-	}
-	e.Str(string(o.Value))
-}
-
-// Decode decodes V1OrganizationsOrganizationNameMembersPostReqRole from json.
-func (o *OptV1OrganizationsOrganizationNameMembersPostReqRole) Decode(d *jx.Decoder) error {
-	if o == nil {
-		return errors.New("invalid: unable to decode OptV1OrganizationsOrganizationNameMembersPostReqRole to nil")
-	}
-	o.Set = true
-	if err := o.Value.Decode(d); err != nil {
-		return err
-	}
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s OptV1OrganizationsOrganizationNameMembersPostReqRole) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *OptV1OrganizationsOrganizationNameMembersPostReqRole) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -4333,6 +7873,423 @@ func (s *OrganizationType) UnmarshalJSON(data []byte) error {
 	return s.Decode(d)
 }
 
+// Encode implements json.Marshaler.
+func (s *PlanQuotas) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *PlanQuotas) encodeFields(e *jx.Encoder) {
+	{
+		if s.RowsRead.Set {
+			e.FieldStart("rowsRead")
+			s.RowsRead.Encode(e)
+		}
+	}
+	{
+		if s.RowsWritten.Set {
+			e.FieldStart("rowsWritten")
+			s.RowsWritten.Encode(e)
+		}
+	}
+	{
+		if s.Databases.Set {
+			e.FieldStart("databases")
+			s.Databases.Encode(e)
+		}
+	}
+	{
+		if s.Locations.Set {
+			e.FieldStart("locations")
+			s.Locations.Encode(e)
+		}
+	}
+	{
+		if s.Storage.Set {
+			e.FieldStart("storage")
+			s.Storage.Encode(e)
+		}
+	}
+	{
+		if s.Groups.Set {
+			e.FieldStart("groups")
+			s.Groups.Encode(e)
+		}
+	}
+	{
+		if s.BytesSynced.Set {
+			e.FieldStart("bytesSynced")
+			s.BytesSynced.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfPlanQuotas = [7]string{
+	0: "rowsRead",
+	1: "rowsWritten",
+	2: "databases",
+	3: "locations",
+	4: "storage",
+	5: "groups",
+	6: "bytesSynced",
+}
+
+// Decode decodes PlanQuotas from json.
+func (s *PlanQuotas) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode PlanQuotas to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "rowsRead":
+			if err := func() error {
+				s.RowsRead.Reset()
+				if err := s.RowsRead.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"rowsRead\"")
+			}
+		case "rowsWritten":
+			if err := func() error {
+				s.RowsWritten.Reset()
+				if err := s.RowsWritten.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"rowsWritten\"")
+			}
+		case "databases":
+			if err := func() error {
+				s.Databases.Reset()
+				if err := s.Databases.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"databases\"")
+			}
+		case "locations":
+			if err := func() error {
+				s.Locations.Reset()
+				if err := s.Locations.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"locations\"")
+			}
+		case "storage":
+			if err := func() error {
+				s.Storage.Reset()
+				if err := s.Storage.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"storage\"")
+			}
+		case "groups":
+			if err := func() error {
+				s.Groups.Reset()
+				if err := s.Groups.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"groups\"")
+			}
+		case "bytesSynced":
+			if err := func() error {
+				s.BytesSynced.Reset()
+				if err := s.BytesSynced.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"bytesSynced\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode PlanQuotas")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *PlanQuotas) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *PlanQuotas) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *RemoveLocationFromGroupBadRequest) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *RemoveLocationFromGroupBadRequest) encodeFields(e *jx.Encoder) {
+	{
+		if s.Error.Set {
+			e.FieldStart("error")
+			s.Error.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfRemoveLocationFromGroupBadRequest = [1]string{
+	0: "error",
+}
+
+// Decode decodes RemoveLocationFromGroupBadRequest from json.
+func (s *RemoveLocationFromGroupBadRequest) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode RemoveLocationFromGroupBadRequest to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "error":
+			if err := func() error {
+				s.Error.Reset()
+				if err := s.Error.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"error\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode RemoveLocationFromGroupBadRequest")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *RemoveLocationFromGroupBadRequest) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *RemoveLocationFromGroupBadRequest) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *RemoveLocationFromGroupOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *RemoveLocationFromGroupOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Group.Set {
+			e.FieldStart("group")
+			s.Group.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfRemoveLocationFromGroupOK = [1]string{
+	0: "group",
+}
+
+// Decode decodes RemoveLocationFromGroupOK from json.
+func (s *RemoveLocationFromGroupOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode RemoveLocationFromGroupOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "group":
+			if err := func() error {
+				s.Group.Reset()
+				if err := s.Group.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"group\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode RemoveLocationFromGroupOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *RemoveLocationFromGroupOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *RemoveLocationFromGroupOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *RemoveOrganizationMemberNotFound) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *RemoveOrganizationMemberNotFound) encodeFields(e *jx.Encoder) {
+	{
+		if s.Error.Set {
+			e.FieldStart("error")
+			s.Error.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfRemoveOrganizationMemberNotFound = [1]string{
+	0: "error",
+}
+
+// Decode decodes RemoveOrganizationMemberNotFound from json.
+func (s *RemoveOrganizationMemberNotFound) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode RemoveOrganizationMemberNotFound to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "error":
+			if err := func() error {
+				s.Error.Reset()
+				if err := s.Error.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"error\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode RemoveOrganizationMemberNotFound")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *RemoveOrganizationMemberNotFound) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *RemoveOrganizationMemberNotFound) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *RemoveOrganizationMemberOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *RemoveOrganizationMemberOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Member.Set {
+			e.FieldStart("member")
+			s.Member.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfRemoveOrganizationMemberOK = [1]string{
+	0: "member",
+}
+
+// Decode decodes RemoveOrganizationMemberOK from json.
+func (s *RemoveOrganizationMemberOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode RemoveOrganizationMemberOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "member":
+			if err := func() error {
+				s.Member.Reset()
+				if err := s.Member.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"member\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode RemoveOrganizationMemberOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *RemoveOrganizationMemberOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *RemoveOrganizationMemberOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
 // Encode encodes Role as json.
 func (s Role) Encode(e *jx.Encoder) {
 	e.Str(string(s))
@@ -4371,6 +8328,321 @@ func (s Role) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
 func (s *Role) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *TransferGroupReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *TransferGroupReq) encodeFields(e *jx.Encoder) {
+	{
+		if s.Organization.Set {
+			e.FieldStart("organization")
+			s.Organization.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfTransferGroupReq = [1]string{
+	0: "organization",
+}
+
+// Decode decodes TransferGroupReq from json.
+func (s *TransferGroupReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode TransferGroupReq to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "organization":
+			if err := func() error {
+				s.Organization.Reset()
+				if err := s.Organization.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"organization\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode TransferGroupReq")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *TransferGroupReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *TransferGroupReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *UnarchiveGroupOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *UnarchiveGroupOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Group.Set {
+			e.FieldStart("group")
+			s.Group.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfUnarchiveGroupOK = [1]string{
+	0: "group",
+}
+
+// Decode decodes UnarchiveGroupOK from json.
+func (s *UnarchiveGroupOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UnarchiveGroupOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "group":
+			if err := func() error {
+				s.Group.Reset()
+				if err := s.Group.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"group\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode UnarchiveGroupOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *UnarchiveGroupOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UnarchiveGroupOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *UpdateOrganizationOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *UpdateOrganizationOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.Organization.Set {
+			e.FieldStart("organization")
+			s.Organization.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfUpdateOrganizationOK = [1]string{
+	0: "organization",
+}
+
+// Decode decodes UpdateOrganizationOK from json.
+func (s *UpdateOrganizationOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UpdateOrganizationOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "organization":
+			if err := func() error {
+				s.Organization.Reset()
+				if err := s.Organization.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"organization\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode UpdateOrganizationOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *UpdateOrganizationOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UpdateOrganizationOK) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *UpdateOrganizationReq) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *UpdateOrganizationReq) encodeFields(e *jx.Encoder) {
+	{
+		if s.Overages.Set {
+			e.FieldStart("overages")
+			s.Overages.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfUpdateOrganizationReq = [1]string{
+	0: "overages",
+}
+
+// Decode decodes UpdateOrganizationReq from json.
+func (s *UpdateOrganizationReq) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UpdateOrganizationReq to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "overages":
+			if err := func() error {
+				s.Overages.Reset()
+				if err := s.Overages.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"overages\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode UpdateOrganizationReq")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *UpdateOrganizationReq) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UpdateOrganizationReq) UnmarshalJSON(data []byte) error {
+	d := jx.DecodeBytes(data)
+	return s.Decode(d)
+}
+
+// Encode implements json.Marshaler.
+func (s *UploadDatabaseDumpOK) Encode(e *jx.Encoder) {
+	e.ObjStart()
+	s.encodeFields(e)
+	e.ObjEnd()
+}
+
+// encodeFields encodes fields.
+func (s *UploadDatabaseDumpOK) encodeFields(e *jx.Encoder) {
+	{
+		if s.DumpURL.Set {
+			e.FieldStart("dump_url")
+			s.DumpURL.Encode(e)
+		}
+	}
+}
+
+var jsonFieldsNameOfUploadDatabaseDumpOK = [1]string{
+	0: "dump_url",
+}
+
+// Decode decodes UploadDatabaseDumpOK from json.
+func (s *UploadDatabaseDumpOK) Decode(d *jx.Decoder) error {
+	if s == nil {
+		return errors.New("invalid: unable to decode UploadDatabaseDumpOK to nil")
+	}
+
+	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
+		switch string(k) {
+		case "dump_url":
+			if err := func() error {
+				s.DumpURL.Reset()
+				if err := s.DumpURL.Decode(d); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return errors.Wrap(err, "decode field \"dump_url\"")
+			}
+		default:
+			return d.Skip()
+		}
+		return nil
+	}); err != nil {
+		return errors.Wrap(err, "decode UploadDatabaseDumpOK")
+	}
+
+	return nil
+}
+
+// MarshalJSON implements stdjson.Marshaler.
+func (s *UploadDatabaseDumpOK) MarshalJSON() ([]byte, error) {
+	e := jx.Encoder{}
+	s.Encode(&e)
+	return e.Bytes(), nil
+}
+
+// UnmarshalJSON implements stdjson.Unmarshaler.
+func (s *UploadDatabaseDumpOK) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }
@@ -4416,88 +8688,14 @@ func (s *Username) UnmarshalJSON(data []byte) error {
 }
 
 // Encode implements json.Marshaler.
-func (s *V1AuthAPITokensGetOK) Encode(e *jx.Encoder) {
+func (s *ValidateAPITokenOK) Encode(e *jx.Encoder) {
 	e.ObjStart()
 	s.encodeFields(e)
 	e.ObjEnd()
 }
 
 // encodeFields encodes fields.
-func (s *V1AuthAPITokensGetOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Tokens != nil {
-			e.FieldStart("tokens")
-			e.ArrStart()
-			for _, elem := range s.Tokens {
-				elem.Encode(e)
-			}
-			e.ArrEnd()
-		}
-	}
-}
-
-var jsonFieldsNameOfV1AuthAPITokensGetOK = [1]string{
-	0: "tokens",
-}
-
-// Decode decodes V1AuthAPITokensGetOK from json.
-func (s *V1AuthAPITokensGetOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1AuthAPITokensGetOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "tokens":
-			if err := func() error {
-				s.Tokens = make([]APIToken, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem APIToken
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					s.Tokens = append(s.Tokens, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"tokens\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1AuthAPITokensGetOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1AuthAPITokensGetOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1AuthAPITokensGetOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1AuthValidateGetOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1AuthValidateGetOK) encodeFields(e *jx.Encoder) {
+func (s *ValidateAPITokenOK) encodeFields(e *jx.Encoder) {
 	{
 		if s.Exp.Set {
 			e.FieldStart("exp")
@@ -4506,14 +8704,14 @@ func (s *V1AuthValidateGetOK) encodeFields(e *jx.Encoder) {
 	}
 }
 
-var jsonFieldsNameOfV1AuthValidateGetOK = [1]string{
+var jsonFieldsNameOfValidateAPITokenOK = [1]string{
 	0: "exp",
 }
 
-// Decode decodes V1AuthValidateGetOK from json.
-func (s *V1AuthValidateGetOK) Decode(d *jx.Decoder) error {
+// Decode decodes ValidateAPITokenOK from json.
+func (s *ValidateAPITokenOK) Decode(d *jx.Decoder) error {
 	if s == nil {
-		return errors.New("invalid: unable to decode V1AuthValidateGetOK to nil")
+		return errors.New("invalid: unable to decode ValidateAPITokenOK to nil")
 	}
 
 	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
@@ -4533,2971 +8731,21 @@ func (s *V1AuthValidateGetOK) Decode(d *jx.Decoder) error {
 		}
 		return nil
 	}); err != nil {
-		return errors.Wrap(err, "decode V1AuthValidateGetOK")
+		return errors.Wrap(err, "decode ValidateAPITokenOK")
 	}
 
 	return nil
 }
 
 // MarshalJSON implements stdjson.Marshaler.
-func (s *V1AuthValidateGetOK) MarshalJSON() ([]byte, error) {
+func (s *ValidateAPITokenOK) MarshalJSON() ([]byte, error) {
 	e := jx.Encoder{}
 	s.Encode(&e)
 	return e.Bytes(), nil
 }
 
 // UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1AuthValidateGetOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1LocationsGetOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1LocationsGetOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Locations.Set {
-			e.FieldStart("locations")
-			s.Locations.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1LocationsGetOK = [1]string{
-	0: "locations",
-}
-
-// Decode decodes V1LocationsGetOK from json.
-func (s *V1LocationsGetOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1LocationsGetOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "locations":
-			if err := func() error {
-				s.Locations.Reset()
-				if err := s.Locations.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"locations\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1LocationsGetOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1LocationsGetOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1LocationsGetOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s V1LocationsGetOKLocations) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields implements json.Marshaler.
-func (s V1LocationsGetOKLocations) encodeFields(e *jx.Encoder) {
-	for k, elem := range s {
-		e.FieldStart(k)
-
-		e.Str(elem)
-	}
-}
-
-// Decode decodes V1LocationsGetOKLocations from json.
-func (s *V1LocationsGetOKLocations) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1LocationsGetOKLocations to nil")
-	}
-	m := s.init()
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		var elem string
-		if err := func() error {
-			v, err := d.Str()
-			elem = string(v)
-			if err != nil {
-				return err
-			}
-			return nil
-		}(); err != nil {
-			return errors.Wrapf(err, "decode field %q", k)
-		}
-		m[string(k)] = elem
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1LocationsGetOKLocations")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s V1LocationsGetOKLocations) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1LocationsGetOKLocations) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.AuditLogs != nil {
-			e.FieldStart("audit_logs")
-			e.ArrStart()
-			for _, elem := range s.AuditLogs {
-				elem.Encode(e)
-			}
-			e.ArrEnd()
-		}
-	}
-	{
-		if s.Pagination.Set {
-			e.FieldStart("pagination")
-			s.Pagination.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameAuditLogsGetOK = [2]string{
-	0: "audit_logs",
-	1: "pagination",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameAuditLogsGetOK from json.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameAuditLogsGetOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "audit_logs":
-			if err := func() error {
-				s.AuditLogs = make([]AuditLog, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem AuditLog
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					s.AuditLogs = append(s.AuditLogs, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"audit_logs\"")
-			}
-		case "pagination":
-			if err := func() error {
-				s.Pagination.Reset()
-				if err := s.Pagination.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"pagination\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameAuditLogsGetOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOKPagination) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOKPagination) encodeFields(e *jx.Encoder) {
-	{
-		if s.Page.Set {
-			e.FieldStart("page")
-			s.Page.Encode(e)
-		}
-	}
-	{
-		if s.PageSize.Set {
-			e.FieldStart("page_size")
-			s.PageSize.Encode(e)
-		}
-	}
-	{
-		if s.TotalPages.Set {
-			e.FieldStart("total_pages")
-			s.TotalPages.Encode(e)
-		}
-	}
-	{
-		if s.TotalRows.Set {
-			e.FieldStart("total_rows")
-			s.TotalRows.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameAuditLogsGetOKPagination = [4]string{
-	0: "page",
-	1: "page_size",
-	2: "total_pages",
-	3: "total_rows",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameAuditLogsGetOKPagination from json.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOKPagination) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameAuditLogsGetOKPagination to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "page":
-			if err := func() error {
-				s.Page.Reset()
-				if err := s.Page.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"page\"")
-			}
-		case "page_size":
-			if err := func() error {
-				s.PageSize.Reset()
-				if err := s.PageSize.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"page_size\"")
-			}
-		case "total_pages":
-			if err := func() error {
-				s.TotalPages.Reset()
-				if err := s.TotalPages.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"total_pages\"")
-			}
-		case "total_rows":
-			if err := func() error {
-				s.TotalRows.Reset()
-				if err := s.TotalRows.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"total_rows\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameAuditLogsGetOKPagination")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOKPagination) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOKPagination) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostBadRequest) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostBadRequest) encodeFields(e *jx.Encoder) {
-	{
-		if s.Error.Set {
-			e.FieldStart("error")
-			s.Error.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostBadRequest = [1]string{
-	0: "error",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostBadRequest from json.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostBadRequest) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostBadRequest to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "error":
-			if err := func() error {
-				s.Error.Reset()
-				if err := s.Error.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"error\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostBadRequest")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostBadRequest) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostBadRequest) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Jwt.Set {
-			e.FieldStart("jwt")
-			s.Jwt.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostOK = [1]string{
-	0: "jwt",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostOK from json.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "jwt":
-			if err := func() error {
-				s.Jwt.Reset()
-				if err := s.Jwt.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"jwt\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Database.Set {
-			e.FieldStart("database")
-			s.Database.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteOK = [1]string{
-	0: "database",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteOK from json.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "database":
-			if err := func() error {
-				s.Database.Reset()
-				if err := s.Database.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"database\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameGetOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameGetOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Database.Set {
-			e.FieldStart("database")
-			s.Database.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameDatabasesDatabaseNameGetOK = [1]string{
-	0: "database",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameDatabasesDatabaseNameGetOK from json.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameGetOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameDatabasesDatabaseNameGetOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "database":
-			if err := func() error {
-				s.Database.Reset()
-				if err := s.Database.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"database\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameDatabasesDatabaseNameGetOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameGetOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameGetOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Instances != nil {
-			e.FieldStart("instances")
-			e.ArrStart()
-			for _, elem := range s.Instances {
-				elem.Encode(e)
-			}
-			e.ArrEnd()
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetOK = [1]string{
-	0: "instances",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetOK from json.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "instances":
-			if err := func() error {
-				s.Instances = make([]Instance, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem Instance
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					s.Instances = append(s.Instances, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"instances\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Instance.Set {
-			e.FieldStart("instance")
-			s.Instance.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetOK = [1]string{
-	0: "instance",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetOK from json.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "instance":
-			if err := func() error {
-				s.Instance.Reset()
-				if err := s.Instance.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"instance\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.TopQueries != nil {
-			e.FieldStart("top_queries")
-			e.ArrStart()
-			for _, elem := range s.TopQueries {
-				elem.Encode(e)
-			}
-			e.ArrEnd()
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetOK = [1]string{
-	0: "top_queries",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetOK from json.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "top_queries":
-			if err := func() error {
-				s.TopQueries = make([]DatabaseStatsOutput, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem DatabaseStatsOutput
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					s.TopQueries = append(s.TopQueries, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"top_queries\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetBadRequest) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetBadRequest) encodeFields(e *jx.Encoder) {
-	{
-		if s.Error.Set {
-			e.FieldStart("error")
-			s.Error.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetBadRequest = [1]string{
-	0: "error",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetBadRequest from json.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetBadRequest) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetBadRequest to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "error":
-			if err := func() error {
-				s.Error.Reset()
-				if err := s.Error.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"error\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetBadRequest")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetBadRequest) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetBadRequest) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Database.Set {
-			e.FieldStart("database")
-			s.Database.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetOK = [1]string{
-	0: "database",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetOK from json.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "database":
-			if err := func() error {
-				s.Database.Reset()
-				if err := s.Database.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"database\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDumpsPostOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameDatabasesDumpsPostOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.DumpURL.Set {
-			e.FieldStart("dump_url")
-			s.DumpURL.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameDatabasesDumpsPostOK = [1]string{
-	0: "dump_url",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameDatabasesDumpsPostOK from json.
-func (s *V1OrganizationsOrganizationNameDatabasesDumpsPostOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameDatabasesDumpsPostOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "dump_url":
-			if err := func() error {
-				s.DumpURL.Reset()
-				if err := s.DumpURL.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"dump_url\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameDatabasesDumpsPostOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDumpsPostOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDumpsPostOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesGetOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameDatabasesGetOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Databases != nil {
-			e.FieldStart("databases")
-			e.ArrStart()
-			for _, elem := range s.Databases {
-				elem.Encode(e)
-			}
-			e.ArrEnd()
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameDatabasesGetOK = [1]string{
-	0: "databases",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameDatabasesGetOK from json.
-func (s *V1OrganizationsOrganizationNameDatabasesGetOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameDatabasesGetOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "databases":
-			if err := func() error {
-				s.Databases = make([]Database, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem Database
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					s.Databases = append(s.Databases, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"databases\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameDatabasesGetOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesGetOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesGetOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesPostBadRequest) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameDatabasesPostBadRequest) encodeFields(e *jx.Encoder) {
-	{
-		if s.Error.Set {
-			e.FieldStart("error")
-			s.Error.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameDatabasesPostBadRequest = [1]string{
-	0: "error",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameDatabasesPostBadRequest from json.
-func (s *V1OrganizationsOrganizationNameDatabasesPostBadRequest) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameDatabasesPostBadRequest to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "error":
-			if err := func() error {
-				s.Error.Reset()
-				if err := s.Error.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"error\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameDatabasesPostBadRequest")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesPostBadRequest) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesPostBadRequest) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesPostConflict) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameDatabasesPostConflict) encodeFields(e *jx.Encoder) {
-	{
-		if s.Error.Set {
-			e.FieldStart("error")
-			s.Error.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameDatabasesPostConflict = [1]string{
-	0: "error",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameDatabasesPostConflict from json.
-func (s *V1OrganizationsOrganizationNameDatabasesPostConflict) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameDatabasesPostConflict to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "error":
-			if err := func() error {
-				s.Error.Reset()
-				if err := s.Error.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"error\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameDatabasesPostConflict")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesPostConflict) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesPostConflict) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesPostOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameDatabasesPostOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Database.Set {
-			e.FieldStart("database")
-			s.Database.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameDatabasesPostOK = [1]string{
-	0: "database",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameDatabasesPostOK from json.
-func (s *V1OrganizationsOrganizationNameDatabasesPostOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameDatabasesPostOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "database":
-			if err := func() error {
-				s.Database.Reset()
-				if err := s.Database.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"database\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameDatabasesPostOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesPostOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesPostOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGetOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameGroupsGetOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Groups != nil {
-			e.FieldStart("groups")
-			e.ArrStart()
-			for _, elem := range s.Groups {
-				elem.Encode(e)
-			}
-			e.ArrEnd()
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameGroupsGetOK = [1]string{
-	0: "groups",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameGroupsGetOK from json.
-func (s *V1OrganizationsOrganizationNameGroupsGetOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameGroupsGetOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "groups":
-			if err := func() error {
-				s.Groups = make([]Group, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem Group
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					s.Groups = append(s.Groups, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"groups\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameGroupsGetOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGetOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGetOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostBadRequest) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostBadRequest) encodeFields(e *jx.Encoder) {
-	{
-		if s.Error.Set {
-			e.FieldStart("error")
-			s.Error.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostBadRequest = [1]string{
-	0: "error",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostBadRequest from json.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostBadRequest) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostBadRequest to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "error":
-			if err := func() error {
-				s.Error.Reset()
-				if err := s.Error.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"error\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostBadRequest")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostBadRequest) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostBadRequest) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Jwt.Set {
-			e.FieldStart("jwt")
-			s.Jwt.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostOK = [1]string{
-	0: "jwt",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostOK from json.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "jwt":
-			if err := func() error {
-				s.Jwt.Reset()
-				if err := s.Jwt.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"jwt\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameDeleteOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameDeleteOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Group.Set {
-			e.FieldStart("group")
-			s.Group.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameGroupsGroupNameDeleteOK = [1]string{
-	0: "group",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameGroupsGroupNameDeleteOK from json.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameDeleteOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameGroupsGroupNameDeleteOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "group":
-			if err := func() error {
-				s.Group.Reset()
-				if err := s.Group.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"group\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameGroupsGroupNameDeleteOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameDeleteOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameDeleteOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameGetOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameGetOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Group.Set {
-			e.FieldStart("group")
-			s.Group.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameGroupsGroupNameGetOK = [1]string{
-	0: "group",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameGroupsGroupNameGetOK from json.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameGetOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameGroupsGroupNameGetOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "group":
-			if err := func() error {
-				s.Group.Reset()
-				if err := s.Group.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"group\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameGroupsGroupNameGetOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameGetOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameGetOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteBadRequest) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteBadRequest) encodeFields(e *jx.Encoder) {
-	{
-		if s.Error.Set {
-			e.FieldStart("error")
-			s.Error.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteBadRequest = [1]string{
-	0: "error",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteBadRequest from json.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteBadRequest) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteBadRequest to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "error":
-			if err := func() error {
-				s.Error.Reset()
-				if err := s.Error.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"error\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteBadRequest")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteBadRequest) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteBadRequest) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Group.Set {
-			e.FieldStart("group")
-			s.Group.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteOK = [1]string{
-	0: "group",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteOK from json.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "group":
-			if err := func() error {
-				s.Group.Reset()
-				if err := s.Group.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"group\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostBadRequest) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostBadRequest) encodeFields(e *jx.Encoder) {
-	{
-		if s.Error.Set {
-			e.FieldStart("error")
-			s.Error.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostBadRequest = [1]string{
-	0: "error",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostBadRequest from json.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostBadRequest) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostBadRequest to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "error":
-			if err := func() error {
-				s.Error.Reset()
-				if err := s.Error.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"error\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostBadRequest")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostBadRequest) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostBadRequest) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Group.Set {
-			e.FieldStart("group")
-			s.Group.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostOK = [1]string{
-	0: "group",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostOK from json.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "group":
-			if err := func() error {
-				s.Group.Reset()
-				if err := s.Group.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"group\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq) encodeFields(e *jx.Encoder) {
-	{
-		if s.Organization.Set {
-			e.FieldStart("organization")
-			s.Organization.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq = [1]string{
-	0: "organization",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq from json.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "organization":
-			if err := func() error {
-				s.Organization.Reset()
-				if err := s.Organization.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"organization\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsPostConflict) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameGroupsPostConflict) encodeFields(e *jx.Encoder) {
-	{
-		if s.Error.Set {
-			e.FieldStart("error")
-			s.Error.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameGroupsPostConflict = [1]string{
-	0: "error",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameGroupsPostConflict from json.
-func (s *V1OrganizationsOrganizationNameGroupsPostConflict) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameGroupsPostConflict to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "error":
-			if err := func() error {
-				s.Error.Reset()
-				if err := s.Error.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"error\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameGroupsPostConflict")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsPostConflict) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameGroupsPostConflict) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsPostOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameGroupsPostOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Group.Set {
-			e.FieldStart("group")
-			s.Group.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameGroupsPostOK = [1]string{
-	0: "group",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameGroupsPostOK from json.
-func (s *V1OrganizationsOrganizationNameGroupsPostOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameGroupsPostOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "group":
-			if err := func() error {
-				s.Group.Reset()
-				if err := s.Group.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"group\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameGroupsPostOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameGroupsPostOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameGroupsPostOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameInvitesGetOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameInvitesGetOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Invites != nil {
-			e.FieldStart("invites")
-			e.ArrStart()
-			for _, elem := range s.Invites {
-				elem.Encode(e)
-			}
-			e.ArrEnd()
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameInvitesGetOK = [1]string{
-	0: "invites",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameInvitesGetOK from json.
-func (s *V1OrganizationsOrganizationNameInvitesGetOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameInvitesGetOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "invites":
-			if err := func() error {
-				s.Invites = make([]Invite, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem Invite
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					s.Invites = append(s.Invites, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"invites\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameInvitesGetOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameInvitesGetOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameInvitesGetOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameInvitesPostOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameInvitesPostOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Invited.Set {
-			e.FieldStart("invited")
-			s.Invited.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameInvitesPostOK = [1]string{
-	0: "invited",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameInvitesPostOK from json.
-func (s *V1OrganizationsOrganizationNameInvitesPostOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameInvitesPostOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "invited":
-			if err := func() error {
-				s.Invited.Reset()
-				if err := s.Invited.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"invited\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameInvitesPostOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameInvitesPostOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameInvitesPostOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameInvitesPostReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameInvitesPostReq) encodeFields(e *jx.Encoder) {
-	{
-		e.FieldStart("email")
-		e.Str(s.Email)
-	}
-	{
-		if s.Role.Set {
-			e.FieldStart("role")
-			s.Role.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameInvitesPostReq = [2]string{
-	0: "email",
-	1: "role",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameInvitesPostReq from json.
-func (s *V1OrganizationsOrganizationNameInvitesPostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameInvitesPostReq to nil")
-	}
-	var requiredBitSet [1]uint8
-	s.setDefaults()
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "email":
-			requiredBitSet[0] |= 1 << 0
-			if err := func() error {
-				v, err := d.Str()
-				s.Email = string(v)
-				if err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"email\"")
-			}
-		case "role":
-			if err := func() error {
-				s.Role.Reset()
-				if err := s.Role.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"role\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameInvitesPostReq")
-	}
-	// Validate required fields.
-	var failures []validate.FieldError
-	for i, mask := range [1]uint8{
-		0b00000001,
-	} {
-		if result := (requiredBitSet[i] & mask) ^ mask; result != 0 {
-			// Mask only required fields and check equality to mask using XOR.
-			//
-			// If XOR result is not zero, result is not equal to expected, so some fields are missed.
-			// Bits of fields which would be set are actually bits of missed fields.
-			missed := bits.OnesCount8(result)
-			for bitN := 0; bitN < missed; bitN++ {
-				bitIdx := bits.TrailingZeros8(result)
-				fieldIdx := i*8 + bitIdx
-				var name string
-				if fieldIdx < len(jsonFieldsNameOfV1OrganizationsOrganizationNameInvitesPostReq) {
-					name = jsonFieldsNameOfV1OrganizationsOrganizationNameInvitesPostReq[fieldIdx]
-				} else {
-					name = strconv.Itoa(fieldIdx)
-				}
-				failures = append(failures, validate.FieldError{
-					Name:  name,
-					Error: validate.ErrFieldRequired,
-				})
-				// Reset bit.
-				result &^= 1 << bitIdx
-			}
-		}
-	}
-	if len(failures) > 0 {
-		return &validate.Error{Fields: failures}
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameInvitesPostReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameInvitesPostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes V1OrganizationsOrganizationNameInvitesPostReqRole as json.
-func (s V1OrganizationsOrganizationNameInvitesPostReqRole) Encode(e *jx.Encoder) {
-	e.Str(string(s))
-}
-
-// Decode decodes V1OrganizationsOrganizationNameInvitesPostReqRole from json.
-func (s *V1OrganizationsOrganizationNameInvitesPostReqRole) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameInvitesPostReqRole to nil")
-	}
-	v, err := d.StrBytes()
-	if err != nil {
-		return err
-	}
-	// Try to use constant string.
-	switch V1OrganizationsOrganizationNameInvitesPostReqRole(v) {
-	case V1OrganizationsOrganizationNameInvitesPostReqRoleAdmin:
-		*s = V1OrganizationsOrganizationNameInvitesPostReqRoleAdmin
-	case V1OrganizationsOrganizationNameInvitesPostReqRoleMember:
-		*s = V1OrganizationsOrganizationNameInvitesPostReqRoleMember
-	default:
-		*s = V1OrganizationsOrganizationNameInvitesPostReqRole(v)
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s V1OrganizationsOrganizationNameInvitesPostReqRole) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameInvitesPostReqRole) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameMembersGetOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameMembersGetOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Members != nil {
-			e.FieldStart("members")
-			e.ArrStart()
-			for _, elem := range s.Members {
-				elem.Encode(e)
-			}
-			e.ArrEnd()
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameMembersGetOK = [1]string{
-	0: "members",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameMembersGetOK from json.
-func (s *V1OrganizationsOrganizationNameMembersGetOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameMembersGetOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "members":
-			if err := func() error {
-				s.Members = make([]Member, 0)
-				if err := d.Arr(func(d *jx.Decoder) error {
-					var elem Member
-					if err := elem.Decode(d); err != nil {
-						return err
-					}
-					s.Members = append(s.Members, elem)
-					return nil
-				}); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"members\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameMembersGetOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameMembersGetOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameMembersGetOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameMembersPostConflict) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameMembersPostConflict) encodeFields(e *jx.Encoder) {
-	{
-		if s.Error.Set {
-			e.FieldStart("error")
-			s.Error.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameMembersPostConflict = [1]string{
-	0: "error",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameMembersPostConflict from json.
-func (s *V1OrganizationsOrganizationNameMembersPostConflict) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameMembersPostConflict to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "error":
-			if err := func() error {
-				s.Error.Reset()
-				if err := s.Error.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"error\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameMembersPostConflict")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameMembersPostConflict) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameMembersPostConflict) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameMembersPostNotFound) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameMembersPostNotFound) encodeFields(e *jx.Encoder) {
-	{
-		if s.Error.Set {
-			e.FieldStart("error")
-			s.Error.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameMembersPostNotFound = [1]string{
-	0: "error",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameMembersPostNotFound from json.
-func (s *V1OrganizationsOrganizationNameMembersPostNotFound) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameMembersPostNotFound to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "error":
-			if err := func() error {
-				s.Error.Reset()
-				if err := s.Error.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"error\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameMembersPostNotFound")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameMembersPostNotFound) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameMembersPostNotFound) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameMembersPostOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameMembersPostOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Member.Set {
-			e.FieldStart("member")
-			s.Member.Encode(e)
-		}
-	}
-	{
-		if s.Role.Set {
-			e.FieldStart("role")
-			s.Role.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameMembersPostOK = [2]string{
-	0: "member",
-	1: "role",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameMembersPostOK from json.
-func (s *V1OrganizationsOrganizationNameMembersPostOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameMembersPostOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "member":
-			if err := func() error {
-				s.Member.Reset()
-				if err := s.Member.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"member\"")
-			}
-		case "role":
-			if err := func() error {
-				s.Role.Reset()
-				if err := s.Role.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"role\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameMembersPostOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameMembersPostOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameMembersPostOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameMembersPostReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameMembersPostReq) encodeFields(e *jx.Encoder) {
-	{
-		if s.Username.Set {
-			e.FieldStart("username")
-			s.Username.Encode(e)
-		}
-	}
-	{
-		if s.Role.Set {
-			e.FieldStart("role")
-			s.Role.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameMembersPostReq = [2]string{
-	0: "username",
-	1: "role",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameMembersPostReq from json.
-func (s *V1OrganizationsOrganizationNameMembersPostReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameMembersPostReq to nil")
-	}
-	s.setDefaults()
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "username":
-			if err := func() error {
-				s.Username.Reset()
-				if err := s.Username.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"username\"")
-			}
-		case "role":
-			if err := func() error {
-				s.Role.Reset()
-				if err := s.Role.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"role\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameMembersPostReq")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameMembersPostReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameMembersPostReq) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode encodes V1OrganizationsOrganizationNameMembersPostReqRole as json.
-func (s V1OrganizationsOrganizationNameMembersPostReqRole) Encode(e *jx.Encoder) {
-	e.Str(string(s))
-}
-
-// Decode decodes V1OrganizationsOrganizationNameMembersPostReqRole from json.
-func (s *V1OrganizationsOrganizationNameMembersPostReqRole) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameMembersPostReqRole to nil")
-	}
-	v, err := d.StrBytes()
-	if err != nil {
-		return err
-	}
-	// Try to use constant string.
-	switch V1OrganizationsOrganizationNameMembersPostReqRole(v) {
-	case V1OrganizationsOrganizationNameMembersPostReqRoleAdmin:
-		*s = V1OrganizationsOrganizationNameMembersPostReqRoleAdmin
-	case V1OrganizationsOrganizationNameMembersPostReqRoleMember:
-		*s = V1OrganizationsOrganizationNameMembersPostReqRoleMember
-	default:
-		*s = V1OrganizationsOrganizationNameMembersPostReqRole(v)
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s V1OrganizationsOrganizationNameMembersPostReqRole) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameMembersPostReqRole) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameMembersUsernameDeleteNotFound) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameMembersUsernameDeleteNotFound) encodeFields(e *jx.Encoder) {
-	{
-		if s.Error.Set {
-			e.FieldStart("error")
-			s.Error.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameMembersUsernameDeleteNotFound = [1]string{
-	0: "error",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameMembersUsernameDeleteNotFound from json.
-func (s *V1OrganizationsOrganizationNameMembersUsernameDeleteNotFound) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameMembersUsernameDeleteNotFound to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "error":
-			if err := func() error {
-				s.Error.Reset()
-				if err := s.Error.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"error\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameMembersUsernameDeleteNotFound")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameMembersUsernameDeleteNotFound) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameMembersUsernameDeleteNotFound) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNameMembersUsernameDeleteOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNameMembersUsernameDeleteOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Member.Set {
-			e.FieldStart("member")
-			s.Member.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNameMembersUsernameDeleteOK = [1]string{
-	0: "member",
-}
-
-// Decode decodes V1OrganizationsOrganizationNameMembersUsernameDeleteOK from json.
-func (s *V1OrganizationsOrganizationNameMembersUsernameDeleteOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNameMembersUsernameDeleteOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "member":
-			if err := func() error {
-				s.Member.Reset()
-				if err := s.Member.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"member\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNameMembersUsernameDeleteOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNameMembersUsernameDeleteOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNameMembersUsernameDeleteOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNamePatchOK) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNamePatchOK) encodeFields(e *jx.Encoder) {
-	{
-		if s.Organization.Set {
-			e.FieldStart("organization")
-			s.Organization.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNamePatchOK = [1]string{
-	0: "organization",
-}
-
-// Decode decodes V1OrganizationsOrganizationNamePatchOK from json.
-func (s *V1OrganizationsOrganizationNamePatchOK) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNamePatchOK to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "organization":
-			if err := func() error {
-				s.Organization.Reset()
-				if err := s.Organization.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"organization\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNamePatchOK")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNamePatchOK) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNamePatchOK) UnmarshalJSON(data []byte) error {
-	d := jx.DecodeBytes(data)
-	return s.Decode(d)
-}
-
-// Encode implements json.Marshaler.
-func (s *V1OrganizationsOrganizationNamePatchReq) Encode(e *jx.Encoder) {
-	e.ObjStart()
-	s.encodeFields(e)
-	e.ObjEnd()
-}
-
-// encodeFields encodes fields.
-func (s *V1OrganizationsOrganizationNamePatchReq) encodeFields(e *jx.Encoder) {
-	{
-		if s.Overages.Set {
-			e.FieldStart("overages")
-			s.Overages.Encode(e)
-		}
-	}
-}
-
-var jsonFieldsNameOfV1OrganizationsOrganizationNamePatchReq = [1]string{
-	0: "overages",
-}
-
-// Decode decodes V1OrganizationsOrganizationNamePatchReq from json.
-func (s *V1OrganizationsOrganizationNamePatchReq) Decode(d *jx.Decoder) error {
-	if s == nil {
-		return errors.New("invalid: unable to decode V1OrganizationsOrganizationNamePatchReq to nil")
-	}
-
-	if err := d.ObjBytes(func(d *jx.Decoder, k []byte) error {
-		switch string(k) {
-		case "overages":
-			if err := func() error {
-				s.Overages.Reset()
-				if err := s.Overages.Decode(d); err != nil {
-					return err
-				}
-				return nil
-			}(); err != nil {
-				return errors.Wrap(err, "decode field \"overages\"")
-			}
-		default:
-			return d.Skip()
-		}
-		return nil
-	}); err != nil {
-		return errors.Wrap(err, "decode V1OrganizationsOrganizationNamePatchReq")
-	}
-
-	return nil
-}
-
-// MarshalJSON implements stdjson.Marshaler.
-func (s *V1OrganizationsOrganizationNamePatchReq) MarshalJSON() ([]byte, error) {
-	e := jx.Encoder{}
-	s.Encode(&e)
-	return e.Bytes(), nil
-}
-
-// UnmarshalJSON implements stdjson.Unmarshaler.
-func (s *V1OrganizationsOrganizationNamePatchReq) UnmarshalJSON(data []byte) error {
+func (s *ValidateAPITokenOK) UnmarshalJSON(data []byte) error {
 	d := jx.DecodeBytes(data)
 	return s.Decode(d)
 }

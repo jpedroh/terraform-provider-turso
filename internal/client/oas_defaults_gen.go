@@ -3,6 +3,14 @@
 package client
 
 // setDefaults set default value of fields.
+func (s *AddOrganizationMemberReq) setDefaults() {
+	{
+		val := AddOrganizationMemberReqRole("member")
+		s.Role.SetTo(val)
+	}
+}
+
+// setDefaults set default value of fields.
 func (s *Database) setDefaults() {
 	{
 		val := string("logical")
@@ -11,17 +19,9 @@ func (s *Database) setDefaults() {
 }
 
 // setDefaults set default value of fields.
-func (s *V1OrganizationsOrganizationNameInvitesPostReq) setDefaults() {
+func (s *InviteOrganizationMemberReq) setDefaults() {
 	{
-		val := V1OrganizationsOrganizationNameInvitesPostReqRole("member")
-		s.Role.SetTo(val)
-	}
-}
-
-// setDefaults set default value of fields.
-func (s *V1OrganizationsOrganizationNameMembersPostReq) setDefaults() {
-	{
-		val := V1OrganizationsOrganizationNameMembersPostReqRole("member")
+		val := InviteOrganizationMemberReqRole("member")
 		s.Role.SetTo(val)
 	}
 }

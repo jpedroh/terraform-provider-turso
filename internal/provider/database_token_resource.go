@@ -111,7 +111,7 @@ func (r *DatabaseTokenResource) Create(ctx context.Context, req resource.CreateR
 		return
 	}
 
-	res, err := r.client.V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPost(ctx, client.OptCreateTokenInput{}, client.V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostParams{
+	res, err := r.client.CreateDatabaseToken(ctx, client.OptCreateTokenInput{}, client.CreateDatabaseTokenParams{
 		OrganizationName: data.OrganizationName.ValueString(),
 		DatabaseName:     data.DatabaseName.ValueString(),
 		Expiration:       client.NewOptString(data.Expiration.ValueString()),
@@ -123,7 +123,7 @@ func (r *DatabaseTokenResource) Create(ctx context.Context, req resource.CreateR
 	}
 
 	switch p := res.(type) {
-	case *client.V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostOK:
+	case *client.CreateDatabaseTokenOK:
 		data.JWT = types.StringValue(p.Jwt.Value)
 	}
 

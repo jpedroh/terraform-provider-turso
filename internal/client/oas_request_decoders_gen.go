@@ -17,75 +17,8 @@ import (
 	"github.com/ogen-go/ogen/validate"
 )
 
-func (s *Server) decodeV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostRequest(r *http.Request) (
-	req OptCreateTokenInput,
-	close func() error,
-	rerr error,
-) {
-	var closers []func() error
-	close = func() error {
-		var merr error
-		// Close in reverse order, to match defer behavior.
-		for i := len(closers) - 1; i >= 0; i-- {
-			c := closers[i]
-			merr = multierr.Append(merr, c())
-		}
-		return merr
-	}
-	defer func() {
-		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
-		}
-	}()
-	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
-		return req, close, nil
-	}
-	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
-	if err != nil {
-		return req, close, errors.Wrap(err, "parse media type")
-	}
-	switch {
-	case ct == "application/json":
-		if r.ContentLength == 0 {
-			return req, close, nil
-		}
-		buf, err := io.ReadAll(r.Body)
-		if err != nil {
-			return req, close, err
-		}
-
-		if len(buf) == 0 {
-			return req, close, nil
-		}
-
-		d := jx.DecodeBytes(buf)
-
-		var request OptCreateTokenInput
-		if err := func() error {
-			request.Reset()
-			if err := request.Decode(d); err != nil {
-				return err
-			}
-			if err := d.Skip(); err != io.EOF {
-				return errors.New("unexpected trailing data")
-			}
-			return nil
-		}(); err != nil {
-			err = &ogenerrors.DecodeBodyError{
-				ContentType: ct,
-				Body:        buf,
-				Err:         err,
-			}
-			return req, close, err
-		}
-		return request, close, nil
-	default:
-		return req, close, validate.InvalidContentType(ct)
-	}
-}
-
-func (s *Server) decodeV1OrganizationsOrganizationNameDatabasesDatabaseNameConfigurationPatchRequest(r *http.Request) (
-	req *DatabaseConfigurationInput,
+func (s *Server) decodeAddOrganizationMemberRequest(r *http.Request) (
+	req *AddOrganizationMemberReq,
 	close func() error,
 	rerr error,
 ) {
@@ -124,7 +57,7 @@ func (s *Server) decodeV1OrganizationsOrganizationNameDatabasesDatabaseNameConfi
 
 		d := jx.DecodeBytes(buf)
 
-		var request DatabaseConfigurationInput
+		var request AddOrganizationMemberReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -141,76 +74,13 @@ func (s *Server) decodeV1OrganizationsOrganizationNameDatabasesDatabaseNameConfi
 			}
 			return req, close, err
 		}
-		return &request, close, nil
-	default:
-		return req, close, validate.InvalidContentType(ct)
-	}
-}
-
-func (s *Server) decodeV1OrganizationsOrganizationNameDatabasesDumpsPostRequest(r *http.Request) (
-	req *V1OrganizationsOrganizationNameDatabasesDumpsPostReq,
-	close func() error,
-	rerr error,
-) {
-	var closers []func() error
-	close = func() error {
-		var merr error
-		// Close in reverse order, to match defer behavior.
-		for i := len(closers) - 1; i >= 0; i-- {
-			c := closers[i]
-			merr = multierr.Append(merr, c())
-		}
-		return merr
-	}
-	defer func() {
-		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
-		}
-	}()
-	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
-	if err != nil {
-		return req, close, errors.Wrap(err, "parse media type")
-	}
-	switch {
-	case ct == "multipart/form-data":
-		if r.ContentLength == 0 {
-			return req, close, validate.ErrBodyRequired
-		}
-		if err := r.ParseMultipartForm(s.cfg.MaxMultipartMemory); err != nil {
-			return req, close, errors.Wrap(err, "parse multipart form")
-		}
-		// Remove all temporary files created by ParseMultipartForm when the request is done.
-		//
-		// Notice that the closers are called in reverse order, to match defer behavior, so
-		// any opened file will be closed before RemoveAll call.
-		closers = append(closers, r.MultipartForm.RemoveAll)
-		// Form values may be unused.
-		form := url.Values(r.MultipartForm.Value)
-		_ = form
-
-		var request V1OrganizationsOrganizationNameDatabasesDumpsPostReq
-		{
-			if err := func() error {
-				files, ok := r.MultipartForm.File["file"]
-				if !ok || len(files) < 1 {
-					return validate.ErrFieldRequired
-				}
-				fh := files[0]
-
-				f, err := fh.Open()
-				if err != nil {
-					return errors.Wrap(err, "open")
-				}
-				closers = append(closers, f.Close)
-				request.File = ht.MultipartFile{
-					Name:   fh.Filename,
-					File:   f,
-					Header: fh.Header,
-				}
-				return nil
-			}(); err != nil {
-				return req, close, errors.Wrap(err, "decode \"file\"")
+		if err := func() error {
+			if err := request.Validate(); err != nil {
+				return err
 			}
+			return nil
+		}(); err != nil {
+			return req, close, errors.Wrap(err, "validate")
 		}
 		return &request, close, nil
 	default:
@@ -218,7 +88,7 @@ func (s *Server) decodeV1OrganizationsOrganizationNameDatabasesDumpsPostRequest(
 	}
 }
 
-func (s *Server) decodeV1OrganizationsOrganizationNameDatabasesPostRequest(r *http.Request) (
+func (s *Server) decodeCreateDatabaseRequest(r *http.Request) (
 	req *CreateDatabaseInput,
 	close func() error,
 	rerr error,
@@ -289,7 +159,7 @@ func (s *Server) decodeV1OrganizationsOrganizationNameDatabasesPostRequest(r *ht
 	}
 }
 
-func (s *Server) decodeV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostRequest(r *http.Request) (
+func (s *Server) decodeCreateDatabaseTokenRequest(r *http.Request) (
 	req OptCreateTokenInput,
 	close func() error,
 	rerr error,
@@ -356,70 +226,7 @@ func (s *Server) decodeV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensP
 	}
 }
 
-func (s *Server) decodeV1OrganizationsOrganizationNameGroupsGroupNameTransferPostRequest(r *http.Request) (
-	req *V1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq,
-	close func() error,
-	rerr error,
-) {
-	var closers []func() error
-	close = func() error {
-		var merr error
-		// Close in reverse order, to match defer behavior.
-		for i := len(closers) - 1; i >= 0; i-- {
-			c := closers[i]
-			merr = multierr.Append(merr, c())
-		}
-		return merr
-	}
-	defer func() {
-		if rerr != nil {
-			rerr = multierr.Append(rerr, close())
-		}
-	}()
-	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
-	if err != nil {
-		return req, close, errors.Wrap(err, "parse media type")
-	}
-	switch {
-	case ct == "application/json":
-		if r.ContentLength == 0 {
-			return req, close, validate.ErrBodyRequired
-		}
-		buf, err := io.ReadAll(r.Body)
-		if err != nil {
-			return req, close, err
-		}
-
-		if len(buf) == 0 {
-			return req, close, validate.ErrBodyRequired
-		}
-
-		d := jx.DecodeBytes(buf)
-
-		var request V1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq
-		if err := func() error {
-			if err := request.Decode(d); err != nil {
-				return err
-			}
-			if err := d.Skip(); err != io.EOF {
-				return errors.New("unexpected trailing data")
-			}
-			return nil
-		}(); err != nil {
-			err = &ogenerrors.DecodeBodyError{
-				ContentType: ct,
-				Body:        buf,
-				Err:         err,
-			}
-			return req, close, err
-		}
-		return &request, close, nil
-	default:
-		return req, close, validate.InvalidContentType(ct)
-	}
-}
-
-func (s *Server) decodeV1OrganizationsOrganizationNameGroupsPostRequest(r *http.Request) (
+func (s *Server) decodeCreateGroupRequest(r *http.Request) (
 	req *NewGroup,
 	close func() error,
 	rerr error,
@@ -490,8 +297,75 @@ func (s *Server) decodeV1OrganizationsOrganizationNameGroupsPostRequest(r *http.
 	}
 }
 
-func (s *Server) decodeV1OrganizationsOrganizationNameInvitesPostRequest(r *http.Request) (
-	req *V1OrganizationsOrganizationNameInvitesPostReq,
+func (s *Server) decodeCreateGroupTokenRequest(r *http.Request) (
+	req OptCreateTokenInput,
+	close func() error,
+	rerr error,
+) {
+	var closers []func() error
+	close = func() error {
+		var merr error
+		// Close in reverse order, to match defer behavior.
+		for i := len(closers) - 1; i >= 0; i-- {
+			c := closers[i]
+			merr = multierr.Append(merr, c())
+		}
+		return merr
+	}
+	defer func() {
+		if rerr != nil {
+			rerr = multierr.Append(rerr, close())
+		}
+	}()
+	if _, ok := r.Header["Content-Type"]; !ok && r.ContentLength == 0 {
+		return req, close, nil
+	}
+	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
+	if err != nil {
+		return req, close, errors.Wrap(err, "parse media type")
+	}
+	switch {
+	case ct == "application/json":
+		if r.ContentLength == 0 {
+			return req, close, nil
+		}
+		buf, err := io.ReadAll(r.Body)
+		if err != nil {
+			return req, close, err
+		}
+
+		if len(buf) == 0 {
+			return req, close, nil
+		}
+
+		d := jx.DecodeBytes(buf)
+
+		var request OptCreateTokenInput
+		if err := func() error {
+			request.Reset()
+			if err := request.Decode(d); err != nil {
+				return err
+			}
+			if err := d.Skip(); err != io.EOF {
+				return errors.New("unexpected trailing data")
+			}
+			return nil
+		}(); err != nil {
+			err = &ogenerrors.DecodeBodyError{
+				ContentType: ct,
+				Body:        buf,
+				Err:         err,
+			}
+			return req, close, err
+		}
+		return request, close, nil
+	default:
+		return req, close, validate.InvalidContentType(ct)
+	}
+}
+
+func (s *Server) decodeInviteOrganizationMemberRequest(r *http.Request) (
+	req *InviteOrganizationMemberReq,
 	close func() error,
 	rerr error,
 ) {
@@ -530,7 +404,7 @@ func (s *Server) decodeV1OrganizationsOrganizationNameInvitesPostRequest(r *http
 
 		d := jx.DecodeBytes(buf)
 
-		var request V1OrganizationsOrganizationNameInvitesPostReq
+		var request InviteOrganizationMemberReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -561,8 +435,8 @@ func (s *Server) decodeV1OrganizationsOrganizationNameInvitesPostRequest(r *http
 	}
 }
 
-func (s *Server) decodeV1OrganizationsOrganizationNameMembersPostRequest(r *http.Request) (
-	req *V1OrganizationsOrganizationNameMembersPostReq,
+func (s *Server) decodeTransferGroupRequest(r *http.Request) (
+	req *TransferGroupReq,
 	close func() error,
 	rerr error,
 ) {
@@ -601,7 +475,7 @@ func (s *Server) decodeV1OrganizationsOrganizationNameMembersPostRequest(r *http
 
 		d := jx.DecodeBytes(buf)
 
-		var request V1OrganizationsOrganizationNameMembersPostReq
+		var request TransferGroupReq
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -617,14 +491,6 @@ func (s *Server) decodeV1OrganizationsOrganizationNameMembersPostRequest(r *http
 				Err:         err,
 			}
 			return req, close, err
-		}
-		if err := func() error {
-			if err := request.Validate(); err != nil {
-				return err
-			}
-			return nil
-		}(); err != nil {
-			return req, close, errors.Wrap(err, "validate")
 		}
 		return &request, close, nil
 	default:
@@ -632,8 +498,8 @@ func (s *Server) decodeV1OrganizationsOrganizationNameMembersPostRequest(r *http
 	}
 }
 
-func (s *Server) decodeV1OrganizationsOrganizationNamePatchRequest(r *http.Request) (
-	req *V1OrganizationsOrganizationNamePatchReq,
+func (s *Server) decodeUpdateDatabaseConfigurationRequest(r *http.Request) (
+	req *DatabaseConfigurationInput,
 	close func() error,
 	rerr error,
 ) {
@@ -672,7 +538,7 @@ func (s *Server) decodeV1OrganizationsOrganizationNamePatchRequest(r *http.Reque
 
 		d := jx.DecodeBytes(buf)
 
-		var request V1OrganizationsOrganizationNamePatchReq
+		var request DatabaseConfigurationInput
 		if err := func() error {
 			if err := request.Decode(d); err != nil {
 				return err
@@ -688,6 +554,141 @@ func (s *Server) decodeV1OrganizationsOrganizationNamePatchRequest(r *http.Reque
 				Err:         err,
 			}
 			return req, close, err
+		}
+		return &request, close, nil
+	default:
+		return req, close, validate.InvalidContentType(ct)
+	}
+}
+
+func (s *Server) decodeUpdateOrganizationRequest(r *http.Request) (
+	req *UpdateOrganizationReq,
+	close func() error,
+	rerr error,
+) {
+	var closers []func() error
+	close = func() error {
+		var merr error
+		// Close in reverse order, to match defer behavior.
+		for i := len(closers) - 1; i >= 0; i-- {
+			c := closers[i]
+			merr = multierr.Append(merr, c())
+		}
+		return merr
+	}
+	defer func() {
+		if rerr != nil {
+			rerr = multierr.Append(rerr, close())
+		}
+	}()
+	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
+	if err != nil {
+		return req, close, errors.Wrap(err, "parse media type")
+	}
+	switch {
+	case ct == "application/json":
+		if r.ContentLength == 0 {
+			return req, close, validate.ErrBodyRequired
+		}
+		buf, err := io.ReadAll(r.Body)
+		if err != nil {
+			return req, close, err
+		}
+
+		if len(buf) == 0 {
+			return req, close, validate.ErrBodyRequired
+		}
+
+		d := jx.DecodeBytes(buf)
+
+		var request UpdateOrganizationReq
+		if err := func() error {
+			if err := request.Decode(d); err != nil {
+				return err
+			}
+			if err := d.Skip(); err != io.EOF {
+				return errors.New("unexpected trailing data")
+			}
+			return nil
+		}(); err != nil {
+			err = &ogenerrors.DecodeBodyError{
+				ContentType: ct,
+				Body:        buf,
+				Err:         err,
+			}
+			return req, close, err
+		}
+		return &request, close, nil
+	default:
+		return req, close, validate.InvalidContentType(ct)
+	}
+}
+
+func (s *Server) decodeUploadDatabaseDumpRequest(r *http.Request) (
+	req *UploadDatabaseDumpReq,
+	close func() error,
+	rerr error,
+) {
+	var closers []func() error
+	close = func() error {
+		var merr error
+		// Close in reverse order, to match defer behavior.
+		for i := len(closers) - 1; i >= 0; i-- {
+			c := closers[i]
+			merr = multierr.Append(merr, c())
+		}
+		return merr
+	}
+	defer func() {
+		if rerr != nil {
+			rerr = multierr.Append(rerr, close())
+		}
+	}()
+	ct, _, err := mime.ParseMediaType(r.Header.Get("Content-Type"))
+	if err != nil {
+		return req, close, errors.Wrap(err, "parse media type")
+	}
+	switch {
+	case ct == "multipart/form-data":
+		if r.ContentLength == 0 {
+			return req, close, validate.ErrBodyRequired
+		}
+		if err := r.ParseMultipartForm(s.cfg.MaxMultipartMemory); err != nil {
+			return req, close, errors.Wrap(err, "parse multipart form")
+		}
+		// Remove all temporary files created by ParseMultipartForm when the request is done.
+		//
+		// Notice that the closers are called in reverse order, to match defer behavior, so
+		// any opened file will be closed before RemoveAll call.
+		closers = append(closers, r.MultipartForm.RemoveAll)
+		// Form values may be unused.
+		form := url.Values(r.MultipartForm.Value)
+		_ = form
+
+		var request UploadDatabaseDumpReq
+		{
+			if err := func() error {
+				files, ok := r.MultipartForm.File["file"]
+				if !ok || len(files) < 1 {
+					return validate.ErrFieldRequired
+				}
+				fh := files[0]
+
+				f, err := fh.Open()
+				if err != nil {
+					return errors.Wrap(err, "open")
+				}
+				closers = append(closers, f.Close)
+				request.File = ht.MultipartFile{
+					Name:   fh.Filename,
+					File:   f,
+					Size:   fh.Size,
+					Header: fh.Header,
+				}
+				return nil
+			}(); err != nil {
+				return req, close, errors.Wrap(err, "decode \"file\"")
+			}
 		}
 		return &request, close, nil
 	default:

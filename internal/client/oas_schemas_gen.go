@@ -39,6 +39,170 @@ func (s *APIToken) SetID(val OptString) {
 	s.ID = val
 }
 
+type AddLocationToGroupBadRequest struct {
+	// The error message.
+	Error OptString `json:"error"`
+}
+
+// GetError returns the value of Error.
+func (s *AddLocationToGroupBadRequest) GetError() OptString {
+	return s.Error
+}
+
+// SetError sets the value of Error.
+func (s *AddLocationToGroupBadRequest) SetError(val OptString) {
+	s.Error = val
+}
+
+func (*AddLocationToGroupBadRequest) addLocationToGroupRes() {}
+
+type AddLocationToGroupOK struct {
+	// The group with the added location.
+	Group OptGroup `json:"group"`
+}
+
+// GetGroup returns the value of Group.
+func (s *AddLocationToGroupOK) GetGroup() OptGroup {
+	return s.Group
+}
+
+// SetGroup sets the value of Group.
+func (s *AddLocationToGroupOK) SetGroup(val OptGroup) {
+	s.Group = val
+}
+
+func (*AddLocationToGroupOK) addLocationToGroupRes() {}
+
+type AddOrganizationMemberConflict struct {
+	// The error message.
+	Error OptString `json:"error"`
+}
+
+// GetError returns the value of Error.
+func (s *AddOrganizationMemberConflict) GetError() OptString {
+	return s.Error
+}
+
+// SetError sets the value of Error.
+func (s *AddOrganizationMemberConflict) SetError(val OptString) {
+	s.Error = val
+}
+
+func (*AddOrganizationMemberConflict) addOrganizationMemberRes() {}
+
+type AddOrganizationMemberNotFound struct {
+	// The error message.
+	Error OptString `json:"error"`
+}
+
+// GetError returns the value of Error.
+func (s *AddOrganizationMemberNotFound) GetError() OptString {
+	return s.Error
+}
+
+// SetError sets the value of Error.
+func (s *AddOrganizationMemberNotFound) SetError(val OptString) {
+	s.Error = val
+}
+
+func (*AddOrganizationMemberNotFound) addOrganizationMemberRes() {}
+
+type AddOrganizationMemberOK struct {
+	Member OptUsername `json:"member"`
+	Role   OptRole     `json:"role"`
+}
+
+// GetMember returns the value of Member.
+func (s *AddOrganizationMemberOK) GetMember() OptUsername {
+	return s.Member
+}
+
+// GetRole returns the value of Role.
+func (s *AddOrganizationMemberOK) GetRole() OptRole {
+	return s.Role
+}
+
+// SetMember sets the value of Member.
+func (s *AddOrganizationMemberOK) SetMember(val OptUsername) {
+	s.Member = val
+}
+
+// SetRole sets the value of Role.
+func (s *AddOrganizationMemberOK) SetRole(val OptRole) {
+	s.Role = val
+}
+
+func (*AddOrganizationMemberOK) addOrganizationMemberRes() {}
+
+type AddOrganizationMemberReq struct {
+	// The username of an existing Turso user.
+	Username OptString `json:"username"`
+	// The role given to the user.
+	Role OptAddOrganizationMemberReqRole `json:"role"`
+}
+
+// GetUsername returns the value of Username.
+func (s *AddOrganizationMemberReq) GetUsername() OptString {
+	return s.Username
+}
+
+// GetRole returns the value of Role.
+func (s *AddOrganizationMemberReq) GetRole() OptAddOrganizationMemberReqRole {
+	return s.Role
+}
+
+// SetUsername sets the value of Username.
+func (s *AddOrganizationMemberReq) SetUsername(val OptString) {
+	s.Username = val
+}
+
+// SetRole sets the value of Role.
+func (s *AddOrganizationMemberReq) SetRole(val OptAddOrganizationMemberReqRole) {
+	s.Role = val
+}
+
+// The role given to the user.
+type AddOrganizationMemberReqRole string
+
+const (
+	AddOrganizationMemberReqRoleAdmin  AddOrganizationMemberReqRole = "admin"
+	AddOrganizationMemberReqRoleMember AddOrganizationMemberReqRole = "member"
+)
+
+// AllValues returns all AddOrganizationMemberReqRole values.
+func (AddOrganizationMemberReqRole) AllValues() []AddOrganizationMemberReqRole {
+	return []AddOrganizationMemberReqRole{
+		AddOrganizationMemberReqRoleAdmin,
+		AddOrganizationMemberReqRoleMember,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s AddOrganizationMemberReqRole) MarshalText() ([]byte, error) {
+	switch s {
+	case AddOrganizationMemberReqRoleAdmin:
+		return []byte(s), nil
+	case AddOrganizationMemberReqRoleMember:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *AddOrganizationMemberReqRole) UnmarshalText(data []byte) error {
+	switch AddOrganizationMemberReqRole(data) {
+	case AddOrganizationMemberReqRoleAdmin:
+		*s = AddOrganizationMemberReqRoleAdmin
+		return nil
+	case AddOrganizationMemberReqRoleMember:
+		*s = AddOrganizationMemberReqRoleMember
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
 // Ref: #/components/schemas/AuditLog
 type AuditLog struct {
 	// The code associated to the action taken.
@@ -134,6 +298,8 @@ const (
 	AuditLogCodeOrgSetOverages AuditLogCode = "org-set-overages"
 	AuditLogCodeGroupCreate    AuditLogCode = "group-create"
 	AuditLogCodeGroupDelete    AuditLogCode = "group-delete"
+	AuditLogCodeMfaEnable      AuditLogCode = "mfa-enable"
+	AuditLogCodeMfaDisable     AuditLogCode = "mfa-disable"
 )
 
 // AllValues returns all AuditLogCode values.
@@ -153,6 +319,8 @@ func (AuditLogCode) AllValues() []AuditLogCode {
 		AuditLogCodeOrgSetOverages,
 		AuditLogCodeGroupCreate,
 		AuditLogCodeGroupDelete,
+		AuditLogCodeMfaEnable,
+		AuditLogCodeMfaDisable,
 	}
 }
 
@@ -186,6 +354,10 @@ func (s AuditLogCode) MarshalText() ([]byte, error) {
 	case AuditLogCodeGroupCreate:
 		return []byte(s), nil
 	case AuditLogCodeGroupDelete:
+		return []byte(s), nil
+	case AuditLogCodeMfaEnable:
+		return []byte(s), nil
+	case AuditLogCodeMfaDisable:
 		return []byte(s), nil
 	default:
 		return nil, errors.Errorf("invalid value: %q", s)
@@ -237,6 +409,12 @@ func (s *AuditLogCode) UnmarshalText(data []byte) error {
 	case AuditLogCodeGroupDelete:
 		*s = AuditLogCodeGroupDelete
 		return nil
+	case AuditLogCodeMfaEnable:
+		*s = AuditLogCodeMfaEnable
+		return nil
+	case AuditLogCodeMfaDisable:
+		*s = AuditLogCodeMfaDisable
+		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
 	}
@@ -245,10 +423,44 @@ func (s *AuditLogCode) UnmarshalText(data []byte) error {
 // The payload of the action performed.
 type AuditLogData struct{}
 
+type CreateDatabaseBadRequest struct {
+	// The error message.
+	Error OptString `json:"error"`
+}
+
+// GetError returns the value of Error.
+func (s *CreateDatabaseBadRequest) GetError() OptString {
+	return s.Error
+}
+
+// SetError sets the value of Error.
+func (s *CreateDatabaseBadRequest) SetError(val OptString) {
+	s.Error = val
+}
+
+func (*CreateDatabaseBadRequest) createDatabaseRes() {}
+
+type CreateDatabaseConflict struct {
+	// The error message.
+	Error OptString `json:"error"`
+}
+
+// GetError returns the value of Error.
+func (s *CreateDatabaseConflict) GetError() OptString {
+	return s.Error
+}
+
+// SetError sets the value of Error.
+func (s *CreateDatabaseConflict) SetError(val OptString) {
+	s.Error = val
+}
+
+func (*CreateDatabaseConflict) createDatabaseRes() {}
+
 // Ref: #/components/schemas/CreateDatabaseInput
 type CreateDatabaseInput struct {
 	// The name of the new database. Must contain only lowercase letters, numbers, dashes. No longer than
-	// 32 characters.
+	// 64 characters.
 	Name string `json:"name"`
 	// The name of the group where the database should be created. **The group must already exist.**.
 	Group string                     `json:"group"`
@@ -419,6 +631,23 @@ func (s *CreateDatabaseInputSeedType) UnmarshalText(data []byte) error {
 	}
 }
 
+type CreateDatabaseOK struct {
+	// The newly created database.
+	Database OptCreateDatabaseOutput `json:"database"`
+}
+
+// GetDatabase returns the value of Database.
+func (s *CreateDatabaseOK) GetDatabase() OptCreateDatabaseOutput {
+	return s.Database
+}
+
+// SetDatabase sets the value of Database.
+func (s *CreateDatabaseOK) SetDatabase(val OptCreateDatabaseOutput) {
+	s.Database = val
+}
+
+func (*CreateDatabaseOK) createDatabaseRes() {}
+
 // Ref: #/components/schemas/CreateDatabaseOutput
 type CreateDatabaseOutput struct {
 	DbId     OptDbId     `json:"DbId"`
@@ -455,6 +684,190 @@ func (s *CreateDatabaseOutput) SetHostname(val OptHostname) {
 func (s *CreateDatabaseOutput) SetName(val OptName) {
 	s.Name = val
 }
+
+type CreateDatabaseTokenAuthorization string
+
+const (
+	CreateDatabaseTokenAuthorizationFullAccess CreateDatabaseTokenAuthorization = "full-access"
+	CreateDatabaseTokenAuthorizationReadOnly   CreateDatabaseTokenAuthorization = "read-only"
+)
+
+// AllValues returns all CreateDatabaseTokenAuthorization values.
+func (CreateDatabaseTokenAuthorization) AllValues() []CreateDatabaseTokenAuthorization {
+	return []CreateDatabaseTokenAuthorization{
+		CreateDatabaseTokenAuthorizationFullAccess,
+		CreateDatabaseTokenAuthorizationReadOnly,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CreateDatabaseTokenAuthorization) MarshalText() ([]byte, error) {
+	switch s {
+	case CreateDatabaseTokenAuthorizationFullAccess:
+		return []byte(s), nil
+	case CreateDatabaseTokenAuthorizationReadOnly:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CreateDatabaseTokenAuthorization) UnmarshalText(data []byte) error {
+	switch CreateDatabaseTokenAuthorization(data) {
+	case CreateDatabaseTokenAuthorizationFullAccess:
+		*s = CreateDatabaseTokenAuthorizationFullAccess
+		return nil
+	case CreateDatabaseTokenAuthorizationReadOnly:
+		*s = CreateDatabaseTokenAuthorizationReadOnly
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CreateDatabaseTokenBadRequest struct {
+	// The error message.
+	Error OptString `json:"error"`
+}
+
+// GetError returns the value of Error.
+func (s *CreateDatabaseTokenBadRequest) GetError() OptString {
+	return s.Error
+}
+
+// SetError sets the value of Error.
+func (s *CreateDatabaseTokenBadRequest) SetError(val OptString) {
+	s.Error = val
+}
+
+func (*CreateDatabaseTokenBadRequest) createDatabaseTokenRes() {}
+
+type CreateDatabaseTokenOK struct {
+	// The generated authorization token (JWT).
+	Jwt OptString `json:"jwt"`
+}
+
+// GetJwt returns the value of Jwt.
+func (s *CreateDatabaseTokenOK) GetJwt() OptString {
+	return s.Jwt
+}
+
+// SetJwt sets the value of Jwt.
+func (s *CreateDatabaseTokenOK) SetJwt(val OptString) {
+	s.Jwt = val
+}
+
+func (*CreateDatabaseTokenOK) createDatabaseTokenRes() {}
+
+type CreateGroupConflict struct {
+	// The error message.
+	Error OptString `json:"error"`
+}
+
+// GetError returns the value of Error.
+func (s *CreateGroupConflict) GetError() OptString {
+	return s.Error
+}
+
+// SetError sets the value of Error.
+func (s *CreateGroupConflict) SetError(val OptString) {
+	s.Error = val
+}
+
+func (*CreateGroupConflict) createGroupRes() {}
+
+type CreateGroupOK struct {
+	// The newly created group.
+	Group OptGroup `json:"group"`
+}
+
+// GetGroup returns the value of Group.
+func (s *CreateGroupOK) GetGroup() OptGroup {
+	return s.Group
+}
+
+// SetGroup sets the value of Group.
+func (s *CreateGroupOK) SetGroup(val OptGroup) {
+	s.Group = val
+}
+
+func (*CreateGroupOK) createGroupRes() {}
+
+type CreateGroupTokenAuthorization string
+
+const (
+	CreateGroupTokenAuthorizationFullAccess CreateGroupTokenAuthorization = "full-access"
+	CreateGroupTokenAuthorizationReadOnly   CreateGroupTokenAuthorization = "read-only"
+)
+
+// AllValues returns all CreateGroupTokenAuthorization values.
+func (CreateGroupTokenAuthorization) AllValues() []CreateGroupTokenAuthorization {
+	return []CreateGroupTokenAuthorization{
+		CreateGroupTokenAuthorizationFullAccess,
+		CreateGroupTokenAuthorizationReadOnly,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s CreateGroupTokenAuthorization) MarshalText() ([]byte, error) {
+	switch s {
+	case CreateGroupTokenAuthorizationFullAccess:
+		return []byte(s), nil
+	case CreateGroupTokenAuthorizationReadOnly:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *CreateGroupTokenAuthorization) UnmarshalText(data []byte) error {
+	switch CreateGroupTokenAuthorization(data) {
+	case CreateGroupTokenAuthorizationFullAccess:
+		*s = CreateGroupTokenAuthorizationFullAccess
+		return nil
+	case CreateGroupTokenAuthorizationReadOnly:
+		*s = CreateGroupTokenAuthorizationReadOnly
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type CreateGroupTokenBadRequest struct {
+	// The error message.
+	Error OptString `json:"error"`
+}
+
+// GetError returns the value of Error.
+func (s *CreateGroupTokenBadRequest) GetError() OptString {
+	return s.Error
+}
+
+// SetError sets the value of Error.
+func (s *CreateGroupTokenBadRequest) SetError(val OptString) {
+	s.Error = val
+}
+
+func (*CreateGroupTokenBadRequest) createGroupTokenRes() {}
+
+type CreateGroupTokenOK struct {
+	// The generated authorization token (JWT).
+	Jwt OptString `json:"jwt"`
+}
+
+// GetJwt returns the value of Jwt.
+func (s *CreateGroupTokenOK) GetJwt() OptString {
+	return s.Jwt
+}
+
+// SetJwt sets the value of Jwt.
+func (s *CreateGroupTokenOK) SetJwt(val OptString) {
+	s.Jwt = val
+}
+
+func (*CreateGroupTokenOK) createGroupTokenRes() {}
 
 // Ref: #/components/schemas/CreateTokenInput
 type CreateTokenInput struct {
@@ -533,9 +946,9 @@ type Database struct {
 	// The name of the parent database that owns the schema for this database. See [Multi-DB
 	// Schemas](/features/multi-db-schemas).
 	Schema OptString `json:"schema"`
-	// The current status of the database. If `true`, the database is sleeping and requires a manual
-	// wakeup.
-	Sleeping OptBool `json:"sleeping"`
+	// The current status of the database. If `true`, the database is archived and requires a manual
+	// unarchive step.
+	Archived OptBool `json:"archived"`
 }
 
 // GetName returns the value of Name.
@@ -603,9 +1016,9 @@ func (s *Database) GetSchema() OptString {
 	return s.Schema
 }
 
-// GetSleeping returns the value of Sleeping.
-func (s *Database) GetSleeping() OptBool {
-	return s.Sleeping
+// GetArchived returns the value of Archived.
+func (s *Database) GetArchived() OptBool {
+	return s.Archived
 }
 
 // SetName sets the value of Name.
@@ -673,9 +1086,9 @@ func (s *Database) SetSchema(val OptString) {
 	s.Schema = val
 }
 
-// SetSleeping sets the value of Sleeping.
-func (s *Database) SetSleeping(val OptBool) {
-	s.Sleeping = val
+// SetArchived sets the value of Archived.
+func (s *Database) SetArchived(val OptBool) {
+	s.Archived = val
 }
 
 // Ref: #/components/schemas/DatabaseConfigurationInput
@@ -685,6 +1098,10 @@ type DatabaseConfigurationInput struct {
 	SizeLimit OptString `json:"size_limit"`
 	// Allow or disallow attaching databases to the current database.
 	AllowAttach OptBool `json:"allow_attach"`
+	// Block all database reads.
+	BlockReads OptBool `json:"block_reads"`
+	// Block all database writes.
+	BlockWrites OptBool `json:"block_writes"`
 }
 
 // GetSizeLimit returns the value of SizeLimit.
@@ -697,6 +1114,16 @@ func (s *DatabaseConfigurationInput) GetAllowAttach() OptBool {
 	return s.AllowAttach
 }
 
+// GetBlockReads returns the value of BlockReads.
+func (s *DatabaseConfigurationInput) GetBlockReads() OptBool {
+	return s.BlockReads
+}
+
+// GetBlockWrites returns the value of BlockWrites.
+func (s *DatabaseConfigurationInput) GetBlockWrites() OptBool {
+	return s.BlockWrites
+}
+
 // SetSizeLimit sets the value of SizeLimit.
 func (s *DatabaseConfigurationInput) SetSizeLimit(val OptString) {
 	s.SizeLimit = val
@@ -707,6 +1134,16 @@ func (s *DatabaseConfigurationInput) SetAllowAttach(val OptBool) {
 	s.AllowAttach = val
 }
 
+// SetBlockReads sets the value of BlockReads.
+func (s *DatabaseConfigurationInput) SetBlockReads(val OptBool) {
+	s.BlockReads = val
+}
+
+// SetBlockWrites sets the value of BlockWrites.
+func (s *DatabaseConfigurationInput) SetBlockWrites(val OptBool) {
+	s.BlockWrites = val
+}
+
 // Ref: #/components/schemas/DatabaseConfigurationResponse
 type DatabaseConfigurationResponse struct {
 	// The maximum size of the database in bytes. Values with units are also accepted, e.g. 1mb, 256mb,
@@ -714,6 +1151,10 @@ type DatabaseConfigurationResponse struct {
 	SizeLimit OptString `json:"size_limit"`
 	// Allow or disallow attaching databases to the current database.
 	AllowAttach OptBool `json:"allow_attach"`
+	// The current status for blocked reads.
+	BlockReads OptBool `json:"block_reads"`
+	// The current status for blocked writes.
+	BlockWrites OptBool `json:"block_writes"`
 }
 
 // GetSizeLimit returns the value of SizeLimit.
@@ -726,6 +1167,16 @@ func (s *DatabaseConfigurationResponse) GetAllowAttach() OptBool {
 	return s.AllowAttach
 }
 
+// GetBlockReads returns the value of BlockReads.
+func (s *DatabaseConfigurationResponse) GetBlockReads() OptBool {
+	return s.BlockReads
+}
+
+// GetBlockWrites returns the value of BlockWrites.
+func (s *DatabaseConfigurationResponse) GetBlockWrites() OptBool {
+	return s.BlockWrites
+}
+
 // SetSizeLimit sets the value of SizeLimit.
 func (s *DatabaseConfigurationResponse) SetSizeLimit(val OptString) {
 	s.SizeLimit = val
@@ -734,6 +1185,16 @@ func (s *DatabaseConfigurationResponse) SetSizeLimit(val OptString) {
 // SetAllowAttach sets the value of AllowAttach.
 func (s *DatabaseConfigurationResponse) SetAllowAttach(val OptBool) {
 	s.AllowAttach = val
+}
+
+// SetBlockReads sets the value of BlockReads.
+func (s *DatabaseConfigurationResponse) SetBlockReads(val OptBool) {
+	s.BlockReads = val
+}
+
+// SetBlockWrites sets the value of BlockWrites.
+func (s *DatabaseConfigurationResponse) SetBlockWrites(val OptBool) {
+	s.BlockWrites = val
 }
 
 type DatabaseNotFoundResponse struct {
@@ -751,14 +1212,12 @@ func (s *DatabaseNotFoundResponse) SetError(val OptString) {
 	s.Error = val
 }
 
-func (*DatabaseNotFoundResponse) v1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePostRes() {
-}
-func (*DatabaseNotFoundResponse) v1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostRes() {
-}
-func (*DatabaseNotFoundResponse) v1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteRes()   {}
-func (*DatabaseNotFoundResponse) v1OrganizationsOrganizationNameDatabasesDatabaseNameGetRes()      {}
-func (*DatabaseNotFoundResponse) v1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetRes() {}
-func (*DatabaseNotFoundResponse) v1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetRes() {}
+func (*DatabaseNotFoundResponse) createDatabaseTokenRes()      {}
+func (*DatabaseNotFoundResponse) deleteDatabaseRes()           {}
+func (*DatabaseNotFoundResponse) getDatabaseRes()              {}
+func (*DatabaseNotFoundResponse) getDatabaseStatsRes()         {}
+func (*DatabaseNotFoundResponse) getDatabaseUsageRes()         {}
+func (*DatabaseNotFoundResponse) invalidateDatabaseTokensRes() {}
 
 // Ref: #/components/schemas/DatabaseStatsOutput
 type DatabaseStatsOutput struct {
@@ -804,11 +1263,11 @@ func (s *DatabaseStatsOutput) SetRowsWritten(val OptInt) {
 
 // Ref: #/components/schemas/DatabaseUsageObject
 type DatabaseUsageObject struct {
-	// Test.
+	// The total rows read in the time period.
 	RowsRead OptInt `json:"rows_read"`
-	// Test.
+	// The total rows written in the time period.
 	RowsWritten OptInt `json:"rows_written"`
-	// Test.
+	// The total storage used.
 	StorageBytes OptInt `json:"storage_bytes"`
 }
 
@@ -909,6 +1368,73 @@ func (s *DatabaseUsageOutputInstancesItem) SetUsage(val OptDatabaseUsageObject) 
 }
 
 type DbId string
+
+type DeleteDatabaseOK struct {
+	// The name of the database that was deleted.
+	Database OptString `json:"database"`
+}
+
+// GetDatabase returns the value of Database.
+func (s *DeleteDatabaseOK) GetDatabase() OptString {
+	return s.Database
+}
+
+// SetDatabase sets the value of Database.
+func (s *DeleteDatabaseOK) SetDatabase(val OptString) {
+	s.Database = val
+}
+
+func (*DeleteDatabaseOK) deleteDatabaseRes() {}
+
+type DeleteGroupOK struct {
+	Group OptGroup `json:"group"`
+}
+
+// GetGroup returns the value of Group.
+func (s *DeleteGroupOK) GetGroup() OptGroup {
+	return s.Group
+}
+
+// SetGroup sets the value of Group.
+func (s *DeleteGroupOK) SetGroup(val OptGroup) {
+	s.Group = val
+}
+
+func (*DeleteGroupOK) deleteGroupRes() {}
+
+type DeleteOrganizationInviteByEmailNotFound struct {
+	// The error code.
+	Code OptString `json:"code"`
+	// The error message (human readable).
+	Error OptString `json:"error"`
+}
+
+// GetCode returns the value of Code.
+func (s *DeleteOrganizationInviteByEmailNotFound) GetCode() OptString {
+	return s.Code
+}
+
+// GetError returns the value of Error.
+func (s *DeleteOrganizationInviteByEmailNotFound) GetError() OptString {
+	return s.Error
+}
+
+// SetCode sets the value of Code.
+func (s *DeleteOrganizationInviteByEmailNotFound) SetCode(val OptString) {
+	s.Code = val
+}
+
+// SetError sets the value of Error.
+func (s *DeleteOrganizationInviteByEmailNotFound) SetError(val OptString) {
+	s.Error = val
+}
+
+func (*DeleteOrganizationInviteByEmailNotFound) deleteOrganizationInviteByEmailRes() {}
+
+// DeleteOrganizationInviteByEmailOK is response for DeleteOrganizationInviteByEmail operation.
+type DeleteOrganizationInviteByEmailOK struct{}
+
+func (*DeleteOrganizationInviteByEmailOK) deleteOrganizationInviteByEmailRes() {}
 
 // The extensions to enable for new databases created in this group.
 // Ref: #/components/schemas/Extensions
@@ -1108,6 +1634,300 @@ func (s *Extensions1Item) UnmarshalText(data []byte) error {
 	}
 }
 
+type GetDatabaseInstanceOK struct {
+	Instance OptInstance `json:"instance"`
+}
+
+// GetInstance returns the value of Instance.
+func (s *GetDatabaseInstanceOK) GetInstance() OptInstance {
+	return s.Instance
+}
+
+// SetInstance sets the value of Instance.
+func (s *GetDatabaseInstanceOK) SetInstance(val OptInstance) {
+	s.Instance = val
+}
+
+type GetDatabaseOK struct {
+	Database OptDatabase `json:"database"`
+}
+
+// GetDatabase returns the value of Database.
+func (s *GetDatabaseOK) GetDatabase() OptDatabase {
+	return s.Database
+}
+
+// SetDatabase sets the value of Database.
+func (s *GetDatabaseOK) SetDatabase(val OptDatabase) {
+	s.Database = val
+}
+
+func (*GetDatabaseOK) getDatabaseRes() {}
+
+type GetDatabaseStatsOK struct {
+	// The top queries performed on the given database as well as the total rows read and written.
+	TopQueries []DatabaseStatsOutput `json:"top_queries"`
+}
+
+// GetTopQueries returns the value of TopQueries.
+func (s *GetDatabaseStatsOK) GetTopQueries() []DatabaseStatsOutput {
+	return s.TopQueries
+}
+
+// SetTopQueries sets the value of TopQueries.
+func (s *GetDatabaseStatsOK) SetTopQueries(val []DatabaseStatsOutput) {
+	s.TopQueries = val
+}
+
+func (*GetDatabaseStatsOK) getDatabaseStatsRes() {}
+
+type GetDatabaseUsageBadRequest struct {
+	// The error message.
+	Error OptString `json:"error"`
+}
+
+// GetError returns the value of Error.
+func (s *GetDatabaseUsageBadRequest) GetError() OptString {
+	return s.Error
+}
+
+// SetError sets the value of Error.
+func (s *GetDatabaseUsageBadRequest) SetError(val OptString) {
+	s.Error = val
+}
+
+func (*GetDatabaseUsageBadRequest) getDatabaseUsageRes() {}
+
+type GetDatabaseUsageOK struct {
+	// The database usage object, containg the total and individual instance usage for rows read and
+	// written, as well as the total storage size (in bytes).
+	Database OptDatabaseUsageOutput `json:"database"`
+}
+
+// GetDatabase returns the value of Database.
+func (s *GetDatabaseUsageOK) GetDatabase() OptDatabaseUsageOutput {
+	return s.Database
+}
+
+// SetDatabase sets the value of Database.
+func (s *GetDatabaseUsageOK) SetDatabase(val OptDatabaseUsageOutput) {
+	s.Database = val
+}
+
+func (*GetDatabaseUsageOK) getDatabaseUsageRes() {}
+
+type GetGroupOK struct {
+	Group OptGroup `json:"group"`
+}
+
+// GetGroup returns the value of Group.
+func (s *GetGroupOK) GetGroup() OptGroup {
+	return s.Group
+}
+
+// SetGroup sets the value of Group.
+func (s *GetGroupOK) SetGroup(val OptGroup) {
+	s.Group = val
+}
+
+func (*GetGroupOK) getGroupRes() {}
+
+type GetOrganizationSubscriptionOK struct {
+	// The name of the plan for the current subscription.
+	Subscription OptString `json:"subscription"`
+	// Whether overages are enabled for the organization.
+	Overages OptBool `json:"overages"`
+	// The name of the plan for the current subscription.
+	Plan OptString `json:"plan"`
+	// Whether the plan is billed monthly or yearly.
+	Timeline OptString `json:"timeline"`
+}
+
+// GetSubscription returns the value of Subscription.
+func (s *GetOrganizationSubscriptionOK) GetSubscription() OptString {
+	return s.Subscription
+}
+
+// GetOverages returns the value of Overages.
+func (s *GetOrganizationSubscriptionOK) GetOverages() OptBool {
+	return s.Overages
+}
+
+// GetPlan returns the value of Plan.
+func (s *GetOrganizationSubscriptionOK) GetPlan() OptString {
+	return s.Plan
+}
+
+// GetTimeline returns the value of Timeline.
+func (s *GetOrganizationSubscriptionOK) GetTimeline() OptString {
+	return s.Timeline
+}
+
+// SetSubscription sets the value of Subscription.
+func (s *GetOrganizationSubscriptionOK) SetSubscription(val OptString) {
+	s.Subscription = val
+}
+
+// SetOverages sets the value of Overages.
+func (s *GetOrganizationSubscriptionOK) SetOverages(val OptBool) {
+	s.Overages = val
+}
+
+// SetPlan sets the value of Plan.
+func (s *GetOrganizationSubscriptionOK) SetPlan(val OptString) {
+	s.Plan = val
+}
+
+// SetTimeline sets the value of Timeline.
+func (s *GetOrganizationSubscriptionOK) SetTimeline(val OptString) {
+	s.Timeline = val
+}
+
+type GetOrganizationUsageOK struct {
+	// The organization usage object, containing the total usage for rows read and written, as well as
+	// the total storage size (in bytes).
+	Organization OptGetOrganizationUsageOKOrganization `json:"organization"`
+}
+
+// GetOrganization returns the value of Organization.
+func (s *GetOrganizationUsageOK) GetOrganization() OptGetOrganizationUsageOKOrganization {
+	return s.Organization
+}
+
+// SetOrganization sets the value of Organization.
+func (s *GetOrganizationUsageOK) SetOrganization(val OptGetOrganizationUsageOKOrganization) {
+	s.Organization = val
+}
+
+// The organization usage object, containing the total usage for rows read and written, as well as
+// the total storage size (in bytes).
+type GetOrganizationUsageOKOrganization struct {
+	// The UUID of the organization.
+	UUID OptString `json:"uuid"`
+	// The usage object for the organization.
+	Usage OptGetOrganizationUsageOKOrganizationUsage `json:"usage"`
+	// The databases for the organization and their usage.
+	Databases []DatabaseUsageOutput `json:"databases"`
+}
+
+// GetUUID returns the value of UUID.
+func (s *GetOrganizationUsageOKOrganization) GetUUID() OptString {
+	return s.UUID
+}
+
+// GetUsage returns the value of Usage.
+func (s *GetOrganizationUsageOKOrganization) GetUsage() OptGetOrganizationUsageOKOrganizationUsage {
+	return s.Usage
+}
+
+// GetDatabases returns the value of Databases.
+func (s *GetOrganizationUsageOKOrganization) GetDatabases() []DatabaseUsageOutput {
+	return s.Databases
+}
+
+// SetUUID sets the value of UUID.
+func (s *GetOrganizationUsageOKOrganization) SetUUID(val OptString) {
+	s.UUID = val
+}
+
+// SetUsage sets the value of Usage.
+func (s *GetOrganizationUsageOKOrganization) SetUsage(val OptGetOrganizationUsageOKOrganizationUsage) {
+	s.Usage = val
+}
+
+// SetDatabases sets the value of Databases.
+func (s *GetOrganizationUsageOKOrganization) SetDatabases(val []DatabaseUsageOutput) {
+	s.Databases = val
+}
+
+// The usage object for the organization.
+type GetOrganizationUsageOKOrganizationUsage struct {
+	// The number of rows read allowed for the specific plan.
+	RowsRead OptInt `json:"rows_read"`
+	// The number of rows written allowed for the specific plan.
+	RowsWritten OptInt `json:"rows_written"`
+	// The number of databases allowed for the specific plan.
+	Databases OptInt `json:"databases"`
+	// The number of locations allowed for the specific plan.
+	Locations OptInt `json:"locations"`
+	// The amount of storage allowed for the specific plan, in bytes.
+	Storage OptInt `json:"storage"`
+	// The number of groups allowed for the specific plan.
+	Groups OptInt `json:"groups"`
+	// The number of bytes synced allowed for the specific plan, in bytes.
+	BytesSynced OptInt `json:"bytes_synced"`
+}
+
+// GetRowsRead returns the value of RowsRead.
+func (s *GetOrganizationUsageOKOrganizationUsage) GetRowsRead() OptInt {
+	return s.RowsRead
+}
+
+// GetRowsWritten returns the value of RowsWritten.
+func (s *GetOrganizationUsageOKOrganizationUsage) GetRowsWritten() OptInt {
+	return s.RowsWritten
+}
+
+// GetDatabases returns the value of Databases.
+func (s *GetOrganizationUsageOKOrganizationUsage) GetDatabases() OptInt {
+	return s.Databases
+}
+
+// GetLocations returns the value of Locations.
+func (s *GetOrganizationUsageOKOrganizationUsage) GetLocations() OptInt {
+	return s.Locations
+}
+
+// GetStorage returns the value of Storage.
+func (s *GetOrganizationUsageOKOrganizationUsage) GetStorage() OptInt {
+	return s.Storage
+}
+
+// GetGroups returns the value of Groups.
+func (s *GetOrganizationUsageOKOrganizationUsage) GetGroups() OptInt {
+	return s.Groups
+}
+
+// GetBytesSynced returns the value of BytesSynced.
+func (s *GetOrganizationUsageOKOrganizationUsage) GetBytesSynced() OptInt {
+	return s.BytesSynced
+}
+
+// SetRowsRead sets the value of RowsRead.
+func (s *GetOrganizationUsageOKOrganizationUsage) SetRowsRead(val OptInt) {
+	s.RowsRead = val
+}
+
+// SetRowsWritten sets the value of RowsWritten.
+func (s *GetOrganizationUsageOKOrganizationUsage) SetRowsWritten(val OptInt) {
+	s.RowsWritten = val
+}
+
+// SetDatabases sets the value of Databases.
+func (s *GetOrganizationUsageOKOrganizationUsage) SetDatabases(val OptInt) {
+	s.Databases = val
+}
+
+// SetLocations sets the value of Locations.
+func (s *GetOrganizationUsageOKOrganizationUsage) SetLocations(val OptInt) {
+	s.Locations = val
+}
+
+// SetStorage sets the value of Storage.
+func (s *GetOrganizationUsageOKOrganizationUsage) SetStorage(val OptInt) {
+	s.Storage = val
+}
+
+// SetGroups sets the value of Groups.
+func (s *GetOrganizationUsageOKOrganizationUsage) SetGroups(val OptInt) {
+	s.Groups = val
+}
+
+// SetBytesSynced sets the value of BytesSynced.
+func (s *GetOrganizationUsageOKOrganizationUsage) SetBytesSynced(val OptInt) {
+	s.BytesSynced = val
+}
+
 // Merged schema.
 // Ref: #/components/schemas/Group
 type Group struct {
@@ -1121,7 +1941,7 @@ type Group struct {
 	Locations []string `json:"locations"`
 	// The primary location key.
 	Primary OptString `json:"primary"`
-	// Groups on the free tier go to sleep after some inactivity.
+	// Groups on the free tier get archived after some inactivity.
 	Archived OptBool `json:"archived"`
 }
 
@@ -1185,7 +2005,7 @@ func (s *Group) SetArchived(val OptBool) {
 	s.Archived = val
 }
 
-func (*Group) v1OrganizationsOrganizationNameGroupsGroupNameTransferPostRes() {}
+func (*Group) transferGroupRes() {}
 
 type GroupNotFoundResponse struct {
 	// The error message.
@@ -1202,16 +2022,15 @@ func (s *GroupNotFoundResponse) SetError(val OptString) {
 	s.Error = val
 }
 
-func (*GroupNotFoundResponse) v1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePostRes() {}
-func (*GroupNotFoundResponse) v1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostRes() {}
-func (*GroupNotFoundResponse) v1OrganizationsOrganizationNameGroupsGroupNameDeleteRes()         {}
-func (*GroupNotFoundResponse) v1OrganizationsOrganizationNameGroupsGroupNameGetRes()            {}
-func (*GroupNotFoundResponse) v1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteRes() {
-}
-func (*GroupNotFoundResponse) v1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostRes() {
-}
-func (*GroupNotFoundResponse) v1OrganizationsOrganizationNameGroupsGroupNameTransferPostRes() {}
-func (*GroupNotFoundResponse) v1OrganizationsOrganizationNameGroupsGroupNameUpdatePostRes()   {}
+func (*GroupNotFoundResponse) addLocationToGroupRes()      {}
+func (*GroupNotFoundResponse) createGroupTokenRes()        {}
+func (*GroupNotFoundResponse) deleteGroupRes()             {}
+func (*GroupNotFoundResponse) getGroupRes()                {}
+func (*GroupNotFoundResponse) invalidateGroupTokensRes()   {}
+func (*GroupNotFoundResponse) removeLocationFromGroupRes() {}
+func (*GroupNotFoundResponse) transferGroupRes()           {}
+func (*GroupNotFoundResponse) unarchiveGroupRes()          {}
+func (*GroupNotFoundResponse) updateGroupDatabasesRes()    {}
 
 type Hostname string
 
@@ -1321,6 +2140,16 @@ func (s *InstanceType) UnmarshalText(data []byte) error {
 	}
 }
 
+// InvalidateDatabaseTokensOK is response for InvalidateDatabaseTokens operation.
+type InvalidateDatabaseTokensOK struct{}
+
+func (*InvalidateDatabaseTokensOK) invalidateDatabaseTokensRes() {}
+
+// InvalidateGroupTokensOK is response for InvalidateGroupTokens operation.
+type InvalidateGroupTokensOK struct{}
+
+func (*InvalidateGroupTokensOK) invalidateGroupTokensRes() {}
+
 // Ref: #/components/schemas/Invite
 type Invite struct {
 	// The unique ID for the invite.
@@ -1334,11 +2163,11 @@ type Invite struct {
 	// The datetime the invite was deleted (or revoked) in [ISO 8601](https://en.wikipedia.
 	// org/wiki/ISO_8601) format. Example: `2023-01-01T00:00:00Z`.
 	DeletedAt OptString `json:"DeletedAt"`
-	// The unique ID for the invite.
+	// The assigned role for the invited user.
 	Role OptInviteRole `json:"Role"`
-	// The unique ID for the invite.
+	// The email of the person invited.
 	Email OptString `json:"Email"`
-	// The unique ID for the invite.
+	// The ID of the organization the user was invited to.
 	OrganizationID OptInt `json:"OrganizationID"`
 	// The unique token used to verify the invite.
 	Token        OptString       `json:"Token"`
@@ -1447,7 +2276,90 @@ func (s *Invite) SetAccepted(val OptBool) {
 	s.Accepted = val
 }
 
-// The unique ID for the invite.
+type InviteOrganizationMemberOK struct {
+	Invited OptInvite `json:"invited"`
+}
+
+// GetInvited returns the value of Invited.
+func (s *InviteOrganizationMemberOK) GetInvited() OptInvite {
+	return s.Invited
+}
+
+// SetInvited sets the value of Invited.
+func (s *InviteOrganizationMemberOK) SetInvited(val OptInvite) {
+	s.Invited = val
+}
+
+type InviteOrganizationMemberReq struct {
+	// The email of the user you want to invite.
+	Email string `json:"email"`
+	// The role given to the user.
+	Role OptInviteOrganizationMemberReqRole `json:"role"`
+}
+
+// GetEmail returns the value of Email.
+func (s *InviteOrganizationMemberReq) GetEmail() string {
+	return s.Email
+}
+
+// GetRole returns the value of Role.
+func (s *InviteOrganizationMemberReq) GetRole() OptInviteOrganizationMemberReqRole {
+	return s.Role
+}
+
+// SetEmail sets the value of Email.
+func (s *InviteOrganizationMemberReq) SetEmail(val string) {
+	s.Email = val
+}
+
+// SetRole sets the value of Role.
+func (s *InviteOrganizationMemberReq) SetRole(val OptInviteOrganizationMemberReqRole) {
+	s.Role = val
+}
+
+// The role given to the user.
+type InviteOrganizationMemberReqRole string
+
+const (
+	InviteOrganizationMemberReqRoleAdmin  InviteOrganizationMemberReqRole = "admin"
+	InviteOrganizationMemberReqRoleMember InviteOrganizationMemberReqRole = "member"
+)
+
+// AllValues returns all InviteOrganizationMemberReqRole values.
+func (InviteOrganizationMemberReqRole) AllValues() []InviteOrganizationMemberReqRole {
+	return []InviteOrganizationMemberReqRole{
+		InviteOrganizationMemberReqRoleAdmin,
+		InviteOrganizationMemberReqRoleMember,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s InviteOrganizationMemberReqRole) MarshalText() ([]byte, error) {
+	switch s {
+	case InviteOrganizationMemberReqRoleAdmin:
+		return []byte(s), nil
+	case InviteOrganizationMemberReqRoleMember:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *InviteOrganizationMemberReqRole) UnmarshalText(data []byte) error {
+	switch InviteOrganizationMemberReqRole(data) {
+	case InviteOrganizationMemberReqRoleAdmin:
+		*s = InviteOrganizationMemberReqRoleAdmin
+		return nil
+	case InviteOrganizationMemberReqRoleMember:
+		*s = InviteOrganizationMemberReqRoleMember
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+// The assigned role for the invited user.
 type InviteRole string
 
 const (
@@ -1487,6 +2399,369 @@ func (s *InviteRole) UnmarshalText(data []byte) error {
 	default:
 		return errors.Errorf("invalid value: %q", data)
 	}
+}
+
+type ListAPITokensOK struct {
+	Tokens []APIToken `json:"tokens"`
+}
+
+// GetTokens returns the value of Tokens.
+func (s *ListAPITokensOK) GetTokens() []APIToken {
+	return s.Tokens
+}
+
+// SetTokens sets the value of Tokens.
+func (s *ListAPITokensOK) SetTokens(val []APIToken) {
+	s.Tokens = val
+}
+
+type ListDatabaseInstancesOK struct {
+	Instances []Instance `json:"instances"`
+}
+
+// GetInstances returns the value of Instances.
+func (s *ListDatabaseInstancesOK) GetInstances() []Instance {
+	return s.Instances
+}
+
+// SetInstances sets the value of Instances.
+func (s *ListDatabaseInstancesOK) SetInstances(val []Instance) {
+	s.Instances = val
+}
+
+type ListDatabasesOK struct {
+	Databases []Database `json:"databases"`
+}
+
+// GetDatabases returns the value of Databases.
+func (s *ListDatabasesOK) GetDatabases() []Database {
+	return s.Databases
+}
+
+// SetDatabases sets the value of Databases.
+func (s *ListDatabasesOK) SetDatabases(val []Database) {
+	s.Databases = val
+}
+
+type ListGroupsOK struct {
+	Groups []Group `json:"groups"`
+}
+
+// GetGroups returns the value of Groups.
+func (s *ListGroupsOK) GetGroups() []Group {
+	return s.Groups
+}
+
+// SetGroups sets the value of Groups.
+func (s *ListGroupsOK) SetGroups(val []Group) {
+	s.Groups = val
+}
+
+type ListLocationsOK struct {
+	// A mapping of location codes to location names.
+	Locations OptListLocationsOKLocations `json:"locations"`
+}
+
+// GetLocations returns the value of Locations.
+func (s *ListLocationsOK) GetLocations() OptListLocationsOKLocations {
+	return s.Locations
+}
+
+// SetLocations sets the value of Locations.
+func (s *ListLocationsOK) SetLocations(val OptListLocationsOKLocations) {
+	s.Locations = val
+}
+
+// A mapping of location codes to location names.
+type ListLocationsOKLocations map[string]string
+
+func (s *ListLocationsOKLocations) init() ListLocationsOKLocations {
+	m := *s
+	if m == nil {
+		m = map[string]string{}
+		*s = m
+	}
+	return m
+}
+
+type ListOrganizationAuditLogsOK struct {
+	AuditLogs  []AuditLog                               `json:"audit_logs"`
+	Pagination OptListOrganizationAuditLogsOKPagination `json:"pagination"`
+}
+
+// GetAuditLogs returns the value of AuditLogs.
+func (s *ListOrganizationAuditLogsOK) GetAuditLogs() []AuditLog {
+	return s.AuditLogs
+}
+
+// GetPagination returns the value of Pagination.
+func (s *ListOrganizationAuditLogsOK) GetPagination() OptListOrganizationAuditLogsOKPagination {
+	return s.Pagination
+}
+
+// SetAuditLogs sets the value of AuditLogs.
+func (s *ListOrganizationAuditLogsOK) SetAuditLogs(val []AuditLog) {
+	s.AuditLogs = val
+}
+
+// SetPagination sets the value of Pagination.
+func (s *ListOrganizationAuditLogsOK) SetPagination(val OptListOrganizationAuditLogsOKPagination) {
+	s.Pagination = val
+}
+
+type ListOrganizationAuditLogsOKPagination struct {
+	// The current page number.
+	Page OptInt `json:"page"`
+	// The number of items per page.
+	PageSize OptInt `json:"page_size"`
+	// The total number of pages.
+	TotalPages OptInt `json:"total_pages"`
+	// The total number of items.
+	TotalRows OptInt `json:"total_rows"`
+}
+
+// GetPage returns the value of Page.
+func (s *ListOrganizationAuditLogsOKPagination) GetPage() OptInt {
+	return s.Page
+}
+
+// GetPageSize returns the value of PageSize.
+func (s *ListOrganizationAuditLogsOKPagination) GetPageSize() OptInt {
+	return s.PageSize
+}
+
+// GetTotalPages returns the value of TotalPages.
+func (s *ListOrganizationAuditLogsOKPagination) GetTotalPages() OptInt {
+	return s.TotalPages
+}
+
+// GetTotalRows returns the value of TotalRows.
+func (s *ListOrganizationAuditLogsOKPagination) GetTotalRows() OptInt {
+	return s.TotalRows
+}
+
+// SetPage sets the value of Page.
+func (s *ListOrganizationAuditLogsOKPagination) SetPage(val OptInt) {
+	s.Page = val
+}
+
+// SetPageSize sets the value of PageSize.
+func (s *ListOrganizationAuditLogsOKPagination) SetPageSize(val OptInt) {
+	s.PageSize = val
+}
+
+// SetTotalPages sets the value of TotalPages.
+func (s *ListOrganizationAuditLogsOKPagination) SetTotalPages(val OptInt) {
+	s.TotalPages = val
+}
+
+// SetTotalRows sets the value of TotalRows.
+func (s *ListOrganizationAuditLogsOKPagination) SetTotalRows(val OptInt) {
+	s.TotalRows = val
+}
+
+type ListOrganizationInvitesOK struct {
+	Invites []Invite `json:"invites"`
+}
+
+// GetInvites returns the value of Invites.
+func (s *ListOrganizationInvitesOK) GetInvites() []Invite {
+	return s.Invites
+}
+
+// SetInvites sets the value of Invites.
+func (s *ListOrganizationInvitesOK) SetInvites(val []Invite) {
+	s.Invites = val
+}
+
+type ListOrganizationInvoicesOK struct {
+	// The list of invoices for the organization.
+	Invoices []ListOrganizationInvoicesOKInvoicesItem `json:"invoices"`
+}
+
+// GetInvoices returns the value of Invoices.
+func (s *ListOrganizationInvoicesOK) GetInvoices() []ListOrganizationInvoicesOKInvoicesItem {
+	return s.Invoices
+}
+
+// SetInvoices sets the value of Invoices.
+func (s *ListOrganizationInvoicesOK) SetInvoices(val []ListOrganizationInvoicesOKInvoicesItem) {
+	s.Invoices = val
+}
+
+type ListOrganizationInvoicesOKInvoicesItem struct {
+	// The unique ID for the invoice.
+	InvoiceNumber OptString `json:"invoice_number"`
+	// The formatted price in USD for the invoice.
+	AmountDue OptString `json:"amount_due"`
+	// The due date for the invoice.
+	DueDate OptString `json:"due_date"`
+	// The date the invoice was paid.
+	PaidAt OptString `json:"paid_at"`
+	// The date the invoice payment last failed.
+	PaymentFailedAt OptString `json:"payment_failed_at"`
+	// The link to the invoice PDF you can download.
+	InvoicePdf OptString `json:"invoice_pdf"`
+}
+
+// GetInvoiceNumber returns the value of InvoiceNumber.
+func (s *ListOrganizationInvoicesOKInvoicesItem) GetInvoiceNumber() OptString {
+	return s.InvoiceNumber
+}
+
+// GetAmountDue returns the value of AmountDue.
+func (s *ListOrganizationInvoicesOKInvoicesItem) GetAmountDue() OptString {
+	return s.AmountDue
+}
+
+// GetDueDate returns the value of DueDate.
+func (s *ListOrganizationInvoicesOKInvoicesItem) GetDueDate() OptString {
+	return s.DueDate
+}
+
+// GetPaidAt returns the value of PaidAt.
+func (s *ListOrganizationInvoicesOKInvoicesItem) GetPaidAt() OptString {
+	return s.PaidAt
+}
+
+// GetPaymentFailedAt returns the value of PaymentFailedAt.
+func (s *ListOrganizationInvoicesOKInvoicesItem) GetPaymentFailedAt() OptString {
+	return s.PaymentFailedAt
+}
+
+// GetInvoicePdf returns the value of InvoicePdf.
+func (s *ListOrganizationInvoicesOKInvoicesItem) GetInvoicePdf() OptString {
+	return s.InvoicePdf
+}
+
+// SetInvoiceNumber sets the value of InvoiceNumber.
+func (s *ListOrganizationInvoicesOKInvoicesItem) SetInvoiceNumber(val OptString) {
+	s.InvoiceNumber = val
+}
+
+// SetAmountDue sets the value of AmountDue.
+func (s *ListOrganizationInvoicesOKInvoicesItem) SetAmountDue(val OptString) {
+	s.AmountDue = val
+}
+
+// SetDueDate sets the value of DueDate.
+func (s *ListOrganizationInvoicesOKInvoicesItem) SetDueDate(val OptString) {
+	s.DueDate = val
+}
+
+// SetPaidAt sets the value of PaidAt.
+func (s *ListOrganizationInvoicesOKInvoicesItem) SetPaidAt(val OptString) {
+	s.PaidAt = val
+}
+
+// SetPaymentFailedAt sets the value of PaymentFailedAt.
+func (s *ListOrganizationInvoicesOKInvoicesItem) SetPaymentFailedAt(val OptString) {
+	s.PaymentFailedAt = val
+}
+
+// SetInvoicePdf sets the value of InvoicePdf.
+func (s *ListOrganizationInvoicesOKInvoicesItem) SetInvoicePdf(val OptString) {
+	s.InvoicePdf = val
+}
+
+type ListOrganizationInvoicesType string
+
+const (
+	ListOrganizationInvoicesTypeAll      ListOrganizationInvoicesType = "all"
+	ListOrganizationInvoicesTypeUpcoming ListOrganizationInvoicesType = "upcoming"
+	ListOrganizationInvoicesTypeIssued   ListOrganizationInvoicesType = "issued"
+)
+
+// AllValues returns all ListOrganizationInvoicesType values.
+func (ListOrganizationInvoicesType) AllValues() []ListOrganizationInvoicesType {
+	return []ListOrganizationInvoicesType{
+		ListOrganizationInvoicesTypeAll,
+		ListOrganizationInvoicesTypeUpcoming,
+		ListOrganizationInvoicesTypeIssued,
+	}
+}
+
+// MarshalText implements encoding.TextMarshaler.
+func (s ListOrganizationInvoicesType) MarshalText() ([]byte, error) {
+	switch s {
+	case ListOrganizationInvoicesTypeAll:
+		return []byte(s), nil
+	case ListOrganizationInvoicesTypeUpcoming:
+		return []byte(s), nil
+	case ListOrganizationInvoicesTypeIssued:
+		return []byte(s), nil
+	default:
+		return nil, errors.Errorf("invalid value: %q", s)
+	}
+}
+
+// UnmarshalText implements encoding.TextUnmarshaler.
+func (s *ListOrganizationInvoicesType) UnmarshalText(data []byte) error {
+	switch ListOrganizationInvoicesType(data) {
+	case ListOrganizationInvoicesTypeAll:
+		*s = ListOrganizationInvoicesTypeAll
+		return nil
+	case ListOrganizationInvoicesTypeUpcoming:
+		*s = ListOrganizationInvoicesTypeUpcoming
+		return nil
+	case ListOrganizationInvoicesTypeIssued:
+		*s = ListOrganizationInvoicesTypeIssued
+		return nil
+	default:
+		return errors.Errorf("invalid value: %q", data)
+	}
+}
+
+type ListOrganizationMembersOK struct {
+	Members []Member `json:"members"`
+}
+
+// GetMembers returns the value of Members.
+func (s *ListOrganizationMembersOK) GetMembers() []Member {
+	return s.Members
+}
+
+// SetMembers sets the value of Members.
+func (s *ListOrganizationMembersOK) SetMembers(val []Member) {
+	s.Members = val
+}
+
+type ListOrganizationPlansOK struct {
+	// The name of the plan.
+	Name OptString `json:"name"`
+	// The monthly price of the plan.
+	Price  OptString     `json:"price"`
+	Quotas OptPlanQuotas `json:"quotas"`
+}
+
+// GetName returns the value of Name.
+func (s *ListOrganizationPlansOK) GetName() OptString {
+	return s.Name
+}
+
+// GetPrice returns the value of Price.
+func (s *ListOrganizationPlansOK) GetPrice() OptString {
+	return s.Price
+}
+
+// GetQuotas returns the value of Quotas.
+func (s *ListOrganizationPlansOK) GetQuotas() OptPlanQuotas {
+	return s.Quotas
+}
+
+// SetName sets the value of Name.
+func (s *ListOrganizationPlansOK) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetPrice sets the value of Price.
+func (s *ListOrganizationPlansOK) SetPrice(val OptString) {
+	s.Price = val
+}
+
+// SetQuotas sets the value of Quotas.
+func (s *ListOrganizationPlansOK) SetQuotas(val OptPlanQuotas) {
+	s.Quotas = val
 }
 
 // Ref: #/components/schemas/Member
@@ -1617,6 +2892,52 @@ func (s *NewGroup) SetLocation(val string) {
 // SetExtensions sets the value of Extensions.
 func (s *NewGroup) SetExtensions(val OptExtensions) {
 	s.Extensions = val
+}
+
+// NewOptAddOrganizationMemberReqRole returns new OptAddOrganizationMemberReqRole with value set to v.
+func NewOptAddOrganizationMemberReqRole(v AddOrganizationMemberReqRole) OptAddOrganizationMemberReqRole {
+	return OptAddOrganizationMemberReqRole{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptAddOrganizationMemberReqRole is optional AddOrganizationMemberReqRole.
+type OptAddOrganizationMemberReqRole struct {
+	Value AddOrganizationMemberReqRole
+	Set   bool
+}
+
+// IsSet returns true if OptAddOrganizationMemberReqRole was set.
+func (o OptAddOrganizationMemberReqRole) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptAddOrganizationMemberReqRole) Reset() {
+	var v AddOrganizationMemberReqRole
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptAddOrganizationMemberReqRole) SetTo(v AddOrganizationMemberReqRole) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptAddOrganizationMemberReqRole) Get() (v AddOrganizationMemberReqRole, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptAddOrganizationMemberReqRole) Or(d AddOrganizationMemberReqRole) AddOrganizationMemberReqRole {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
 }
 
 // NewOptAuditLogCode returns new OptAuditLogCode with value set to v.
@@ -1843,6 +3164,98 @@ func (o OptCreateDatabaseOutput) Get() (v CreateDatabaseOutput, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptCreateDatabaseOutput) Or(d CreateDatabaseOutput) CreateDatabaseOutput {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCreateDatabaseTokenAuthorization returns new OptCreateDatabaseTokenAuthorization with value set to v.
+func NewOptCreateDatabaseTokenAuthorization(v CreateDatabaseTokenAuthorization) OptCreateDatabaseTokenAuthorization {
+	return OptCreateDatabaseTokenAuthorization{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCreateDatabaseTokenAuthorization is optional CreateDatabaseTokenAuthorization.
+type OptCreateDatabaseTokenAuthorization struct {
+	Value CreateDatabaseTokenAuthorization
+	Set   bool
+}
+
+// IsSet returns true if OptCreateDatabaseTokenAuthorization was set.
+func (o OptCreateDatabaseTokenAuthorization) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCreateDatabaseTokenAuthorization) Reset() {
+	var v CreateDatabaseTokenAuthorization
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCreateDatabaseTokenAuthorization) SetTo(v CreateDatabaseTokenAuthorization) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCreateDatabaseTokenAuthorization) Get() (v CreateDatabaseTokenAuthorization, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCreateDatabaseTokenAuthorization) Or(d CreateDatabaseTokenAuthorization) CreateDatabaseTokenAuthorization {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptCreateGroupTokenAuthorization returns new OptCreateGroupTokenAuthorization with value set to v.
+func NewOptCreateGroupTokenAuthorization(v CreateGroupTokenAuthorization) OptCreateGroupTokenAuthorization {
+	return OptCreateGroupTokenAuthorization{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptCreateGroupTokenAuthorization is optional CreateGroupTokenAuthorization.
+type OptCreateGroupTokenAuthorization struct {
+	Value CreateGroupTokenAuthorization
+	Set   bool
+}
+
+// IsSet returns true if OptCreateGroupTokenAuthorization was set.
+func (o OptCreateGroupTokenAuthorization) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptCreateGroupTokenAuthorization) Reset() {
+	var v CreateGroupTokenAuthorization
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptCreateGroupTokenAuthorization) SetTo(v CreateGroupTokenAuthorization) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptCreateGroupTokenAuthorization) Get() (v CreateGroupTokenAuthorization, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptCreateGroupTokenAuthorization) Or(d CreateGroupTokenAuthorization) CreateGroupTokenAuthorization {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -2263,6 +3676,98 @@ func (o OptExtensions) Or(d Extensions) Extensions {
 	return d
 }
 
+// NewOptGetOrganizationUsageOKOrganization returns new OptGetOrganizationUsageOKOrganization with value set to v.
+func NewOptGetOrganizationUsageOKOrganization(v GetOrganizationUsageOKOrganization) OptGetOrganizationUsageOKOrganization {
+	return OptGetOrganizationUsageOKOrganization{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptGetOrganizationUsageOKOrganization is optional GetOrganizationUsageOKOrganization.
+type OptGetOrganizationUsageOKOrganization struct {
+	Value GetOrganizationUsageOKOrganization
+	Set   bool
+}
+
+// IsSet returns true if OptGetOrganizationUsageOKOrganization was set.
+func (o OptGetOrganizationUsageOKOrganization) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptGetOrganizationUsageOKOrganization) Reset() {
+	var v GetOrganizationUsageOKOrganization
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptGetOrganizationUsageOKOrganization) SetTo(v GetOrganizationUsageOKOrganization) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptGetOrganizationUsageOKOrganization) Get() (v GetOrganizationUsageOKOrganization, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptGetOrganizationUsageOKOrganization) Or(d GetOrganizationUsageOKOrganization) GetOrganizationUsageOKOrganization {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptGetOrganizationUsageOKOrganizationUsage returns new OptGetOrganizationUsageOKOrganizationUsage with value set to v.
+func NewOptGetOrganizationUsageOKOrganizationUsage(v GetOrganizationUsageOKOrganizationUsage) OptGetOrganizationUsageOKOrganizationUsage {
+	return OptGetOrganizationUsageOKOrganizationUsage{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptGetOrganizationUsageOKOrganizationUsage is optional GetOrganizationUsageOKOrganizationUsage.
+type OptGetOrganizationUsageOKOrganizationUsage struct {
+	Value GetOrganizationUsageOKOrganizationUsage
+	Set   bool
+}
+
+// IsSet returns true if OptGetOrganizationUsageOKOrganizationUsage was set.
+func (o OptGetOrganizationUsageOKOrganizationUsage) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptGetOrganizationUsageOKOrganizationUsage) Reset() {
+	var v GetOrganizationUsageOKOrganizationUsage
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptGetOrganizationUsageOKOrganizationUsage) SetTo(v GetOrganizationUsageOKOrganizationUsage) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptGetOrganizationUsageOKOrganizationUsage) Get() (v GetOrganizationUsageOKOrganizationUsage, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptGetOrganizationUsageOKOrganizationUsage) Or(d GetOrganizationUsageOKOrganizationUsage) GetOrganizationUsageOKOrganizationUsage {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptGroup returns new OptGroup with value set to v.
 func NewOptGroup(v Group) OptGroup {
 	return OptGroup{
@@ -2539,6 +4044,52 @@ func (o OptInvite) Or(d Invite) Invite {
 	return d
 }
 
+// NewOptInviteOrganizationMemberReqRole returns new OptInviteOrganizationMemberReqRole with value set to v.
+func NewOptInviteOrganizationMemberReqRole(v InviteOrganizationMemberReqRole) OptInviteOrganizationMemberReqRole {
+	return OptInviteOrganizationMemberReqRole{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptInviteOrganizationMemberReqRole is optional InviteOrganizationMemberReqRole.
+type OptInviteOrganizationMemberReqRole struct {
+	Value InviteOrganizationMemberReqRole
+	Set   bool
+}
+
+// IsSet returns true if OptInviteOrganizationMemberReqRole was set.
+func (o OptInviteOrganizationMemberReqRole) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptInviteOrganizationMemberReqRole) Reset() {
+	var v InviteOrganizationMemberReqRole
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptInviteOrganizationMemberReqRole) SetTo(v InviteOrganizationMemberReqRole) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptInviteOrganizationMemberReqRole) Get() (v InviteOrganizationMemberReqRole, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptInviteOrganizationMemberReqRole) Or(d InviteOrganizationMemberReqRole) InviteOrganizationMemberReqRole {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptInviteRole returns new OptInviteRole with value set to v.
 func NewOptInviteRole(v InviteRole) OptInviteRole {
 	return OptInviteRole{
@@ -2579,6 +4130,144 @@ func (o OptInviteRole) Get() (v InviteRole, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptInviteRole) Or(d InviteRole) InviteRole {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptListLocationsOKLocations returns new OptListLocationsOKLocations with value set to v.
+func NewOptListLocationsOKLocations(v ListLocationsOKLocations) OptListLocationsOKLocations {
+	return OptListLocationsOKLocations{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptListLocationsOKLocations is optional ListLocationsOKLocations.
+type OptListLocationsOKLocations struct {
+	Value ListLocationsOKLocations
+	Set   bool
+}
+
+// IsSet returns true if OptListLocationsOKLocations was set.
+func (o OptListLocationsOKLocations) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptListLocationsOKLocations) Reset() {
+	var v ListLocationsOKLocations
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptListLocationsOKLocations) SetTo(v ListLocationsOKLocations) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptListLocationsOKLocations) Get() (v ListLocationsOKLocations, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptListLocationsOKLocations) Or(d ListLocationsOKLocations) ListLocationsOKLocations {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptListOrganizationAuditLogsOKPagination returns new OptListOrganizationAuditLogsOKPagination with value set to v.
+func NewOptListOrganizationAuditLogsOKPagination(v ListOrganizationAuditLogsOKPagination) OptListOrganizationAuditLogsOKPagination {
+	return OptListOrganizationAuditLogsOKPagination{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptListOrganizationAuditLogsOKPagination is optional ListOrganizationAuditLogsOKPagination.
+type OptListOrganizationAuditLogsOKPagination struct {
+	Value ListOrganizationAuditLogsOKPagination
+	Set   bool
+}
+
+// IsSet returns true if OptListOrganizationAuditLogsOKPagination was set.
+func (o OptListOrganizationAuditLogsOKPagination) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptListOrganizationAuditLogsOKPagination) Reset() {
+	var v ListOrganizationAuditLogsOKPagination
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptListOrganizationAuditLogsOKPagination) SetTo(v ListOrganizationAuditLogsOKPagination) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptListOrganizationAuditLogsOKPagination) Get() (v ListOrganizationAuditLogsOKPagination, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptListOrganizationAuditLogsOKPagination) Or(d ListOrganizationAuditLogsOKPagination) ListOrganizationAuditLogsOKPagination {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
+// NewOptListOrganizationInvoicesType returns new OptListOrganizationInvoicesType with value set to v.
+func NewOptListOrganizationInvoicesType(v ListOrganizationInvoicesType) OptListOrganizationInvoicesType {
+	return OptListOrganizationInvoicesType{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptListOrganizationInvoicesType is optional ListOrganizationInvoicesType.
+type OptListOrganizationInvoicesType struct {
+	Value ListOrganizationInvoicesType
+	Set   bool
+}
+
+// IsSet returns true if OptListOrganizationInvoicesType was set.
+func (o OptListOrganizationInvoicesType) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptListOrganizationInvoicesType) Reset() {
+	var v ListOrganizationInvoicesType
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptListOrganizationInvoicesType) SetTo(v ListOrganizationInvoicesType) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptListOrganizationInvoicesType) Get() (v ListOrganizationInvoicesType, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptListOrganizationInvoicesType) Or(d ListOrganizationInvoicesType) ListOrganizationInvoicesType {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -2769,6 +4458,52 @@ func (o OptOrganizationType) Or(d OrganizationType) OrganizationType {
 	return d
 }
 
+// NewOptPlanQuotas returns new OptPlanQuotas with value set to v.
+func NewOptPlanQuotas(v PlanQuotas) OptPlanQuotas {
+	return OptPlanQuotas{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptPlanQuotas is optional PlanQuotas.
+type OptPlanQuotas struct {
+	Value PlanQuotas
+	Set   bool
+}
+
+// IsSet returns true if OptPlanQuotas was set.
+func (o OptPlanQuotas) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptPlanQuotas) Reset() {
+	var v PlanQuotas
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptPlanQuotas) SetTo(v PlanQuotas) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptPlanQuotas) Get() (v PlanQuotas, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptPlanQuotas) Or(d PlanQuotas) PlanQuotas {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptRole returns new OptRole with value set to v.
 func NewOptRole(v Role) OptRole {
 	return OptRole{
@@ -2953,286 +4688,6 @@ func (o OptUsername) Or(d Username) Username {
 	return d
 }
 
-// NewOptV1LocationsGetOKLocations returns new OptV1LocationsGetOKLocations with value set to v.
-func NewOptV1LocationsGetOKLocations(v V1LocationsGetOKLocations) OptV1LocationsGetOKLocations {
-	return OptV1LocationsGetOKLocations{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptV1LocationsGetOKLocations is optional V1LocationsGetOKLocations.
-type OptV1LocationsGetOKLocations struct {
-	Value V1LocationsGetOKLocations
-	Set   bool
-}
-
-// IsSet returns true if OptV1LocationsGetOKLocations was set.
-func (o OptV1LocationsGetOKLocations) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptV1LocationsGetOKLocations) Reset() {
-	var v V1LocationsGetOKLocations
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptV1LocationsGetOKLocations) SetTo(v V1LocationsGetOKLocations) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptV1LocationsGetOKLocations) Get() (v V1LocationsGetOKLocations, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptV1LocationsGetOKLocations) Or(d V1LocationsGetOKLocations) V1LocationsGetOKLocations {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptV1OrganizationsOrganizationNameAuditLogsGetOKPagination returns new OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination with value set to v.
-func NewOptV1OrganizationsOrganizationNameAuditLogsGetOKPagination(v V1OrganizationsOrganizationNameAuditLogsGetOKPagination) OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination {
-	return OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination is optional V1OrganizationsOrganizationNameAuditLogsGetOKPagination.
-type OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination struct {
-	Value V1OrganizationsOrganizationNameAuditLogsGetOKPagination
-	Set   bool
-}
-
-// IsSet returns true if OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination was set.
-func (o OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination) Reset() {
-	var v V1OrganizationsOrganizationNameAuditLogsGetOKPagination
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination) SetTo(v V1OrganizationsOrganizationNameAuditLogsGetOKPagination) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination) Get() (v V1OrganizationsOrganizationNameAuditLogsGetOKPagination, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination) Or(d V1OrganizationsOrganizationNameAuditLogsGetOKPagination) V1OrganizationsOrganizationNameAuditLogsGetOKPagination {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization returns new OptV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization with value set to v.
-func NewOptV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization(v V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization) OptV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization {
-	return OptV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization is optional V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization.
-type OptV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization struct {
-	Value V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization
-	Set   bool
-}
-
-// IsSet returns true if OptV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization was set.
-func (o OptV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization) IsSet() bool {
-	return o.Set
-}
-
-// Reset unsets value.
-func (o *OptV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization) Reset() {
-	var v V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization) SetTo(v V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization) Get() (v V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization) Or(d V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization) V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization returns new OptV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization with value set to v.
-func NewOptV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization(v V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization) OptV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization {
-	return OptV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization is optional V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization.
-type OptV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization struct {
-	Value V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization
-	Set   bool
-}
-
-// IsSet returns true if OptV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization was set.
-func (o OptV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization) IsSet() bool {
-	return o.Set
-}
-
-// Reset unsets value.
-func (o *OptV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization) Reset() {
-	var v V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization) SetTo(v V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization) Get() (v V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization) Or(d V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization) V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptV1OrganizationsOrganizationNameInvitesPostReqRole returns new OptV1OrganizationsOrganizationNameInvitesPostReqRole with value set to v.
-func NewOptV1OrganizationsOrganizationNameInvitesPostReqRole(v V1OrganizationsOrganizationNameInvitesPostReqRole) OptV1OrganizationsOrganizationNameInvitesPostReqRole {
-	return OptV1OrganizationsOrganizationNameInvitesPostReqRole{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptV1OrganizationsOrganizationNameInvitesPostReqRole is optional V1OrganizationsOrganizationNameInvitesPostReqRole.
-type OptV1OrganizationsOrganizationNameInvitesPostReqRole struct {
-	Value V1OrganizationsOrganizationNameInvitesPostReqRole
-	Set   bool
-}
-
-// IsSet returns true if OptV1OrganizationsOrganizationNameInvitesPostReqRole was set.
-func (o OptV1OrganizationsOrganizationNameInvitesPostReqRole) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptV1OrganizationsOrganizationNameInvitesPostReqRole) Reset() {
-	var v V1OrganizationsOrganizationNameInvitesPostReqRole
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptV1OrganizationsOrganizationNameInvitesPostReqRole) SetTo(v V1OrganizationsOrganizationNameInvitesPostReqRole) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptV1OrganizationsOrganizationNameInvitesPostReqRole) Get() (v V1OrganizationsOrganizationNameInvitesPostReqRole, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptV1OrganizationsOrganizationNameInvitesPostReqRole) Or(d V1OrganizationsOrganizationNameInvitesPostReqRole) V1OrganizationsOrganizationNameInvitesPostReqRole {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptV1OrganizationsOrganizationNameMembersPostReqRole returns new OptV1OrganizationsOrganizationNameMembersPostReqRole with value set to v.
-func NewOptV1OrganizationsOrganizationNameMembersPostReqRole(v V1OrganizationsOrganizationNameMembersPostReqRole) OptV1OrganizationsOrganizationNameMembersPostReqRole {
-	return OptV1OrganizationsOrganizationNameMembersPostReqRole{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptV1OrganizationsOrganizationNameMembersPostReqRole is optional V1OrganizationsOrganizationNameMembersPostReqRole.
-type OptV1OrganizationsOrganizationNameMembersPostReqRole struct {
-	Value V1OrganizationsOrganizationNameMembersPostReqRole
-	Set   bool
-}
-
-// IsSet returns true if OptV1OrganizationsOrganizationNameMembersPostReqRole was set.
-func (o OptV1OrganizationsOrganizationNameMembersPostReqRole) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptV1OrganizationsOrganizationNameMembersPostReqRole) Reset() {
-	var v V1OrganizationsOrganizationNameMembersPostReqRole
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptV1OrganizationsOrganizationNameMembersPostReqRole) SetTo(v V1OrganizationsOrganizationNameMembersPostReqRole) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptV1OrganizationsOrganizationNameMembersPostReqRole) Get() (v V1OrganizationsOrganizationNameMembersPostReqRole, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptV1OrganizationsOrganizationNameMembersPostReqRole) Or(d V1OrganizationsOrganizationNameMembersPostReqRole) V1OrganizationsOrganizationNameMembersPostReqRole {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // Ref: #/components/schemas/Organization
 type Organization struct {
 	// The organization name. Every user has a `personal` organization for their own account.
@@ -3351,6 +4806,161 @@ func (s *OrganizationType) UnmarshalText(data []byte) error {
 	}
 }
 
+// Ref: #/components/schemas/PlanQuotas
+type PlanQuotas struct {
+	// The number of rows read allowed for the specific plan.
+	RowsRead OptInt `json:"rowsRead"`
+	// The number of rows written allowed for the specific plan.
+	RowsWritten OptInt `json:"rowsWritten"`
+	// The number of databases allowed for the specific plan.
+	Databases OptInt `json:"databases"`
+	// The number of locations allowed for the specific plan.
+	Locations OptInt `json:"locations"`
+	// The amount of storage allowed for the specific plan, in bytes.
+	Storage OptInt `json:"storage"`
+	// The number of groups allowed for the specific plan.
+	Groups OptInt `json:"groups"`
+	// The number of bytes synced allowed for the specific plan, in bytes.
+	BytesSynced OptInt `json:"bytesSynced"`
+}
+
+// GetRowsRead returns the value of RowsRead.
+func (s *PlanQuotas) GetRowsRead() OptInt {
+	return s.RowsRead
+}
+
+// GetRowsWritten returns the value of RowsWritten.
+func (s *PlanQuotas) GetRowsWritten() OptInt {
+	return s.RowsWritten
+}
+
+// GetDatabases returns the value of Databases.
+func (s *PlanQuotas) GetDatabases() OptInt {
+	return s.Databases
+}
+
+// GetLocations returns the value of Locations.
+func (s *PlanQuotas) GetLocations() OptInt {
+	return s.Locations
+}
+
+// GetStorage returns the value of Storage.
+func (s *PlanQuotas) GetStorage() OptInt {
+	return s.Storage
+}
+
+// GetGroups returns the value of Groups.
+func (s *PlanQuotas) GetGroups() OptInt {
+	return s.Groups
+}
+
+// GetBytesSynced returns the value of BytesSynced.
+func (s *PlanQuotas) GetBytesSynced() OptInt {
+	return s.BytesSynced
+}
+
+// SetRowsRead sets the value of RowsRead.
+func (s *PlanQuotas) SetRowsRead(val OptInt) {
+	s.RowsRead = val
+}
+
+// SetRowsWritten sets the value of RowsWritten.
+func (s *PlanQuotas) SetRowsWritten(val OptInt) {
+	s.RowsWritten = val
+}
+
+// SetDatabases sets the value of Databases.
+func (s *PlanQuotas) SetDatabases(val OptInt) {
+	s.Databases = val
+}
+
+// SetLocations sets the value of Locations.
+func (s *PlanQuotas) SetLocations(val OptInt) {
+	s.Locations = val
+}
+
+// SetStorage sets the value of Storage.
+func (s *PlanQuotas) SetStorage(val OptInt) {
+	s.Storage = val
+}
+
+// SetGroups sets the value of Groups.
+func (s *PlanQuotas) SetGroups(val OptInt) {
+	s.Groups = val
+}
+
+// SetBytesSynced sets the value of BytesSynced.
+func (s *PlanQuotas) SetBytesSynced(val OptInt) {
+	s.BytesSynced = val
+}
+
+type RemoveLocationFromGroupBadRequest struct {
+	// The error message.
+	Error OptString `json:"error"`
+}
+
+// GetError returns the value of Error.
+func (s *RemoveLocationFromGroupBadRequest) GetError() OptString {
+	return s.Error
+}
+
+// SetError sets the value of Error.
+func (s *RemoveLocationFromGroupBadRequest) SetError(val OptString) {
+	s.Error = val
+}
+
+func (*RemoveLocationFromGroupBadRequest) removeLocationFromGroupRes() {}
+
+type RemoveLocationFromGroupOK struct {
+	// The group with the removed location.
+	Group OptGroup `json:"group"`
+}
+
+// GetGroup returns the value of Group.
+func (s *RemoveLocationFromGroupOK) GetGroup() OptGroup {
+	return s.Group
+}
+
+// SetGroup sets the value of Group.
+func (s *RemoveLocationFromGroupOK) SetGroup(val OptGroup) {
+	s.Group = val
+}
+
+func (*RemoveLocationFromGroupOK) removeLocationFromGroupRes() {}
+
+type RemoveOrganizationMemberNotFound struct {
+	// The error message.
+	Error OptString `json:"error"`
+}
+
+// GetError returns the value of Error.
+func (s *RemoveOrganizationMemberNotFound) GetError() OptString {
+	return s.Error
+}
+
+// SetError sets the value of Error.
+func (s *RemoveOrganizationMemberNotFound) SetError(val OptString) {
+	s.Error = val
+}
+
+func (*RemoveOrganizationMemberNotFound) removeOrganizationMemberRes() {}
+
+type RemoveOrganizationMemberOK struct {
+	Member OptUsername `json:"member"`
+}
+
+// GetMember returns the value of Member.
+func (s *RemoveOrganizationMemberOK) GetMember() OptUsername {
+	return s.Member
+}
+
+// SetMember sets the value of Member.
+func (s *RemoveOrganizationMemberOK) SetMember(val OptUsername) {
+	s.Member = val
+}
+
+func (*RemoveOrganizationMemberOK) removeOrganizationMemberRes() {}
+
 // The role assigned to the member. Will be `owner`, `admin` or `member`.
 // Ref: #/components/schemas/Member/properties/role
 type Role string
@@ -3401,1004 +5011,117 @@ func (s *Role) UnmarshalText(data []byte) error {
 	}
 }
 
+type TransferGroupReq struct {
+	// The name of the organization to transfer the group to.
+	Organization OptString `json:"organization"`
+}
+
+// GetOrganization returns the value of Organization.
+func (s *TransferGroupReq) GetOrganization() OptString {
+	return s.Organization
+}
+
+// SetOrganization sets the value of Organization.
+func (s *TransferGroupReq) SetOrganization(val OptString) {
+	s.Organization = val
+}
+
+type UnarchiveGroupOK struct {
+	// The group that was unarchived.
+	Group OptGroup `json:"group"`
+}
+
+// GetGroup returns the value of Group.
+func (s *UnarchiveGroupOK) GetGroup() OptGroup {
+	return s.Group
+}
+
+// SetGroup sets the value of Group.
+func (s *UnarchiveGroupOK) SetGroup(val OptGroup) {
+	s.Group = val
+}
+
+func (*UnarchiveGroupOK) unarchiveGroupRes() {}
+
+// UpdateGroupDatabasesOK is response for UpdateGroupDatabases operation.
+type UpdateGroupDatabasesOK struct{}
+
+func (*UpdateGroupDatabasesOK) updateGroupDatabasesRes() {}
+
+type UpdateOrganizationOK struct {
+	// The updated organization.
+	Organization OptOrganization `json:"organization"`
+}
+
+// GetOrganization returns the value of Organization.
+func (s *UpdateOrganizationOK) GetOrganization() OptOrganization {
+	return s.Organization
+}
+
+// SetOrganization sets the value of Organization.
+func (s *UpdateOrganizationOK) SetOrganization(val OptOrganization) {
+	s.Organization = val
+}
+
+type UpdateOrganizationReq struct {
+	// Enable or disable overages for the organization.
+	Overages OptBool `json:"overages"`
+}
+
+// GetOverages returns the value of Overages.
+func (s *UpdateOrganizationReq) GetOverages() OptBool {
+	return s.Overages
+}
+
+// SetOverages sets the value of Overages.
+func (s *UpdateOrganizationReq) SetOverages(val OptBool) {
+	s.Overages = val
+}
+
+type UploadDatabaseDumpOK struct {
+	// URL of the uploaded database dump.
+	DumpURL OptURI `json:"dump_url"`
+}
+
+// GetDumpURL returns the value of DumpURL.
+func (s *UploadDatabaseDumpOK) GetDumpURL() OptURI {
+	return s.DumpURL
+}
+
+// SetDumpURL sets the value of DumpURL.
+func (s *UploadDatabaseDumpOK) SetDumpURL(val OptURI) {
+	s.DumpURL = val
+}
+
+type UploadDatabaseDumpReq struct {
+	// Database dump file.
+	File ht.MultipartFile `json:"file"`
+}
+
+// GetFile returns the value of File.
+func (s *UploadDatabaseDumpReq) GetFile() ht.MultipartFile {
+	return s.File
+}
+
+// SetFile sets the value of File.
+func (s *UploadDatabaseDumpReq) SetFile(val ht.MultipartFile) {
+	s.File = val
+}
+
 type Username string
 
-type V1AuthAPITokensGetOK struct {
-	Tokens []APIToken `json:"tokens"`
-}
-
-// GetTokens returns the value of Tokens.
-func (s *V1AuthAPITokensGetOK) GetTokens() []APIToken {
-	return s.Tokens
-}
-
-// SetTokens sets the value of Tokens.
-func (s *V1AuthAPITokensGetOK) SetTokens(val []APIToken) {
-	s.Tokens = val
-}
-
-type V1AuthValidateGetOK struct {
+type ValidateAPITokenOK struct {
 	// The time of expiration for the provided token in unix epoch seconds, or `-1` if there is no
 	// expiration.
 	Exp OptInt `json:"exp"`
 }
 
 // GetExp returns the value of Exp.
-func (s *V1AuthValidateGetOK) GetExp() OptInt {
+func (s *ValidateAPITokenOK) GetExp() OptInt {
 	return s.Exp
 }
 
 // SetExp sets the value of Exp.
-func (s *V1AuthValidateGetOK) SetExp(val OptInt) {
+func (s *ValidateAPITokenOK) SetExp(val OptInt) {
 	s.Exp = val
-}
-
-type V1LocationsGetOK struct {
-	// A mapping of location codes to location names.
-	Locations OptV1LocationsGetOKLocations `json:"locations"`
-}
-
-// GetLocations returns the value of Locations.
-func (s *V1LocationsGetOK) GetLocations() OptV1LocationsGetOKLocations {
-	return s.Locations
-}
-
-// SetLocations sets the value of Locations.
-func (s *V1LocationsGetOK) SetLocations(val OptV1LocationsGetOKLocations) {
-	s.Locations = val
-}
-
-// A mapping of location codes to location names.
-type V1LocationsGetOKLocations map[string]string
-
-func (s *V1LocationsGetOKLocations) init() V1LocationsGetOKLocations {
-	m := *s
-	if m == nil {
-		m = map[string]string{}
-		*s = m
-	}
-	return m
-}
-
-type V1OrganizationsOrganizationNameAuditLogsGetOK struct {
-	AuditLogs  []AuditLog                                                 `json:"audit_logs"`
-	Pagination OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination `json:"pagination"`
-}
-
-// GetAuditLogs returns the value of AuditLogs.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOK) GetAuditLogs() []AuditLog {
-	return s.AuditLogs
-}
-
-// GetPagination returns the value of Pagination.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOK) GetPagination() OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination {
-	return s.Pagination
-}
-
-// SetAuditLogs sets the value of AuditLogs.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOK) SetAuditLogs(val []AuditLog) {
-	s.AuditLogs = val
-}
-
-// SetPagination sets the value of Pagination.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOK) SetPagination(val OptV1OrganizationsOrganizationNameAuditLogsGetOKPagination) {
-	s.Pagination = val
-}
-
-type V1OrganizationsOrganizationNameAuditLogsGetOKPagination struct {
-	// The current page number.
-	Page OptInt `json:"page"`
-	// The number of items per page.
-	PageSize OptInt `json:"page_size"`
-	// The total number of pages.
-	TotalPages OptInt `json:"total_pages"`
-	// The total number of items.
-	TotalRows OptInt `json:"total_rows"`
-}
-
-// GetPage returns the value of Page.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOKPagination) GetPage() OptInt {
-	return s.Page
-}
-
-// GetPageSize returns the value of PageSize.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOKPagination) GetPageSize() OptInt {
-	return s.PageSize
-}
-
-// GetTotalPages returns the value of TotalPages.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOKPagination) GetTotalPages() OptInt {
-	return s.TotalPages
-}
-
-// GetTotalRows returns the value of TotalRows.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOKPagination) GetTotalRows() OptInt {
-	return s.TotalRows
-}
-
-// SetPage sets the value of Page.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOKPagination) SetPage(val OptInt) {
-	s.Page = val
-}
-
-// SetPageSize sets the value of PageSize.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOKPagination) SetPageSize(val OptInt) {
-	s.PageSize = val
-}
-
-// SetTotalPages sets the value of TotalPages.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOKPagination) SetTotalPages(val OptInt) {
-	s.TotalPages = val
-}
-
-// SetTotalRows sets the value of TotalRows.
-func (s *V1OrganizationsOrganizationNameAuditLogsGetOKPagination) SetTotalRows(val OptInt) {
-	s.TotalRows = val
-}
-
-// V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePostOK is response for V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePost operation.
-type V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePostOK struct{}
-
-func (*V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePostOK) v1OrganizationsOrganizationNameDatabasesDatabaseNameAuthRotatePostRes() {
-}
-
-type V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization string
-
-const (
-	V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorizationFullAccess V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization = "full-access"
-	V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorizationReadOnly   V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization = "read-only"
-)
-
-// AllValues returns all V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization values.
-func (V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization) AllValues() []V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization {
-	return []V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization{
-		V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorizationFullAccess,
-		V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorizationReadOnly,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization) MarshalText() ([]byte, error) {
-	switch s {
-	case V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorizationFullAccess:
-		return []byte(s), nil
-	case V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorizationReadOnly:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization) UnmarshalText(data []byte) error {
-	switch V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorization(data) {
-	case V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorizationFullAccess:
-		*s = V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorizationFullAccess
-		return nil
-	case V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorizationReadOnly:
-		*s = V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostAuthorizationReadOnly
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
-type V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostBadRequest struct {
-	// The error message.
-	Error OptString `json:"error"`
-}
-
-// GetError returns the value of Error.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostBadRequest) GetError() OptString {
-	return s.Error
-}
-
-// SetError sets the value of Error.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostBadRequest) SetError(val OptString) {
-	s.Error = val
-}
-
-func (*V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostBadRequest) v1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostRes() {
-}
-
-type V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostOK struct {
-	// The generated authorization token (JWT).
-	Jwt OptString `json:"jwt"`
-}
-
-// GetJwt returns the value of Jwt.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostOK) GetJwt() OptString {
-	return s.Jwt
-}
-
-// SetJwt sets the value of Jwt.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostOK) SetJwt(val OptString) {
-	s.Jwt = val
-}
-
-func (*V1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostOK) v1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostRes() {
-}
-
-type V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteOK struct {
-	// The name of the database that was deleted.
-	Database OptString `json:"database"`
-}
-
-// GetDatabase returns the value of Database.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteOK) GetDatabase() OptString {
-	return s.Database
-}
-
-// SetDatabase sets the value of Database.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteOK) SetDatabase(val OptString) {
-	s.Database = val
-}
-
-func (*V1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteOK) v1OrganizationsOrganizationNameDatabasesDatabaseNameDeleteRes() {
-}
-
-type V1OrganizationsOrganizationNameDatabasesDatabaseNameGetOK struct {
-	Database OptDatabase `json:"database"`
-}
-
-// GetDatabase returns the value of Database.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameGetOK) GetDatabase() OptDatabase {
-	return s.Database
-}
-
-// SetDatabase sets the value of Database.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameGetOK) SetDatabase(val OptDatabase) {
-	s.Database = val
-}
-
-func (*V1OrganizationsOrganizationNameDatabasesDatabaseNameGetOK) v1OrganizationsOrganizationNameDatabasesDatabaseNameGetRes() {
-}
-
-type V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetOK struct {
-	Instances []Instance `json:"instances"`
-}
-
-// GetInstances returns the value of Instances.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetOK) GetInstances() []Instance {
-	return s.Instances
-}
-
-// SetInstances sets the value of Instances.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesGetOK) SetInstances(val []Instance) {
-	s.Instances = val
-}
-
-type V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetOK struct {
-	Instance OptInstance `json:"instance"`
-}
-
-// GetInstance returns the value of Instance.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetOK) GetInstance() OptInstance {
-	return s.Instance
-}
-
-// SetInstance sets the value of Instance.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameInstancesInstanceNameGetOK) SetInstance(val OptInstance) {
-	s.Instance = val
-}
-
-type V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetOK struct {
-	// The top queries performed on the given database as well as the total rows read and written.
-	TopQueries []DatabaseStatsOutput `json:"top_queries"`
-}
-
-// GetTopQueries returns the value of TopQueries.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetOK) GetTopQueries() []DatabaseStatsOutput {
-	return s.TopQueries
-}
-
-// SetTopQueries sets the value of TopQueries.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetOK) SetTopQueries(val []DatabaseStatsOutput) {
-	s.TopQueries = val
-}
-
-func (*V1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetOK) v1OrganizationsOrganizationNameDatabasesDatabaseNameStatsGetRes() {
-}
-
-type V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetBadRequest struct {
-	// The error message.
-	Error OptString `json:"error"`
-}
-
-// GetError returns the value of Error.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetBadRequest) GetError() OptString {
-	return s.Error
-}
-
-// SetError sets the value of Error.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetBadRequest) SetError(val OptString) {
-	s.Error = val
-}
-
-func (*V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetBadRequest) v1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetRes() {
-}
-
-type V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetOK struct {
-	// The database usage object, containg the total and individual instance usage for rows read and
-	// written, as well as the total storage size (in bytes).
-	Database OptDatabaseUsageOutput `json:"database"`
-}
-
-// GetDatabase returns the value of Database.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetOK) GetDatabase() OptDatabaseUsageOutput {
-	return s.Database
-}
-
-// SetDatabase sets the value of Database.
-func (s *V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetOK) SetDatabase(val OptDatabaseUsageOutput) {
-	s.Database = val
-}
-
-func (*V1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetOK) v1OrganizationsOrganizationNameDatabasesDatabaseNameUsageGetRes() {
-}
-
-type V1OrganizationsOrganizationNameDatabasesDumpsPostOK struct {
-	// URL of the uploaded database dump.
-	DumpURL OptURI `json:"dump_url"`
-}
-
-// GetDumpURL returns the value of DumpURL.
-func (s *V1OrganizationsOrganizationNameDatabasesDumpsPostOK) GetDumpURL() OptURI {
-	return s.DumpURL
-}
-
-// SetDumpURL sets the value of DumpURL.
-func (s *V1OrganizationsOrganizationNameDatabasesDumpsPostOK) SetDumpURL(val OptURI) {
-	s.DumpURL = val
-}
-
-type V1OrganizationsOrganizationNameDatabasesDumpsPostReq struct {
-	// Database dump file.
-	File ht.MultipartFile `json:"file"`
-}
-
-// GetFile returns the value of File.
-func (s *V1OrganizationsOrganizationNameDatabasesDumpsPostReq) GetFile() ht.MultipartFile {
-	return s.File
-}
-
-// SetFile sets the value of File.
-func (s *V1OrganizationsOrganizationNameDatabasesDumpsPostReq) SetFile(val ht.MultipartFile) {
-	s.File = val
-}
-
-type V1OrganizationsOrganizationNameDatabasesGetOK struct {
-	Databases []Database `json:"databases"`
-}
-
-// GetDatabases returns the value of Databases.
-func (s *V1OrganizationsOrganizationNameDatabasesGetOK) GetDatabases() []Database {
-	return s.Databases
-}
-
-// SetDatabases sets the value of Databases.
-func (s *V1OrganizationsOrganizationNameDatabasesGetOK) SetDatabases(val []Database) {
-	s.Databases = val
-}
-
-type V1OrganizationsOrganizationNameDatabasesPostBadRequest struct {
-	// The error message.
-	Error OptString `json:"error"`
-}
-
-// GetError returns the value of Error.
-func (s *V1OrganizationsOrganizationNameDatabasesPostBadRequest) GetError() OptString {
-	return s.Error
-}
-
-// SetError sets the value of Error.
-func (s *V1OrganizationsOrganizationNameDatabasesPostBadRequest) SetError(val OptString) {
-	s.Error = val
-}
-
-func (*V1OrganizationsOrganizationNameDatabasesPostBadRequest) v1OrganizationsOrganizationNameDatabasesPostRes() {
-}
-
-type V1OrganizationsOrganizationNameDatabasesPostConflict struct {
-	// The error message.
-	Error OptString `json:"error"`
-}
-
-// GetError returns the value of Error.
-func (s *V1OrganizationsOrganizationNameDatabasesPostConflict) GetError() OptString {
-	return s.Error
-}
-
-// SetError sets the value of Error.
-func (s *V1OrganizationsOrganizationNameDatabasesPostConflict) SetError(val OptString) {
-	s.Error = val
-}
-
-func (*V1OrganizationsOrganizationNameDatabasesPostConflict) v1OrganizationsOrganizationNameDatabasesPostRes() {
-}
-
-type V1OrganizationsOrganizationNameDatabasesPostOK struct {
-	// The newly created database.
-	Database OptCreateDatabaseOutput `json:"database"`
-}
-
-// GetDatabase returns the value of Database.
-func (s *V1OrganizationsOrganizationNameDatabasesPostOK) GetDatabase() OptCreateDatabaseOutput {
-	return s.Database
-}
-
-// SetDatabase sets the value of Database.
-func (s *V1OrganizationsOrganizationNameDatabasesPostOK) SetDatabase(val OptCreateDatabaseOutput) {
-	s.Database = val
-}
-
-func (*V1OrganizationsOrganizationNameDatabasesPostOK) v1OrganizationsOrganizationNameDatabasesPostRes() {
-}
-
-type V1OrganizationsOrganizationNameGroupsGetOK struct {
-	Groups []Group `json:"groups"`
-}
-
-// GetGroups returns the value of Groups.
-func (s *V1OrganizationsOrganizationNameGroupsGetOK) GetGroups() []Group {
-	return s.Groups
-}
-
-// SetGroups sets the value of Groups.
-func (s *V1OrganizationsOrganizationNameGroupsGetOK) SetGroups(val []Group) {
-	s.Groups = val
-}
-
-// V1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePostOK is response for V1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePost operation.
-type V1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePostOK struct{}
-
-func (*V1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePostOK) v1OrganizationsOrganizationNameGroupsGroupNameAuthRotatePostRes() {
-}
-
-type V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization string
-
-const (
-	V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorizationFullAccess V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization = "full-access"
-	V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorizationReadOnly   V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization = "read-only"
-)
-
-// AllValues returns all V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization values.
-func (V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization) AllValues() []V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization {
-	return []V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization{
-		V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorizationFullAccess,
-		V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorizationReadOnly,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization) MarshalText() ([]byte, error) {
-	switch s {
-	case V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorizationFullAccess:
-		return []byte(s), nil
-	case V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorizationReadOnly:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization) UnmarshalText(data []byte) error {
-	switch V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorization(data) {
-	case V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorizationFullAccess:
-		*s = V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorizationFullAccess
-		return nil
-	case V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorizationReadOnly:
-		*s = V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostAuthorizationReadOnly
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
-type V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostBadRequest struct {
-	// The error message.
-	Error OptString `json:"error"`
-}
-
-// GetError returns the value of Error.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostBadRequest) GetError() OptString {
-	return s.Error
-}
-
-// SetError sets the value of Error.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostBadRequest) SetError(val OptString) {
-	s.Error = val
-}
-
-func (*V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostBadRequest) v1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostRes() {
-}
-
-type V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostOK struct {
-	// The generated authorization token (JWT).
-	Jwt OptString `json:"jwt"`
-}
-
-// GetJwt returns the value of Jwt.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostOK) GetJwt() OptString {
-	return s.Jwt
-}
-
-// SetJwt sets the value of Jwt.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostOK) SetJwt(val OptString) {
-	s.Jwt = val
-}
-
-func (*V1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostOK) v1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostRes() {
-}
-
-type V1OrganizationsOrganizationNameGroupsGroupNameDeleteOK struct {
-	Group OptGroup `json:"group"`
-}
-
-// GetGroup returns the value of Group.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameDeleteOK) GetGroup() OptGroup {
-	return s.Group
-}
-
-// SetGroup sets the value of Group.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameDeleteOK) SetGroup(val OptGroup) {
-	s.Group = val
-}
-
-func (*V1OrganizationsOrganizationNameGroupsGroupNameDeleteOK) v1OrganizationsOrganizationNameGroupsGroupNameDeleteRes() {
-}
-
-type V1OrganizationsOrganizationNameGroupsGroupNameGetOK struct {
-	Group OptGroup `json:"group"`
-}
-
-// GetGroup returns the value of Group.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameGetOK) GetGroup() OptGroup {
-	return s.Group
-}
-
-// SetGroup sets the value of Group.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameGetOK) SetGroup(val OptGroup) {
-	s.Group = val
-}
-
-func (*V1OrganizationsOrganizationNameGroupsGroupNameGetOK) v1OrganizationsOrganizationNameGroupsGroupNameGetRes() {
-}
-
-type V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteBadRequest struct {
-	// The error message.
-	Error OptString `json:"error"`
-}
-
-// GetError returns the value of Error.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteBadRequest) GetError() OptString {
-	return s.Error
-}
-
-// SetError sets the value of Error.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteBadRequest) SetError(val OptString) {
-	s.Error = val
-}
-
-func (*V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteBadRequest) v1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteRes() {
-}
-
-type V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteOK struct {
-	// The group with the removed location.
-	Group OptGroup `json:"group"`
-}
-
-// GetGroup returns the value of Group.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteOK) GetGroup() OptGroup {
-	return s.Group
-}
-
-// SetGroup sets the value of Group.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteOK) SetGroup(val OptGroup) {
-	s.Group = val
-}
-
-func (*V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteOK) v1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationDeleteRes() {
-}
-
-type V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostBadRequest struct {
-	// The error message.
-	Error OptString `json:"error"`
-}
-
-// GetError returns the value of Error.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostBadRequest) GetError() OptString {
-	return s.Error
-}
-
-// SetError sets the value of Error.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostBadRequest) SetError(val OptString) {
-	s.Error = val
-}
-
-func (*V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostBadRequest) v1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostRes() {
-}
-
-type V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostOK struct {
-	// The group with the added location.
-	Group OptGroup `json:"group"`
-}
-
-// GetGroup returns the value of Group.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostOK) GetGroup() OptGroup {
-	return s.Group
-}
-
-// SetGroup sets the value of Group.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostOK) SetGroup(val OptGroup) {
-	s.Group = val
-}
-
-func (*V1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostOK) v1OrganizationsOrganizationNameGroupsGroupNameLocationsLocationPostRes() {
-}
-
-type V1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq struct {
-	// The name of the organization to transfer the group to.
-	Organization OptString `json:"organization"`
-}
-
-// GetOrganization returns the value of Organization.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq) GetOrganization() OptString {
-	return s.Organization
-}
-
-// SetOrganization sets the value of Organization.
-func (s *V1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq) SetOrganization(val OptString) {
-	s.Organization = val
-}
-
-// V1OrganizationsOrganizationNameGroupsGroupNameUpdatePostOK is response for V1OrganizationsOrganizationNameGroupsGroupNameUpdatePost operation.
-type V1OrganizationsOrganizationNameGroupsGroupNameUpdatePostOK struct{}
-
-func (*V1OrganizationsOrganizationNameGroupsGroupNameUpdatePostOK) v1OrganizationsOrganizationNameGroupsGroupNameUpdatePostRes() {
-}
-
-type V1OrganizationsOrganizationNameGroupsPostConflict struct {
-	// The error message.
-	Error OptString `json:"error"`
-}
-
-// GetError returns the value of Error.
-func (s *V1OrganizationsOrganizationNameGroupsPostConflict) GetError() OptString {
-	return s.Error
-}
-
-// SetError sets the value of Error.
-func (s *V1OrganizationsOrganizationNameGroupsPostConflict) SetError(val OptString) {
-	s.Error = val
-}
-
-func (*V1OrganizationsOrganizationNameGroupsPostConflict) v1OrganizationsOrganizationNameGroupsPostRes() {
-}
-
-type V1OrganizationsOrganizationNameGroupsPostOK struct {
-	// The newly created group.
-	Group OptGroup `json:"group"`
-}
-
-// GetGroup returns the value of Group.
-func (s *V1OrganizationsOrganizationNameGroupsPostOK) GetGroup() OptGroup {
-	return s.Group
-}
-
-// SetGroup sets the value of Group.
-func (s *V1OrganizationsOrganizationNameGroupsPostOK) SetGroup(val OptGroup) {
-	s.Group = val
-}
-
-func (*V1OrganizationsOrganizationNameGroupsPostOK) v1OrganizationsOrganizationNameGroupsPostRes() {}
-
-type V1OrganizationsOrganizationNameInvitesGetOK struct {
-	Invites []Invite `json:"invites"`
-}
-
-// GetInvites returns the value of Invites.
-func (s *V1OrganizationsOrganizationNameInvitesGetOK) GetInvites() []Invite {
-	return s.Invites
-}
-
-// SetInvites sets the value of Invites.
-func (s *V1OrganizationsOrganizationNameInvitesGetOK) SetInvites(val []Invite) {
-	s.Invites = val
-}
-
-type V1OrganizationsOrganizationNameInvitesPostOK struct {
-	Invited OptInvite `json:"invited"`
-}
-
-// GetInvited returns the value of Invited.
-func (s *V1OrganizationsOrganizationNameInvitesPostOK) GetInvited() OptInvite {
-	return s.Invited
-}
-
-// SetInvited sets the value of Invited.
-func (s *V1OrganizationsOrganizationNameInvitesPostOK) SetInvited(val OptInvite) {
-	s.Invited = val
-}
-
-type V1OrganizationsOrganizationNameInvitesPostReq struct {
-	// The email of the user you want to invite.
-	Email string `json:"email"`
-	// The role given to the user.
-	Role OptV1OrganizationsOrganizationNameInvitesPostReqRole `json:"role"`
-}
-
-// GetEmail returns the value of Email.
-func (s *V1OrganizationsOrganizationNameInvitesPostReq) GetEmail() string {
-	return s.Email
-}
-
-// GetRole returns the value of Role.
-func (s *V1OrganizationsOrganizationNameInvitesPostReq) GetRole() OptV1OrganizationsOrganizationNameInvitesPostReqRole {
-	return s.Role
-}
-
-// SetEmail sets the value of Email.
-func (s *V1OrganizationsOrganizationNameInvitesPostReq) SetEmail(val string) {
-	s.Email = val
-}
-
-// SetRole sets the value of Role.
-func (s *V1OrganizationsOrganizationNameInvitesPostReq) SetRole(val OptV1OrganizationsOrganizationNameInvitesPostReqRole) {
-	s.Role = val
-}
-
-// The role given to the user.
-type V1OrganizationsOrganizationNameInvitesPostReqRole string
-
-const (
-	V1OrganizationsOrganizationNameInvitesPostReqRoleAdmin  V1OrganizationsOrganizationNameInvitesPostReqRole = "admin"
-	V1OrganizationsOrganizationNameInvitesPostReqRoleMember V1OrganizationsOrganizationNameInvitesPostReqRole = "member"
-)
-
-// AllValues returns all V1OrganizationsOrganizationNameInvitesPostReqRole values.
-func (V1OrganizationsOrganizationNameInvitesPostReqRole) AllValues() []V1OrganizationsOrganizationNameInvitesPostReqRole {
-	return []V1OrganizationsOrganizationNameInvitesPostReqRole{
-		V1OrganizationsOrganizationNameInvitesPostReqRoleAdmin,
-		V1OrganizationsOrganizationNameInvitesPostReqRoleMember,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s V1OrganizationsOrganizationNameInvitesPostReqRole) MarshalText() ([]byte, error) {
-	switch s {
-	case V1OrganizationsOrganizationNameInvitesPostReqRoleAdmin:
-		return []byte(s), nil
-	case V1OrganizationsOrganizationNameInvitesPostReqRoleMember:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *V1OrganizationsOrganizationNameInvitesPostReqRole) UnmarshalText(data []byte) error {
-	switch V1OrganizationsOrganizationNameInvitesPostReqRole(data) {
-	case V1OrganizationsOrganizationNameInvitesPostReqRoleAdmin:
-		*s = V1OrganizationsOrganizationNameInvitesPostReqRoleAdmin
-		return nil
-	case V1OrganizationsOrganizationNameInvitesPostReqRoleMember:
-		*s = V1OrganizationsOrganizationNameInvitesPostReqRoleMember
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
-type V1OrganizationsOrganizationNameMembersGetOK struct {
-	Members []Member `json:"members"`
-}
-
-// GetMembers returns the value of Members.
-func (s *V1OrganizationsOrganizationNameMembersGetOK) GetMembers() []Member {
-	return s.Members
-}
-
-// SetMembers sets the value of Members.
-func (s *V1OrganizationsOrganizationNameMembersGetOK) SetMembers(val []Member) {
-	s.Members = val
-}
-
-type V1OrganizationsOrganizationNameMembersPostConflict struct {
-	// The error message.
-	Error OptString `json:"error"`
-}
-
-// GetError returns the value of Error.
-func (s *V1OrganizationsOrganizationNameMembersPostConflict) GetError() OptString {
-	return s.Error
-}
-
-// SetError sets the value of Error.
-func (s *V1OrganizationsOrganizationNameMembersPostConflict) SetError(val OptString) {
-	s.Error = val
-}
-
-func (*V1OrganizationsOrganizationNameMembersPostConflict) v1OrganizationsOrganizationNameMembersPostRes() {
-}
-
-type V1OrganizationsOrganizationNameMembersPostNotFound struct {
-	// The error message.
-	Error OptString `json:"error"`
-}
-
-// GetError returns the value of Error.
-func (s *V1OrganizationsOrganizationNameMembersPostNotFound) GetError() OptString {
-	return s.Error
-}
-
-// SetError sets the value of Error.
-func (s *V1OrganizationsOrganizationNameMembersPostNotFound) SetError(val OptString) {
-	s.Error = val
-}
-
-func (*V1OrganizationsOrganizationNameMembersPostNotFound) v1OrganizationsOrganizationNameMembersPostRes() {
-}
-
-type V1OrganizationsOrganizationNameMembersPostOK struct {
-	Member OptUsername `json:"member"`
-	Role   OptRole     `json:"role"`
-}
-
-// GetMember returns the value of Member.
-func (s *V1OrganizationsOrganizationNameMembersPostOK) GetMember() OptUsername {
-	return s.Member
-}
-
-// GetRole returns the value of Role.
-func (s *V1OrganizationsOrganizationNameMembersPostOK) GetRole() OptRole {
-	return s.Role
-}
-
-// SetMember sets the value of Member.
-func (s *V1OrganizationsOrganizationNameMembersPostOK) SetMember(val OptUsername) {
-	s.Member = val
-}
-
-// SetRole sets the value of Role.
-func (s *V1OrganizationsOrganizationNameMembersPostOK) SetRole(val OptRole) {
-	s.Role = val
-}
-
-func (*V1OrganizationsOrganizationNameMembersPostOK) v1OrganizationsOrganizationNameMembersPostRes() {
-}
-
-type V1OrganizationsOrganizationNameMembersPostReq struct {
-	// The username of an existing Turso user.
-	Username OptString `json:"username"`
-	// The role given to the user.
-	Role OptV1OrganizationsOrganizationNameMembersPostReqRole `json:"role"`
-}
-
-// GetUsername returns the value of Username.
-func (s *V1OrganizationsOrganizationNameMembersPostReq) GetUsername() OptString {
-	return s.Username
-}
-
-// GetRole returns the value of Role.
-func (s *V1OrganizationsOrganizationNameMembersPostReq) GetRole() OptV1OrganizationsOrganizationNameMembersPostReqRole {
-	return s.Role
-}
-
-// SetUsername sets the value of Username.
-func (s *V1OrganizationsOrganizationNameMembersPostReq) SetUsername(val OptString) {
-	s.Username = val
-}
-
-// SetRole sets the value of Role.
-func (s *V1OrganizationsOrganizationNameMembersPostReq) SetRole(val OptV1OrganizationsOrganizationNameMembersPostReqRole) {
-	s.Role = val
-}
-
-// The role given to the user.
-type V1OrganizationsOrganizationNameMembersPostReqRole string
-
-const (
-	V1OrganizationsOrganizationNameMembersPostReqRoleAdmin  V1OrganizationsOrganizationNameMembersPostReqRole = "admin"
-	V1OrganizationsOrganizationNameMembersPostReqRoleMember V1OrganizationsOrganizationNameMembersPostReqRole = "member"
-)
-
-// AllValues returns all V1OrganizationsOrganizationNameMembersPostReqRole values.
-func (V1OrganizationsOrganizationNameMembersPostReqRole) AllValues() []V1OrganizationsOrganizationNameMembersPostReqRole {
-	return []V1OrganizationsOrganizationNameMembersPostReqRole{
-		V1OrganizationsOrganizationNameMembersPostReqRoleAdmin,
-		V1OrganizationsOrganizationNameMembersPostReqRoleMember,
-	}
-}
-
-// MarshalText implements encoding.TextMarshaler.
-func (s V1OrganizationsOrganizationNameMembersPostReqRole) MarshalText() ([]byte, error) {
-	switch s {
-	case V1OrganizationsOrganizationNameMembersPostReqRoleAdmin:
-		return []byte(s), nil
-	case V1OrganizationsOrganizationNameMembersPostReqRoleMember:
-		return []byte(s), nil
-	default:
-		return nil, errors.Errorf("invalid value: %q", s)
-	}
-}
-
-// UnmarshalText implements encoding.TextUnmarshaler.
-func (s *V1OrganizationsOrganizationNameMembersPostReqRole) UnmarshalText(data []byte) error {
-	switch V1OrganizationsOrganizationNameMembersPostReqRole(data) {
-	case V1OrganizationsOrganizationNameMembersPostReqRoleAdmin:
-		*s = V1OrganizationsOrganizationNameMembersPostReqRoleAdmin
-		return nil
-	case V1OrganizationsOrganizationNameMembersPostReqRoleMember:
-		*s = V1OrganizationsOrganizationNameMembersPostReqRoleMember
-		return nil
-	default:
-		return errors.Errorf("invalid value: %q", data)
-	}
-}
-
-type V1OrganizationsOrganizationNameMembersUsernameDeleteNotFound struct {
-	// The error message.
-	Error OptString `json:"error"`
-}
-
-// GetError returns the value of Error.
-func (s *V1OrganizationsOrganizationNameMembersUsernameDeleteNotFound) GetError() OptString {
-	return s.Error
-}
-
-// SetError sets the value of Error.
-func (s *V1OrganizationsOrganizationNameMembersUsernameDeleteNotFound) SetError(val OptString) {
-	s.Error = val
-}
-
-func (*V1OrganizationsOrganizationNameMembersUsernameDeleteNotFound) v1OrganizationsOrganizationNameMembersUsernameDeleteRes() {
-}
-
-type V1OrganizationsOrganizationNameMembersUsernameDeleteOK struct {
-	Member OptUsername `json:"member"`
-}
-
-// GetMember returns the value of Member.
-func (s *V1OrganizationsOrganizationNameMembersUsernameDeleteOK) GetMember() OptUsername {
-	return s.Member
-}
-
-// SetMember sets the value of Member.
-func (s *V1OrganizationsOrganizationNameMembersUsernameDeleteOK) SetMember(val OptUsername) {
-	s.Member = val
-}
-
-func (*V1OrganizationsOrganizationNameMembersUsernameDeleteOK) v1OrganizationsOrganizationNameMembersUsernameDeleteRes() {
-}
-
-type V1OrganizationsOrganizationNamePatchOK struct {
-	// The updated organization.
-	Organization OptOrganization `json:"organization"`
-}
-
-// GetOrganization returns the value of Organization.
-func (s *V1OrganizationsOrganizationNamePatchOK) GetOrganization() OptOrganization {
-	return s.Organization
-}
-
-// SetOrganization sets the value of Organization.
-func (s *V1OrganizationsOrganizationNamePatchOK) SetOrganization(val OptOrganization) {
-	s.Organization = val
-}
-
-type V1OrganizationsOrganizationNamePatchReq struct {
-	// Enable or disable overages for the organization.
-	Overages OptBool `json:"overages"`
-}
-
-// GetOverages returns the value of Overages.
-func (s *V1OrganizationsOrganizationNamePatchReq) GetOverages() OptBool {
-	return s.Overages
-}
-
-// SetOverages sets the value of Overages.
-func (s *V1OrganizationsOrganizationNamePatchReq) SetOverages(val OptBool) {
-	s.Overages = val
 }

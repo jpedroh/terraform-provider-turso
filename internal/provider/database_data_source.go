@@ -110,7 +110,7 @@ func (d *DatabaseDataSource) Read(ctx context.Context, req datasource.ReadReques
 		return
 	}
 
-	res, err := d.client.V1OrganizationsOrganizationNameDatabasesDatabaseNameGet(ctx, client.V1OrganizationsOrganizationNameDatabasesDatabaseNameGetParams{
+	res, err := d.client.GetDatabase(ctx, client.GetDatabaseParams{
 		OrganizationName: data.OrganizationName.ValueString(),
 		DatabaseName:     data.Name.ValueString(),
 	})
@@ -121,7 +121,7 @@ func (d *DatabaseDataSource) Read(ctx context.Context, req datasource.ReadReques
 	}
 
 	switch p := res.(type) {
-	case *client.V1OrganizationsOrganizationNameDatabasesDatabaseNameGetOK:
+	case *client.GetDatabaseOK:
 		data.DbId = types.StringValue(string(p.Database.Value.DbId.Value))         //nolint:all
 		data.Hostname = types.StringValue(string(p.Database.Value.Hostname.Value)) //nolint:all
 	}

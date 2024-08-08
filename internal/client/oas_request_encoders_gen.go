@@ -15,7 +15,35 @@ import (
 	"github.com/ogen-go/ogen/uri"
 )
 
-func encodeV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostRequest(
+func encodeAddOrganizationMemberRequest(
+	req *AddOrganizationMemberReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeCreateDatabaseRequest(
+	req *CreateDatabaseInput,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeCreateDatabaseTokenRequest(
 	req OptCreateTokenInput,
 	r *http.Request,
 ) error {
@@ -35,7 +63,69 @@ func encodeV1OrganizationsOrganizationNameDatabasesDatabaseNameAuthTokensPostReq
 	return nil
 }
 
-func encodeV1OrganizationsOrganizationNameDatabasesDatabaseNameConfigurationPatchRequest(
+func encodeCreateGroupRequest(
+	req *NewGroup,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeCreateGroupTokenRequest(
+	req OptCreateTokenInput,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	if !req.Set {
+		// Keep request with empty body if value is not set.
+		return nil
+	}
+	e := new(jx.Encoder)
+	{
+		if req.Set {
+			req.Encode(e)
+		}
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeInviteOrganizationMemberRequest(
+	req *InviteOrganizationMemberReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeTransferGroupRequest(
+	req *TransferGroupReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeUpdateDatabaseConfigurationRequest(
 	req *DatabaseConfigurationInput,
 	r *http.Request,
 ) error {
@@ -49,8 +139,22 @@ func encodeV1OrganizationsOrganizationNameDatabasesDatabaseNameConfigurationPatc
 	return nil
 }
 
-func encodeV1OrganizationsOrganizationNameDatabasesDumpsPostRequest(
-	req *V1OrganizationsOrganizationNameDatabasesDumpsPostReq,
+func encodeUpdateOrganizationRequest(
+	req *UpdateOrganizationReq,
+	r *http.Request,
+) error {
+	const contentType = "application/json"
+	e := new(jx.Encoder)
+	{
+		req.Encode(e)
+	}
+	encoded := e.Bytes()
+	ht.SetBody(r, bytes.NewReader(encoded), contentType)
+	return nil
+}
+
+func encodeUploadDatabaseDumpRequest(
+	req *UploadDatabaseDumpReq,
 	r *http.Request,
 ) error {
 	const contentType = "multipart/form-data"
@@ -67,109 +171,5 @@ func encodeV1OrganizationsOrganizationNameDatabasesDumpsPostRequest(
 		return nil
 	})
 	ht.SetCloserBody(r, body, mime.FormatMediaType(contentType, map[string]string{"boundary": boundary}))
-	return nil
-}
-
-func encodeV1OrganizationsOrganizationNameDatabasesPostRequest(
-	req *CreateDatabaseInput,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeV1OrganizationsOrganizationNameGroupsGroupNameAuthTokensPostRequest(
-	req OptCreateTokenInput,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	if !req.Set {
-		// Keep request with empty body if value is not set.
-		return nil
-	}
-	e := new(jx.Encoder)
-	{
-		if req.Set {
-			req.Encode(e)
-		}
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeV1OrganizationsOrganizationNameGroupsGroupNameTransferPostRequest(
-	req *V1OrganizationsOrganizationNameGroupsGroupNameTransferPostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeV1OrganizationsOrganizationNameGroupsPostRequest(
-	req *NewGroup,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeV1OrganizationsOrganizationNameInvitesPostRequest(
-	req *V1OrganizationsOrganizationNameInvitesPostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeV1OrganizationsOrganizationNameMembersPostRequest(
-	req *V1OrganizationsOrganizationNameMembersPostReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
-	return nil
-}
-
-func encodeV1OrganizationsOrganizationNamePatchRequest(
-	req *V1OrganizationsOrganizationNamePatchReq,
-	r *http.Request,
-) error {
-	const contentType = "application/json"
-	e := new(jx.Encoder)
-	{
-		req.Encode(e)
-	}
-	encoded := e.Bytes()
-	ht.SetBody(r, bytes.NewReader(encoded), contentType)
 	return nil
 }
