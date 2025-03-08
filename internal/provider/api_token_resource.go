@@ -110,9 +110,9 @@ func (r *ApiTokenResource) Create(ctx context.Context, req resource.CreateReques
 
 	// For the purposes of this example code, hardcoding a response value to
 	// save into the Terraform state.
-	data.Name = types.StringValue(string(res.Name.Value))
+	data.Name = types.StringValue(res.Name.Value)
 	data.Id = types.StringValue(string(res.ID.Value))
-	data.Token = types.StringValue(string(res.Token.Value))
+	data.Token = types.StringValue(res.Token.Value)
 
 	// Write logs using the tflog package
 	// Documentation: https://terraform.io/plugin/log
