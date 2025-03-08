@@ -93,6 +93,7 @@ func (p *TursoProvider) Resources(ctx context.Context) []func() resource.Resourc
 	return []func() resource.Resource{
 		NewDatabaseResource,
 		NewDatabaseTokenResource,
+		NewApiTokenResource,
 	}
 }
 

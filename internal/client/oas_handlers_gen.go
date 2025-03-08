@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
-	"github.com/go-faster/jx"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
@@ -415,7 +414,7 @@ func (s *Server) handleCreateAPITokenRequest(args [1]string, argsEscaped bool, w
 		return
 	}
 
-	var response jx.Raw
+	var response *CreateAPITokenOK
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -435,7 +434,7 @@ func (s *Server) handleCreateAPITokenRequest(args [1]string, argsEscaped bool, w
 		type (
 			Request  = struct{}
 			Params   = CreateAPITokenParams
-			Response = jx.Raw
+			Response = *CreateAPITokenOK
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -5247,7 +5246,7 @@ func (s *Server) handleRevokeAPITokenRequest(args [1]string, argsEscaped bool, w
 		return
 	}
 
-	var response jx.Raw
+	var response *RevokeAPITokenOK
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -5267,7 +5266,7 @@ func (s *Server) handleRevokeAPITokenRequest(args [1]string, argsEscaped bool, w
 		type (
 			Request  = struct{}
 			Params   = RevokeAPITokenParams
-			Response = jx.Raw
+			Response = *RevokeAPITokenOK
 		)
 		response, err = middleware.HookMiddleware[
 			Request,

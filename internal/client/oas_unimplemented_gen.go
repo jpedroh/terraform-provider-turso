@@ -5,8 +5,6 @@ package client
 import (
 	"context"
 
-	"github.com/go-faster/jx"
-
 	ht "github.com/ogen-go/ogen/http"
 )
 
@@ -38,7 +36,7 @@ func (UnimplementedHandler) AddOrganizationMember(ctx context.Context, req *AddO
 // Returns a new API token belonging to a user.
 //
 // POST /v1/auth/api-tokens/{tokenName}
-func (UnimplementedHandler) CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (r jx.Raw, _ error) {
+func (UnimplementedHandler) CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (r *CreateAPITokenOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -346,7 +344,7 @@ func (UnimplementedHandler) RemoveOrganizationMember(ctx context.Context, params
 // Revokes the provided API token belonging to a user.
 //
 // DELETE /v1/auth/api-tokens/{tokenName}
-func (UnimplementedHandler) RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (r jx.Raw, _ error) {
+func (UnimplementedHandler) RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (r *RevokeAPITokenOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

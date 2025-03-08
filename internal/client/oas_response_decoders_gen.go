@@ -246,7 +246,7 @@ func decodeAddOrganizationMemberResponse(resp *http.Response) (res AddOrganizati
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeCreateAPITokenResponse(resp *http.Response) (res jx.Raw, _ error) {
+func decodeCreateAPITokenResponse(resp *http.Response) (res *CreateAPITokenOK, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -262,11 +262,9 @@ func decodeCreateAPITokenResponse(resp *http.Response) (res jx.Raw, _ error) {
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response jx.Raw
+			var response CreateAPITokenOK
 			if err := func() error {
-				v, err := d.RawAppend(nil)
-				response = jx.Raw(v)
-				if err != nil {
+				if err := response.Decode(d); err != nil {
 					return err
 				}
 				if err := d.Skip(); err != io.EOF {
@@ -281,7 +279,7 @@ func decodeCreateAPITokenResponse(resp *http.Response) (res jx.Raw, _ error) {
 				}
 				return res, err
 			}
-			return response, nil
+			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
 		}
@@ -2431,7 +2429,7 @@ func decodeRemoveOrganizationMemberResponse(resp *http.Response) (res RemoveOrga
 	return res, validate.UnexpectedStatusCode(resp.StatusCode)
 }
 
-func decodeRevokeAPITokenResponse(resp *http.Response) (res jx.Raw, _ error) {
+func decodeRevokeAPITokenResponse(resp *http.Response) (res *RevokeAPITokenOK, _ error) {
 	switch resp.StatusCode {
 	case 200:
 		// Code 200.
@@ -2447,11 +2445,9 @@ func decodeRevokeAPITokenResponse(resp *http.Response) (res jx.Raw, _ error) {
 			}
 			d := jx.DecodeBytes(buf)
 
-			var response jx.Raw
+			var response RevokeAPITokenOK
 			if err := func() error {
-				v, err := d.RawAppend(nil)
-				response = jx.Raw(v)
-				if err != nil {
+				if err := response.Decode(d); err != nil {
 					return err
 				}
 				if err := d.Skip(); err != io.EOF {
@@ -2466,7 +2462,7 @@ func decodeRevokeAPITokenResponse(resp *http.Response) (res jx.Raw, _ error) {
 				}
 				return res, err
 			}
-			return response, nil
+			return &response, nil
 		default:
 			return res, validate.InvalidContentType(ct)
 		}

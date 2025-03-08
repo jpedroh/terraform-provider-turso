@@ -103,15 +103,13 @@ func encodeAddOrganizationMemberResponse(response AddOrganizationMemberRes, w ht
 	}
 }
 
-func encodeCreateAPITokenResponse(response jx.Raw, w http.ResponseWriter, span trace.Span) error {
+func encodeCreateAPITokenResponse(response *CreateAPITokenOK, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
-	if len(response) != 0 {
-		e.Raw(response)
-	}
+	response.Encode(e)
 	if _, err := e.WriteTo(w); err != nil {
 		return errors.Wrap(err, "write")
 	}
@@ -952,15 +950,13 @@ func encodeRemoveOrganizationMemberResponse(response RemoveOrganizationMemberRes
 	}
 }
 
-func encodeRevokeAPITokenResponse(response jx.Raw, w http.ResponseWriter, span trace.Span) error {
+func encodeRevokeAPITokenResponse(response *RevokeAPITokenOK, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
-	if len(response) != 0 {
-		e.Raw(response)
-	}
+	response.Encode(e)
 	if _, err := e.WriteTo(w); err != nil {
 		return errors.Wrap(err, "write")
 	}
