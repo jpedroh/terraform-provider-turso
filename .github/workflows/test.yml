@@ -84,6 +84,11 @@ jobs:
         run: go test -v -cover ./internal/provider/
         timeout-minutes: 10
   release:
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write
+      id-token: write
     runs-on: ubuntu-latest
     needs: [build, test, generate]
     steps:
