@@ -21,4 +21,7 @@ test:
 testacc:
 	TF_ACC=1 go test -v -cover -timeout 120m ./...
 
+generate_client:
+	ogen --target ./internal/client -package client --clean ./internal/openapi.json
+
 .PHONY: fmt lint test testacc build install generate
