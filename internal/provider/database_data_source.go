@@ -111,7 +111,7 @@ func (d *DatabaseDataSource) Read(ctx context.Context, req datasource.ReadReques
 	}
 
 	res, err := d.client.GetDatabase(ctx, client.GetDatabaseParams{
-		OrganizationName: data.OrganizationName.ValueString(),
+		OrganizationSlug: data.OrganizationName.ValueString(),
 		DatabaseName:     data.Name.ValueString(),
 	})
 

@@ -13,7 +13,7 @@ import (
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
-	semconv "go.opentelemetry.io/otel/semconv/v1.19.0"
+	semconv "go.opentelemetry.io/otel/semconv/v1.26.0"
 	"go.opentelemetry.io/otel/trace"
 
 	"github.com/ogen-go/ogen/conv"
@@ -22,19 +22,24 @@ import (
 	"github.com/ogen-go/ogen/uri"
 )
 
+func trimTrailingSlashes(u *url.URL) {
+	u.Path = strings.TrimRight(u.Path, "/")
+	u.RawPath = strings.TrimRight(u.RawPath, "/")
+}
+
 // Invoker invokes operations described by OpenAPI v3 specification.
 type Invoker interface {
 	// AddLocationToGroup invokes addLocationToGroup operation.
 	//
 	// Adds a location to the specified group.
 	//
-	// POST /v1/organizations/{organizationName}/groups/{groupName}/locations/{location}
+	// POST /v1/organizations/{organizationSlug}/groups/{groupName}/locations/{location}
 	AddLocationToGroup(ctx context.Context, params AddLocationToGroupParams) (AddLocationToGroupRes, error)
 	// AddOrganizationMember invokes addOrganizationMember operation.
 	//
 	// Add an existing Turso user to an organization.
 	//
-	// POST /v1/organizations/{organizationName}/members
+	// POST /v1/organizations/{organizationSlug}/members
 	AddOrganizationMember(ctx context.Context, request *AddOrganizationMemberReq, params AddOrganizationMemberParams) (AddOrganizationMemberRes, error)
 	// CreateAPIToken invokes createAPIToken operation.
 	//
@@ -46,109 +51,121 @@ type Invoker interface {
 	//
 	// Creates a new database in a group for the organization or user.
 	//
-	// POST /v1/organizations/{organizationName}/databases
+	// POST /v1/organizations/{organizationSlug}/databases
 	CreateDatabase(ctx context.Context, request *CreateDatabaseInput, params CreateDatabaseParams) (CreateDatabaseRes, error)
 	// CreateDatabaseToken invokes createDatabaseToken operation.
 	//
 	// Generates an authorization token for the specified database.
 	//
-	// POST /v1/organizations/{organizationName}/databases/{databaseName}/auth/tokens
+	// POST /v1/organizations/{organizationSlug}/databases/{databaseName}/auth/tokens
 	CreateDatabaseToken(ctx context.Context, request OptCreateTokenInput, params CreateDatabaseTokenParams) (CreateDatabaseTokenRes, error)
 	// CreateGroup invokes createGroup operation.
 	//
 	// Creates a new group for the organization or user.
 	//
-	// POST /v1/organizations/{organizationName}/groups
+	// POST /v1/organizations/{organizationSlug}/groups
 	CreateGroup(ctx context.Context, request *NewGroup, params CreateGroupParams) (CreateGroupRes, error)
 	// CreateGroupToken invokes createGroupToken operation.
 	//
 	// Generates an authorization token for the specified group.
 	//
-	// POST /v1/organizations/{organizationName}/groups/{groupName}/auth/tokens
+	// POST /v1/organizations/{organizationSlug}/groups/{groupName}/auth/tokens
 	CreateGroupToken(ctx context.Context, request OptCreateTokenInput, params CreateGroupTokenParams) (CreateGroupTokenRes, error)
 	// DeleteDatabase invokes deleteDatabase operation.
 	//
 	// Delete a database belonging to the organization or user.
 	//
-	// DELETE /v1/organizations/{organizationName}/databases/{databaseName}
+	// DELETE /v1/organizations/{organizationSlug}/databases/{databaseName}
 	DeleteDatabase(ctx context.Context, params DeleteDatabaseParams) (DeleteDatabaseRes, error)
 	// DeleteGroup invokes deleteGroup operation.
 	//
 	// Delete a group belonging to the organization or user.
 	//
-	// DELETE /v1/organizations/{organizationName}/groups/{groupName}
+	// DELETE /v1/organizations/{organizationSlug}/groups/{groupName}
 	DeleteGroup(ctx context.Context, params DeleteGroupParams) (DeleteGroupRes, error)
 	// DeleteOrganizationInviteByEmail invokes deleteOrganizationInviteByEmail operation.
 	//
 	// Delete an invite for the organization by email.
 	//
-	// DELETE /v1/organizations/{organizationName}/invites/{email}
+	// DELETE /v1/organizations/{organizationSlug}/invites/{email}
 	DeleteOrganizationInviteByEmail(ctx context.Context, params DeleteOrganizationInviteByEmailParams) (DeleteOrganizationInviteByEmailRes, error)
 	// GetDatabase invokes getDatabase operation.
 	//
 	// Returns a database belonging to the organization or user.
 	//
-	// GET /v1/organizations/{organizationName}/databases/{databaseName}
+	// GET /v1/organizations/{organizationSlug}/databases/{databaseName}
 	GetDatabase(ctx context.Context, params GetDatabaseParams) (GetDatabaseRes, error)
 	// GetDatabaseConfiguration invokes getDatabaseConfiguration operation.
 	//
 	// Retrieve an individual database configuration belonging to the organization or user.
 	//
-	// GET /v1/organizations/{organizationName}/databases/{databaseName}/configuration
+	// GET /v1/organizations/{organizationSlug}/databases/{databaseName}/configuration
 	GetDatabaseConfiguration(ctx context.Context, params GetDatabaseConfigurationParams) (*DatabaseConfigurationResponse, error)
 	// GetDatabaseInstance invokes getDatabaseInstance operation.
 	//
 	// Return the individual database instance by name.
 	//
-	// GET /v1/organizations/{organizationName}/databases/{databaseName}/instances/{instanceName}
+	// GET /v1/organizations/{organizationSlug}/databases/{databaseName}/instances/{instanceName}
 	GetDatabaseInstance(ctx context.Context, params GetDatabaseInstanceParams) (*GetDatabaseInstanceOK, error)
 	// GetDatabaseStats invokes getDatabaseStats operation.
 	//
 	// Fetch the top queries of a database, including the count of rows read and written.
 	//
-	// GET /v1/organizations/{organizationName}/databases/{databaseName}/stats
+	// GET /v1/organizations/{organizationSlug}/databases/{databaseName}/stats
 	GetDatabaseStats(ctx context.Context, params GetDatabaseStatsParams) (GetDatabaseStatsRes, error)
 	// GetDatabaseUsage invokes getDatabaseUsage operation.
 	//
 	// Fetch activity usage for a database in a given time period.
 	//
-	// GET /v1/organizations/{organizationName}/databases/{databaseName}/usage
+	// GET /v1/organizations/{organizationSlug}/databases/{databaseName}/usage
 	GetDatabaseUsage(ctx context.Context, params GetDatabaseUsageParams) (GetDatabaseUsageRes, error)
 	// GetGroup invokes getGroup operation.
 	//
 	// Returns a group belonging to the organization or user.
 	//
-	// GET /v1/organizations/{organizationName}/groups/{groupName}
+	// GET /v1/organizations/{organizationSlug}/groups/{groupName}
 	GetGroup(ctx context.Context, params GetGroupParams) (GetGroupRes, error)
+	// GetOrganization invokes getOrganization operation.
+	//
+	// Retrieve details of a specific organization.
+	//
+	// GET /v1/organizations/{organizationSlug}
+	GetOrganization(ctx context.Context, params GetOrganizationParams) (GetOrganizationRes, error)
+	// GetOrganizationMember invokes getOrganizationMember operation.
+	//
+	// Retrieve details of a specific member in the organization.
+	//
+	// GET /v1/organizations/{organizationSlug}/members/{username}
+	GetOrganizationMember(ctx context.Context, params GetOrganizationMemberParams) (GetOrganizationMemberRes, error)
 	// GetOrganizationSubscription invokes getOrganizationSubscription operation.
 	//
 	// Returns the current subscription details for the organization.
 	//
-	// GET /v1/organizations/{organizationName}/subscription
+	// GET /v1/organizations/{organizationSlug}/subscription
 	GetOrganizationSubscription(ctx context.Context, params GetOrganizationSubscriptionParams) (*GetOrganizationSubscriptionOK, error)
 	// GetOrganizationUsage invokes getOrganizationUsage operation.
 	//
 	// Fetch current billing cycle usage for an organization.
 	//
-	// GET /v1/organizations/{organizationName}/usage
+	// GET /v1/organizations/{organizationSlug}/usage
 	GetOrganizationUsage(ctx context.Context, params GetOrganizationUsageParams) (*GetOrganizationUsageOK, error)
 	// InvalidateDatabaseTokens invokes invalidateDatabaseTokens operation.
 	//
 	// Invalidates all authorization tokens for the specified database.
 	//
-	// POST /v1/organizations/{organizationName}/databases/{databaseName}/auth/rotate
+	// POST /v1/organizations/{organizationSlug}/databases/{databaseName}/auth/rotate
 	InvalidateDatabaseTokens(ctx context.Context, params InvalidateDatabaseTokensParams) (InvalidateDatabaseTokensRes, error)
 	// InvalidateGroupTokens invokes invalidateGroupTokens operation.
 	//
 	// Invalidates all authorization tokens for the specified group.
 	//
-	// POST /v1/organizations/{organizationName}/groups/{groupName}/auth/rotate
+	// POST /v1/organizations/{organizationSlug}/groups/{groupName}/auth/rotate
 	InvalidateGroupTokens(ctx context.Context, params InvalidateGroupTokensParams) (InvalidateGroupTokensRes, error)
 	// InviteOrganizationMember invokes inviteOrganizationMember operation.
 	//
 	// Invite a user (who isn't already a Turso user) to an organization.
 	//
-	// POST /v1/organizations/{organizationName}/invites
+	// POST /v1/organizations/{organizationSlug}/invites
 	InviteOrganizationMember(ctx context.Context, request *InviteOrganizationMemberReq, params InviteOrganizationMemberParams) (*InviteOrganizationMemberOK, error)
 	// ListAPITokens invokes listAPITokens operation.
 	//
@@ -161,19 +178,19 @@ type Invoker interface {
 	// Returns a list of instances of a database. Instances are the individual primary or replica
 	// databases in each region defined by the group.
 	//
-	// GET /v1/organizations/{organizationName}/databases/{databaseName}/instances
+	// GET /v1/organizations/{organizationSlug}/databases/{databaseName}/instances
 	ListDatabaseInstances(ctx context.Context, params ListDatabaseInstancesParams) (*ListDatabaseInstancesOK, error)
 	// ListDatabases invokes listDatabases operation.
 	//
 	// Returns a list of databases belonging to the organization or user.
 	//
-	// GET /v1/organizations/{organizationName}/databases
+	// GET /v1/organizations/{organizationSlug}/databases
 	ListDatabases(ctx context.Context, params ListDatabasesParams) (*ListDatabasesOK, error)
 	// ListGroups invokes listGroups operation.
 	//
 	// Returns a list of groups belonging to the organization or user.
 	//
-	// GET /v1/organizations/{organizationName}/groups
+	// GET /v1/organizations/{organizationSlug}/groups
 	ListGroups(ctx context.Context, params ListGroupsParams) (*ListGroupsOK, error)
 	// ListLocations invokes listLocations operation.
 	//
@@ -186,31 +203,31 @@ type Invoker interface {
 	// Return the audit logs for the given organization, ordered by the `created_at` field in descending
 	// order.
 	//
-	// GET /v1/organizations/{organizationName}/audit-logs
+	// GET /v1/organizations/{organizationSlug}/audit-logs
 	ListOrganizationAuditLogs(ctx context.Context, params ListOrganizationAuditLogsParams) (*ListOrganizationAuditLogsOK, error)
 	// ListOrganizationInvites invokes listOrganizationInvites operation.
 	//
 	// Returns a list of invites for the organization.
 	//
-	// GET /v1/organizations/{organizationName}/invites
+	// GET /v1/organizations/{organizationSlug}/invites
 	ListOrganizationInvites(ctx context.Context, params ListOrganizationInvitesParams) (*ListOrganizationInvitesOK, error)
 	// ListOrganizationInvoices invokes listOrganizationInvoices operation.
 	//
 	// Returns a list of invoices for the organization.
 	//
-	// GET /v1/organizations/{organizationName}/invoices
+	// GET /v1/organizations/{organizationSlug}/invoices
 	ListOrganizationInvoices(ctx context.Context, params ListOrganizationInvoicesParams) (*ListOrganizationInvoicesOK, error)
 	// ListOrganizationMembers invokes listOrganizationMembers operation.
 	//
 	// Returns a list of members part of the organization.
 	//
-	// GET /v1/organizations/{organizationName}/members
+	// GET /v1/organizations/{organizationSlug}/members
 	ListOrganizationMembers(ctx context.Context, params ListOrganizationMembersParams) (*ListOrganizationMembersOK, error)
 	// ListOrganizationPlans invokes listOrganizationPlans operation.
 	//
 	// Returns a list of available plans and their quotas.
 	//
-	// GET /v1/organizations/{organizationName}/plans
+	// GET /v1/organizations/{organizationSlug}/plans
 	ListOrganizationPlans(ctx context.Context, params ListOrganizationPlansParams) (*ListOrganizationPlansOK, error)
 	// ListOrganizations invokes listOrganizations operation.
 	//
@@ -222,13 +239,13 @@ type Invoker interface {
 	//
 	// Removes a location from the specified group.
 	//
-	// DELETE /v1/organizations/{organizationName}/groups/{groupName}/locations/{location}
+	// DELETE /v1/organizations/{organizationSlug}/groups/{groupName}/locations/{location}
 	RemoveLocationFromGroup(ctx context.Context, params RemoveLocationFromGroupParams) (RemoveLocationFromGroupRes, error)
 	// RemoveOrganizationMember invokes removeOrganizationMember operation.
 	//
 	// Remove a user from the organization by username.
 	//
-	// DELETE /v1/organizations/{organizationName}/members/{username}
+	// DELETE /v1/organizations/{organizationSlug}/members/{username}
 	RemoveOrganizationMember(ctx context.Context, params RemoveOrganizationMemberParams) (RemoveOrganizationMemberRes, error)
 	// RevokeAPIToken invokes revokeAPIToken operation.
 	//
@@ -240,38 +257,45 @@ type Invoker interface {
 	//
 	// Transfer a group to another organization that you own or a member of.
 	//
-	// POST /v1/organizations/{organizationName}/groups/{groupName}/transfer
+	// POST /v1/organizations/{organizationSlug}/groups/{groupName}/transfer
 	TransferGroup(ctx context.Context, request *TransferGroupReq, params TransferGroupParams) (TransferGroupRes, error)
 	// UnarchiveGroup invokes unarchiveGroup operation.
 	//
 	// Unarchive a group that has been archived due to inactivity.
 	//
-	// POST /v1/organizations/{organizationName}/groups/{groupName}/unarchive
+	// POST /v1/organizations/{organizationSlug}/groups/{groupName}/unarchive
 	UnarchiveGroup(ctx context.Context, params UnarchiveGroupParams) (UnarchiveGroupRes, error)
 	// UpdateDatabaseConfiguration invokes updateDatabaseConfiguration operation.
 	//
 	// Update a database configuration belonging to the organization or user.
 	//
-	// PATCH /v1/organizations/{organizationName}/databases/{databaseName}/configuration
+	// PATCH /v1/organizations/{organizationSlug}/databases/{databaseName}/configuration
 	UpdateDatabaseConfiguration(ctx context.Context, request *DatabaseConfigurationInput, params UpdateDatabaseConfigurationParams) (*DatabaseConfigurationResponse, error)
 	// UpdateGroupDatabases invokes updateGroupDatabases operation.
 	//
 	// Updates all databases in the group to the latest libSQL version.
 	//
-	// POST /v1/organizations/{organizationName}/groups/{groupName}/update
+	// POST /v1/organizations/{organizationSlug}/groups/{groupName}/update
 	UpdateGroupDatabases(ctx context.Context, params UpdateGroupDatabasesParams) (UpdateGroupDatabasesRes, error)
+	// UpdateMemberRole invokes updateMemberRole operation.
+	//
+	// Update the role of an organization member. Only organization admins or owners can perform this
+	// action.
+	//
+	// PATCH /v1/organizations/{organizationSlug}/members/{username}
+	UpdateMemberRole(ctx context.Context, request *UpdateMemberRoleReq, params UpdateMemberRoleParams) (UpdateMemberRoleRes, error)
 	// UpdateOrganization invokes updateOrganization operation.
 	//
 	// Update an organization you own or are a member of.
 	//
-	// PATCH /v1/organizations/{organizationName}
+	// PATCH /v1/organizations/{organizationSlug}
 	UpdateOrganization(ctx context.Context, request *UpdateOrganizationReq, params UpdateOrganizationParams) (*UpdateOrganizationOK, error)
 	// UploadDatabaseDump invokes uploadDatabaseDump operation.
 	//
 	// Upload a SQL dump to be used when [creating a new database](/api-reference/databases/create) from
 	// seed.
 	//
-	// POST /v1/organizations/{organizationName}/databases/dumps
+	// POST /v1/organizations/{organizationSlug}/databases/dumps
 	UploadDatabaseDump(ctx context.Context, request *UploadDatabaseDumpReq, params UploadDatabaseDumpParams) (*UploadDatabaseDumpOK, error)
 	// ValidateAPIToken invokes validateAPIToken operation.
 	//
@@ -290,11 +314,6 @@ type Client struct {
 var _ Handler = struct {
 	*Client
 }{}
-
-func trimTrailingSlashes(u *url.URL) {
-	u.Path = strings.TrimRight(u.Path, "/")
-	u.RawPath = strings.TrimRight(u.RawPath, "/")
-}
 
 // NewClient initializes new Client defined by OAS.
 func NewClient(serverURL string, opts ...ClientOption) (*Client, error) {
@@ -333,7 +352,7 @@ func (c *Client) requestURL(ctx context.Context) *url.URL {
 //
 // Adds a location to the specified group.
 //
-// POST /v1/organizations/{organizationName}/groups/{groupName}/locations/{location}
+// POST /v1/organizations/{organizationSlug}/groups/{groupName}/locations/{location}
 func (c *Client) AddLocationToGroup(ctx context.Context, params AddLocationToGroupParams) (AddLocationToGroupRes, error) {
 	res, err := c.sendAddLocationToGroup(ctx, params)
 	return res, err
@@ -342,8 +361,8 @@ func (c *Client) AddLocationToGroup(ctx context.Context, params AddLocationToGro
 func (c *Client) sendAddLocationToGroup(ctx context.Context, params AddLocationToGroupParams) (res AddLocationToGroupRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("addLocationToGroup"),
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/groups/{groupName}/locations/{location}"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/groups/{groupName}/locations/{location}"),
 	}
 
 	// Run stopwatch.
@@ -351,14 +370,14 @@ func (c *Client) sendAddLocationToGroup(ctx context.Context, params AddLocationT
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "AddLocationToGroup",
+	ctx, span := c.cfg.Tracer.Start(ctx, AddLocationToGroupOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -378,14 +397,14 @@ func (c *Client) sendAddLocationToGroup(ctx context.Context, params AddLocationT
 	var pathParts [6]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -461,7 +480,7 @@ func (c *Client) sendAddLocationToGroup(ctx context.Context, params AddLocationT
 //
 // Add an existing Turso user to an organization.
 //
-// POST /v1/organizations/{organizationName}/members
+// POST /v1/organizations/{organizationSlug}/members
 func (c *Client) AddOrganizationMember(ctx context.Context, request *AddOrganizationMemberReq, params AddOrganizationMemberParams) (AddOrganizationMemberRes, error) {
 	res, err := c.sendAddOrganizationMember(ctx, request, params)
 	return res, err
@@ -470,8 +489,8 @@ func (c *Client) AddOrganizationMember(ctx context.Context, request *AddOrganiza
 func (c *Client) sendAddOrganizationMember(ctx context.Context, request *AddOrganizationMemberReq, params AddOrganizationMemberParams) (res AddOrganizationMemberRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("addOrganizationMember"),
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/members"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/members"),
 	}
 
 	// Run stopwatch.
@@ -479,14 +498,14 @@ func (c *Client) sendAddOrganizationMember(ctx context.Context, request *AddOrga
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "AddOrganizationMember",
+	ctx, span := c.cfg.Tracer.Start(ctx, AddOrganizationMemberOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -506,14 +525,14 @@ func (c *Client) sendAddOrganizationMember(ctx context.Context, request *AddOrga
 	var pathParts [3]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -564,7 +583,7 @@ func (c *Client) CreateAPIToken(ctx context.Context, params CreateAPITokenParams
 func (c *Client) sendCreateAPIToken(ctx context.Context, params CreateAPITokenParams) (res jx.Raw, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createAPIToken"),
-		semconv.HTTPMethodKey.String("POST"),
+		semconv.HTTPRequestMethodKey.String("POST"),
 		semconv.HTTPRouteKey.String("/v1/auth/api-tokens/{tokenName}"),
 	}
 
@@ -573,14 +592,14 @@ func (c *Client) sendCreateAPIToken(ctx context.Context, params CreateAPITokenPa
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "CreateAPIToken",
+	ctx, span := c.cfg.Tracer.Start(ctx, CreateAPITokenOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -645,7 +664,7 @@ func (c *Client) sendCreateAPIToken(ctx context.Context, params CreateAPITokenPa
 //
 // Creates a new database in a group for the organization or user.
 //
-// POST /v1/organizations/{organizationName}/databases
+// POST /v1/organizations/{organizationSlug}/databases
 func (c *Client) CreateDatabase(ctx context.Context, request *CreateDatabaseInput, params CreateDatabaseParams) (CreateDatabaseRes, error) {
 	res, err := c.sendCreateDatabase(ctx, request, params)
 	return res, err
@@ -654,8 +673,8 @@ func (c *Client) CreateDatabase(ctx context.Context, request *CreateDatabaseInpu
 func (c *Client) sendCreateDatabase(ctx context.Context, request *CreateDatabaseInput, params CreateDatabaseParams) (res CreateDatabaseRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createDatabase"),
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/databases"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/databases"),
 	}
 
 	// Run stopwatch.
@@ -663,14 +682,14 @@ func (c *Client) sendCreateDatabase(ctx context.Context, request *CreateDatabase
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "CreateDatabase",
+	ctx, span := c.cfg.Tracer.Start(ctx, CreateDatabaseOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -690,14 +709,14 @@ func (c *Client) sendCreateDatabase(ctx context.Context, request *CreateDatabase
 	var pathParts [3]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -739,7 +758,7 @@ func (c *Client) sendCreateDatabase(ctx context.Context, request *CreateDatabase
 //
 // Generates an authorization token for the specified database.
 //
-// POST /v1/organizations/{organizationName}/databases/{databaseName}/auth/tokens
+// POST /v1/organizations/{organizationSlug}/databases/{databaseName}/auth/tokens
 func (c *Client) CreateDatabaseToken(ctx context.Context, request OptCreateTokenInput, params CreateDatabaseTokenParams) (CreateDatabaseTokenRes, error) {
 	res, err := c.sendCreateDatabaseToken(ctx, request, params)
 	return res, err
@@ -748,8 +767,8 @@ func (c *Client) CreateDatabaseToken(ctx context.Context, request OptCreateToken
 func (c *Client) sendCreateDatabaseToken(ctx context.Context, request OptCreateTokenInput, params CreateDatabaseTokenParams) (res CreateDatabaseTokenRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createDatabaseToken"),
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/databases/{databaseName}/auth/tokens"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/databases/{databaseName}/auth/tokens"),
 	}
 
 	// Run stopwatch.
@@ -757,14 +776,14 @@ func (c *Client) sendCreateDatabaseToken(ctx context.Context, request OptCreateT
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "CreateDatabaseToken",
+	ctx, span := c.cfg.Tracer.Start(ctx, CreateDatabaseTokenOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -784,14 +803,14 @@ func (c *Client) sendCreateDatabaseToken(ctx context.Context, request OptCreateT
 	var pathParts [5]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -890,7 +909,7 @@ func (c *Client) sendCreateDatabaseToken(ctx context.Context, request OptCreateT
 //
 // Creates a new group for the organization or user.
 //
-// POST /v1/organizations/{organizationName}/groups
+// POST /v1/organizations/{organizationSlug}/groups
 func (c *Client) CreateGroup(ctx context.Context, request *NewGroup, params CreateGroupParams) (CreateGroupRes, error) {
 	res, err := c.sendCreateGroup(ctx, request, params)
 	return res, err
@@ -899,8 +918,8 @@ func (c *Client) CreateGroup(ctx context.Context, request *NewGroup, params Crea
 func (c *Client) sendCreateGroup(ctx context.Context, request *NewGroup, params CreateGroupParams) (res CreateGroupRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createGroup"),
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/groups"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/groups"),
 	}
 
 	// Run stopwatch.
@@ -908,14 +927,14 @@ func (c *Client) sendCreateGroup(ctx context.Context, request *NewGroup, params 
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "CreateGroup",
+	ctx, span := c.cfg.Tracer.Start(ctx, CreateGroupOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -935,14 +954,14 @@ func (c *Client) sendCreateGroup(ctx context.Context, request *NewGroup, params 
 	var pathParts [3]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -984,7 +1003,7 @@ func (c *Client) sendCreateGroup(ctx context.Context, request *NewGroup, params 
 //
 // Generates an authorization token for the specified group.
 //
-// POST /v1/organizations/{organizationName}/groups/{groupName}/auth/tokens
+// POST /v1/organizations/{organizationSlug}/groups/{groupName}/auth/tokens
 func (c *Client) CreateGroupToken(ctx context.Context, request OptCreateTokenInput, params CreateGroupTokenParams) (CreateGroupTokenRes, error) {
 	res, err := c.sendCreateGroupToken(ctx, request, params)
 	return res, err
@@ -993,8 +1012,8 @@ func (c *Client) CreateGroupToken(ctx context.Context, request OptCreateTokenInp
 func (c *Client) sendCreateGroupToken(ctx context.Context, request OptCreateTokenInput, params CreateGroupTokenParams) (res CreateGroupTokenRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createGroupToken"),
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/groups/{groupName}/auth/tokens"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/groups/{groupName}/auth/tokens"),
 	}
 
 	// Run stopwatch.
@@ -1002,14 +1021,14 @@ func (c *Client) sendCreateGroupToken(ctx context.Context, request OptCreateToke
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "CreateGroupToken",
+	ctx, span := c.cfg.Tracer.Start(ctx, CreateGroupTokenOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1029,14 +1048,14 @@ func (c *Client) sendCreateGroupToken(ctx context.Context, request OptCreateToke
 	var pathParts [5]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -1135,7 +1154,7 @@ func (c *Client) sendCreateGroupToken(ctx context.Context, request OptCreateToke
 //
 // Delete a database belonging to the organization or user.
 //
-// DELETE /v1/organizations/{organizationName}/databases/{databaseName}
+// DELETE /v1/organizations/{organizationSlug}/databases/{databaseName}
 func (c *Client) DeleteDatabase(ctx context.Context, params DeleteDatabaseParams) (DeleteDatabaseRes, error) {
 	res, err := c.sendDeleteDatabase(ctx, params)
 	return res, err
@@ -1144,8 +1163,8 @@ func (c *Client) DeleteDatabase(ctx context.Context, params DeleteDatabaseParams
 func (c *Client) sendDeleteDatabase(ctx context.Context, params DeleteDatabaseParams) (res DeleteDatabaseRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deleteDatabase"),
-		semconv.HTTPMethodKey.String("DELETE"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/databases/{databaseName}"),
+		semconv.HTTPRequestMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/databases/{databaseName}"),
 	}
 
 	// Run stopwatch.
@@ -1153,14 +1172,14 @@ func (c *Client) sendDeleteDatabase(ctx context.Context, params DeleteDatabasePa
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "DeleteDatabase",
+	ctx, span := c.cfg.Tracer.Start(ctx, DeleteDatabaseOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1180,14 +1199,14 @@ func (c *Client) sendDeleteDatabase(ctx context.Context, params DeleteDatabasePa
 	var pathParts [4]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -1244,7 +1263,7 @@ func (c *Client) sendDeleteDatabase(ctx context.Context, params DeleteDatabasePa
 //
 // Delete a group belonging to the organization or user.
 //
-// DELETE /v1/organizations/{organizationName}/groups/{groupName}
+// DELETE /v1/organizations/{organizationSlug}/groups/{groupName}
 func (c *Client) DeleteGroup(ctx context.Context, params DeleteGroupParams) (DeleteGroupRes, error) {
 	res, err := c.sendDeleteGroup(ctx, params)
 	return res, err
@@ -1253,8 +1272,8 @@ func (c *Client) DeleteGroup(ctx context.Context, params DeleteGroupParams) (Del
 func (c *Client) sendDeleteGroup(ctx context.Context, params DeleteGroupParams) (res DeleteGroupRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deleteGroup"),
-		semconv.HTTPMethodKey.String("DELETE"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/groups/{groupName}"),
+		semconv.HTTPRequestMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/groups/{groupName}"),
 	}
 
 	// Run stopwatch.
@@ -1262,14 +1281,14 @@ func (c *Client) sendDeleteGroup(ctx context.Context, params DeleteGroupParams) 
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "DeleteGroup",
+	ctx, span := c.cfg.Tracer.Start(ctx, DeleteGroupOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1289,14 +1308,14 @@ func (c *Client) sendDeleteGroup(ctx context.Context, params DeleteGroupParams) 
 	var pathParts [4]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -1353,7 +1372,7 @@ func (c *Client) sendDeleteGroup(ctx context.Context, params DeleteGroupParams) 
 //
 // Delete an invite for the organization by email.
 //
-// DELETE /v1/organizations/{organizationName}/invites/{email}
+// DELETE /v1/organizations/{organizationSlug}/invites/{email}
 func (c *Client) DeleteOrganizationInviteByEmail(ctx context.Context, params DeleteOrganizationInviteByEmailParams) (DeleteOrganizationInviteByEmailRes, error) {
 	res, err := c.sendDeleteOrganizationInviteByEmail(ctx, params)
 	return res, err
@@ -1362,8 +1381,8 @@ func (c *Client) DeleteOrganizationInviteByEmail(ctx context.Context, params Del
 func (c *Client) sendDeleteOrganizationInviteByEmail(ctx context.Context, params DeleteOrganizationInviteByEmailParams) (res DeleteOrganizationInviteByEmailRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("deleteOrganizationInviteByEmail"),
-		semconv.HTTPMethodKey.String("DELETE"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/invites/{email}"),
+		semconv.HTTPRequestMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/invites/{email}"),
 	}
 
 	// Run stopwatch.
@@ -1371,14 +1390,14 @@ func (c *Client) sendDeleteOrganizationInviteByEmail(ctx context.Context, params
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "DeleteOrganizationInviteByEmail",
+	ctx, span := c.cfg.Tracer.Start(ctx, DeleteOrganizationInviteByEmailOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1398,14 +1417,14 @@ func (c *Client) sendDeleteOrganizationInviteByEmail(ctx context.Context, params
 	var pathParts [4]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -1462,7 +1481,7 @@ func (c *Client) sendDeleteOrganizationInviteByEmail(ctx context.Context, params
 //
 // Returns a database belonging to the organization or user.
 //
-// GET /v1/organizations/{organizationName}/databases/{databaseName}
+// GET /v1/organizations/{organizationSlug}/databases/{databaseName}
 func (c *Client) GetDatabase(ctx context.Context, params GetDatabaseParams) (GetDatabaseRes, error) {
 	res, err := c.sendGetDatabase(ctx, params)
 	return res, err
@@ -1471,8 +1490,8 @@ func (c *Client) GetDatabase(ctx context.Context, params GetDatabaseParams) (Get
 func (c *Client) sendGetDatabase(ctx context.Context, params GetDatabaseParams) (res GetDatabaseRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getDatabase"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/databases/{databaseName}"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/databases/{databaseName}"),
 	}
 
 	// Run stopwatch.
@@ -1480,14 +1499,14 @@ func (c *Client) sendGetDatabase(ctx context.Context, params GetDatabaseParams) 
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "GetDatabase",
+	ctx, span := c.cfg.Tracer.Start(ctx, GetDatabaseOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1507,14 +1526,14 @@ func (c *Client) sendGetDatabase(ctx context.Context, params GetDatabaseParams) 
 	var pathParts [4]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -1571,7 +1590,7 @@ func (c *Client) sendGetDatabase(ctx context.Context, params GetDatabaseParams) 
 //
 // Retrieve an individual database configuration belonging to the organization or user.
 //
-// GET /v1/organizations/{organizationName}/databases/{databaseName}/configuration
+// GET /v1/organizations/{organizationSlug}/databases/{databaseName}/configuration
 func (c *Client) GetDatabaseConfiguration(ctx context.Context, params GetDatabaseConfigurationParams) (*DatabaseConfigurationResponse, error) {
 	res, err := c.sendGetDatabaseConfiguration(ctx, params)
 	return res, err
@@ -1580,8 +1599,8 @@ func (c *Client) GetDatabaseConfiguration(ctx context.Context, params GetDatabas
 func (c *Client) sendGetDatabaseConfiguration(ctx context.Context, params GetDatabaseConfigurationParams) (res *DatabaseConfigurationResponse, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getDatabaseConfiguration"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/databases/{databaseName}/configuration"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/databases/{databaseName}/configuration"),
 	}
 
 	// Run stopwatch.
@@ -1589,14 +1608,14 @@ func (c *Client) sendGetDatabaseConfiguration(ctx context.Context, params GetDat
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "GetDatabaseConfiguration",
+	ctx, span := c.cfg.Tracer.Start(ctx, GetDatabaseConfigurationOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1616,14 +1635,14 @@ func (c *Client) sendGetDatabaseConfiguration(ctx context.Context, params GetDat
 	var pathParts [5]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -1681,7 +1700,7 @@ func (c *Client) sendGetDatabaseConfiguration(ctx context.Context, params GetDat
 //
 // Return the individual database instance by name.
 //
-// GET /v1/organizations/{organizationName}/databases/{databaseName}/instances/{instanceName}
+// GET /v1/organizations/{organizationSlug}/databases/{databaseName}/instances/{instanceName}
 func (c *Client) GetDatabaseInstance(ctx context.Context, params GetDatabaseInstanceParams) (*GetDatabaseInstanceOK, error) {
 	res, err := c.sendGetDatabaseInstance(ctx, params)
 	return res, err
@@ -1690,8 +1709,8 @@ func (c *Client) GetDatabaseInstance(ctx context.Context, params GetDatabaseInst
 func (c *Client) sendGetDatabaseInstance(ctx context.Context, params GetDatabaseInstanceParams) (res *GetDatabaseInstanceOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getDatabaseInstance"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/databases/{databaseName}/instances/{instanceName}"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/databases/{databaseName}/instances/{instanceName}"),
 	}
 
 	// Run stopwatch.
@@ -1699,14 +1718,14 @@ func (c *Client) sendGetDatabaseInstance(ctx context.Context, params GetDatabase
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "GetDatabaseInstance",
+	ctx, span := c.cfg.Tracer.Start(ctx, GetDatabaseInstanceOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1726,14 +1745,14 @@ func (c *Client) sendGetDatabaseInstance(ctx context.Context, params GetDatabase
 	var pathParts [6]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -1809,7 +1828,7 @@ func (c *Client) sendGetDatabaseInstance(ctx context.Context, params GetDatabase
 //
 // Fetch the top queries of a database, including the count of rows read and written.
 //
-// GET /v1/organizations/{organizationName}/databases/{databaseName}/stats
+// GET /v1/organizations/{organizationSlug}/databases/{databaseName}/stats
 func (c *Client) GetDatabaseStats(ctx context.Context, params GetDatabaseStatsParams) (GetDatabaseStatsRes, error) {
 	res, err := c.sendGetDatabaseStats(ctx, params)
 	return res, err
@@ -1818,8 +1837,8 @@ func (c *Client) GetDatabaseStats(ctx context.Context, params GetDatabaseStatsPa
 func (c *Client) sendGetDatabaseStats(ctx context.Context, params GetDatabaseStatsParams) (res GetDatabaseStatsRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getDatabaseStats"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/databases/{databaseName}/stats"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/databases/{databaseName}/stats"),
 	}
 
 	// Run stopwatch.
@@ -1827,14 +1846,14 @@ func (c *Client) sendGetDatabaseStats(ctx context.Context, params GetDatabaseSta
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "GetDatabaseStats",
+	ctx, span := c.cfg.Tracer.Start(ctx, GetDatabaseStatsOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1854,14 +1873,14 @@ func (c *Client) sendGetDatabaseStats(ctx context.Context, params GetDatabaseSta
 	var pathParts [5]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -1919,7 +1938,7 @@ func (c *Client) sendGetDatabaseStats(ctx context.Context, params GetDatabaseSta
 //
 // Fetch activity usage for a database in a given time period.
 //
-// GET /v1/organizations/{organizationName}/databases/{databaseName}/usage
+// GET /v1/organizations/{organizationSlug}/databases/{databaseName}/usage
 func (c *Client) GetDatabaseUsage(ctx context.Context, params GetDatabaseUsageParams) (GetDatabaseUsageRes, error) {
 	res, err := c.sendGetDatabaseUsage(ctx, params)
 	return res, err
@@ -1928,8 +1947,8 @@ func (c *Client) GetDatabaseUsage(ctx context.Context, params GetDatabaseUsagePa
 func (c *Client) sendGetDatabaseUsage(ctx context.Context, params GetDatabaseUsageParams) (res GetDatabaseUsageRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getDatabaseUsage"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/databases/{databaseName}/usage"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/databases/{databaseName}/usage"),
 	}
 
 	// Run stopwatch.
@@ -1937,14 +1956,14 @@ func (c *Client) sendGetDatabaseUsage(ctx context.Context, params GetDatabaseUsa
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "GetDatabaseUsage",
+	ctx, span := c.cfg.Tracer.Start(ctx, GetDatabaseUsageOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -1964,14 +1983,14 @@ func (c *Client) sendGetDatabaseUsage(ctx context.Context, params GetDatabaseUsa
 	var pathParts [5]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -2067,7 +2086,7 @@ func (c *Client) sendGetDatabaseUsage(ctx context.Context, params GetDatabaseUsa
 //
 // Returns a group belonging to the organization or user.
 //
-// GET /v1/organizations/{organizationName}/groups/{groupName}
+// GET /v1/organizations/{organizationSlug}/groups/{groupName}
 func (c *Client) GetGroup(ctx context.Context, params GetGroupParams) (GetGroupRes, error) {
 	res, err := c.sendGetGroup(ctx, params)
 	return res, err
@@ -2076,8 +2095,8 @@ func (c *Client) GetGroup(ctx context.Context, params GetGroupParams) (GetGroupR
 func (c *Client) sendGetGroup(ctx context.Context, params GetGroupParams) (res GetGroupRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getGroup"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/groups/{groupName}"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/groups/{groupName}"),
 	}
 
 	// Run stopwatch.
@@ -2085,14 +2104,14 @@ func (c *Client) sendGetGroup(ctx context.Context, params GetGroupParams) (res G
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "GetGroup",
+	ctx, span := c.cfg.Tracer.Start(ctx, GetGroupOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2112,14 +2131,14 @@ func (c *Client) sendGetGroup(ctx context.Context, params GetGroupParams) (res G
 	var pathParts [4]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -2172,11 +2191,210 @@ func (c *Client) sendGetGroup(ctx context.Context, params GetGroupParams) (res G
 	return result, nil
 }
 
+// GetOrganization invokes getOrganization operation.
+//
+// Retrieve details of a specific organization.
+//
+// GET /v1/organizations/{organizationSlug}
+func (c *Client) GetOrganization(ctx context.Context, params GetOrganizationParams) (GetOrganizationRes, error) {
+	res, err := c.sendGetOrganization(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendGetOrganization(ctx context.Context, params GetOrganizationParams) (res GetOrganizationRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("getOrganization"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, GetOrganizationOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [2]string
+	pathParts[0] = "/v1/organizations/"
+	{
+		// Encode "organizationSlug" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationSlug",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeGetOrganizationResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
+// GetOrganizationMember invokes getOrganizationMember operation.
+//
+// Retrieve details of a specific member in the organization.
+//
+// GET /v1/organizations/{organizationSlug}/members/{username}
+func (c *Client) GetOrganizationMember(ctx context.Context, params GetOrganizationMemberParams) (GetOrganizationMemberRes, error) {
+	res, err := c.sendGetOrganizationMember(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendGetOrganizationMember(ctx context.Context, params GetOrganizationMemberParams) (res GetOrganizationMemberRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("getOrganizationMember"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/members/{username}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, GetOrganizationMemberOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [4]string
+	pathParts[0] = "/v1/organizations/"
+	{
+		// Encode "organizationSlug" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationSlug",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/members/"
+	{
+		// Encode "username" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "username",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.StringToString(params.Username))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[3] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeGetOrganizationMemberResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // GetOrganizationSubscription invokes getOrganizationSubscription operation.
 //
 // Returns the current subscription details for the organization.
 //
-// GET /v1/organizations/{organizationName}/subscription
+// GET /v1/organizations/{organizationSlug}/subscription
 func (c *Client) GetOrganizationSubscription(ctx context.Context, params GetOrganizationSubscriptionParams) (*GetOrganizationSubscriptionOK, error) {
 	res, err := c.sendGetOrganizationSubscription(ctx, params)
 	return res, err
@@ -2185,8 +2403,8 @@ func (c *Client) GetOrganizationSubscription(ctx context.Context, params GetOrga
 func (c *Client) sendGetOrganizationSubscription(ctx context.Context, params GetOrganizationSubscriptionParams) (res *GetOrganizationSubscriptionOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getOrganizationSubscription"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/subscription"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/subscription"),
 	}
 
 	// Run stopwatch.
@@ -2194,14 +2412,14 @@ func (c *Client) sendGetOrganizationSubscription(ctx context.Context, params Get
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "GetOrganizationSubscription",
+	ctx, span := c.cfg.Tracer.Start(ctx, GetOrganizationSubscriptionOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2221,14 +2439,14 @@ func (c *Client) sendGetOrganizationSubscription(ctx context.Context, params Get
 	var pathParts [3]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -2267,7 +2485,7 @@ func (c *Client) sendGetOrganizationSubscription(ctx context.Context, params Get
 //
 // Fetch current billing cycle usage for an organization.
 //
-// GET /v1/organizations/{organizationName}/usage
+// GET /v1/organizations/{organizationSlug}/usage
 func (c *Client) GetOrganizationUsage(ctx context.Context, params GetOrganizationUsageParams) (*GetOrganizationUsageOK, error) {
 	res, err := c.sendGetOrganizationUsage(ctx, params)
 	return res, err
@@ -2276,8 +2494,8 @@ func (c *Client) GetOrganizationUsage(ctx context.Context, params GetOrganizatio
 func (c *Client) sendGetOrganizationUsage(ctx context.Context, params GetOrganizationUsageParams) (res *GetOrganizationUsageOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("getOrganizationUsage"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/usage"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/usage"),
 	}
 
 	// Run stopwatch.
@@ -2285,14 +2503,14 @@ func (c *Client) sendGetOrganizationUsage(ctx context.Context, params GetOrganiz
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "GetOrganizationUsage",
+	ctx, span := c.cfg.Tracer.Start(ctx, GetOrganizationUsageOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2312,14 +2530,14 @@ func (c *Client) sendGetOrganizationUsage(ctx context.Context, params GetOrganiz
 	var pathParts [3]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -2358,7 +2576,7 @@ func (c *Client) sendGetOrganizationUsage(ctx context.Context, params GetOrganiz
 //
 // Invalidates all authorization tokens for the specified database.
 //
-// POST /v1/organizations/{organizationName}/databases/{databaseName}/auth/rotate
+// POST /v1/organizations/{organizationSlug}/databases/{databaseName}/auth/rotate
 func (c *Client) InvalidateDatabaseTokens(ctx context.Context, params InvalidateDatabaseTokensParams) (InvalidateDatabaseTokensRes, error) {
 	res, err := c.sendInvalidateDatabaseTokens(ctx, params)
 	return res, err
@@ -2367,8 +2585,8 @@ func (c *Client) InvalidateDatabaseTokens(ctx context.Context, params Invalidate
 func (c *Client) sendInvalidateDatabaseTokens(ctx context.Context, params InvalidateDatabaseTokensParams) (res InvalidateDatabaseTokensRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("invalidateDatabaseTokens"),
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/databases/{databaseName}/auth/rotate"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/databases/{databaseName}/auth/rotate"),
 	}
 
 	// Run stopwatch.
@@ -2376,14 +2594,14 @@ func (c *Client) sendInvalidateDatabaseTokens(ctx context.Context, params Invali
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "InvalidateDatabaseTokens",
+	ctx, span := c.cfg.Tracer.Start(ctx, InvalidateDatabaseTokensOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2403,14 +2621,14 @@ func (c *Client) sendInvalidateDatabaseTokens(ctx context.Context, params Invali
 	var pathParts [5]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -2468,7 +2686,7 @@ func (c *Client) sendInvalidateDatabaseTokens(ctx context.Context, params Invali
 //
 // Invalidates all authorization tokens for the specified group.
 //
-// POST /v1/organizations/{organizationName}/groups/{groupName}/auth/rotate
+// POST /v1/organizations/{organizationSlug}/groups/{groupName}/auth/rotate
 func (c *Client) InvalidateGroupTokens(ctx context.Context, params InvalidateGroupTokensParams) (InvalidateGroupTokensRes, error) {
 	res, err := c.sendInvalidateGroupTokens(ctx, params)
 	return res, err
@@ -2477,8 +2695,8 @@ func (c *Client) InvalidateGroupTokens(ctx context.Context, params InvalidateGro
 func (c *Client) sendInvalidateGroupTokens(ctx context.Context, params InvalidateGroupTokensParams) (res InvalidateGroupTokensRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("invalidateGroupTokens"),
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/groups/{groupName}/auth/rotate"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/groups/{groupName}/auth/rotate"),
 	}
 
 	// Run stopwatch.
@@ -2486,14 +2704,14 @@ func (c *Client) sendInvalidateGroupTokens(ctx context.Context, params Invalidat
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "InvalidateGroupTokens",
+	ctx, span := c.cfg.Tracer.Start(ctx, InvalidateGroupTokensOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2513,14 +2731,14 @@ func (c *Client) sendInvalidateGroupTokens(ctx context.Context, params Invalidat
 	var pathParts [5]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -2578,7 +2796,7 @@ func (c *Client) sendInvalidateGroupTokens(ctx context.Context, params Invalidat
 //
 // Invite a user (who isn't already a Turso user) to an organization.
 //
-// POST /v1/organizations/{organizationName}/invites
+// POST /v1/organizations/{organizationSlug}/invites
 func (c *Client) InviteOrganizationMember(ctx context.Context, request *InviteOrganizationMemberReq, params InviteOrganizationMemberParams) (*InviteOrganizationMemberOK, error) {
 	res, err := c.sendInviteOrganizationMember(ctx, request, params)
 	return res, err
@@ -2587,8 +2805,8 @@ func (c *Client) InviteOrganizationMember(ctx context.Context, request *InviteOr
 func (c *Client) sendInviteOrganizationMember(ctx context.Context, request *InviteOrganizationMemberReq, params InviteOrganizationMemberParams) (res *InviteOrganizationMemberOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("inviteOrganizationMember"),
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/invites"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/invites"),
 	}
 
 	// Run stopwatch.
@@ -2596,14 +2814,14 @@ func (c *Client) sendInviteOrganizationMember(ctx context.Context, request *Invi
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "InviteOrganizationMember",
+	ctx, span := c.cfg.Tracer.Start(ctx, InviteOrganizationMemberOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2623,14 +2841,14 @@ func (c *Client) sendInviteOrganizationMember(ctx context.Context, request *Invi
 	var pathParts [3]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -2681,7 +2899,7 @@ func (c *Client) ListAPITokens(ctx context.Context) (*ListAPITokensOK, error) {
 func (c *Client) sendListAPITokens(ctx context.Context) (res *ListAPITokensOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listAPITokens"),
-		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/v1/auth/api-tokens"),
 	}
 
@@ -2690,14 +2908,14 @@ func (c *Client) sendListAPITokens(ctx context.Context) (res *ListAPITokensOK, e
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ListAPITokens",
+	ctx, span := c.cfg.Tracer.Start(ctx, ListAPITokensOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2745,7 +2963,7 @@ func (c *Client) sendListAPITokens(ctx context.Context) (res *ListAPITokensOK, e
 // Returns a list of instances of a database. Instances are the individual primary or replica
 // databases in each region defined by the group.
 //
-// GET /v1/organizations/{organizationName}/databases/{databaseName}/instances
+// GET /v1/organizations/{organizationSlug}/databases/{databaseName}/instances
 func (c *Client) ListDatabaseInstances(ctx context.Context, params ListDatabaseInstancesParams) (*ListDatabaseInstancesOK, error) {
 	res, err := c.sendListDatabaseInstances(ctx, params)
 	return res, err
@@ -2754,8 +2972,8 @@ func (c *Client) ListDatabaseInstances(ctx context.Context, params ListDatabaseI
 func (c *Client) sendListDatabaseInstances(ctx context.Context, params ListDatabaseInstancesParams) (res *ListDatabaseInstancesOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listDatabaseInstances"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/databases/{databaseName}/instances"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/databases/{databaseName}/instances"),
 	}
 
 	// Run stopwatch.
@@ -2763,14 +2981,14 @@ func (c *Client) sendListDatabaseInstances(ctx context.Context, params ListDatab
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ListDatabaseInstances",
+	ctx, span := c.cfg.Tracer.Start(ctx, ListDatabaseInstancesOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2790,14 +3008,14 @@ func (c *Client) sendListDatabaseInstances(ctx context.Context, params ListDatab
 	var pathParts [5]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -2855,7 +3073,7 @@ func (c *Client) sendListDatabaseInstances(ctx context.Context, params ListDatab
 //
 // Returns a list of databases belonging to the organization or user.
 //
-// GET /v1/organizations/{organizationName}/databases
+// GET /v1/organizations/{organizationSlug}/databases
 func (c *Client) ListDatabases(ctx context.Context, params ListDatabasesParams) (*ListDatabasesOK, error) {
 	res, err := c.sendListDatabases(ctx, params)
 	return res, err
@@ -2864,8 +3082,8 @@ func (c *Client) ListDatabases(ctx context.Context, params ListDatabasesParams) 
 func (c *Client) sendListDatabases(ctx context.Context, params ListDatabasesParams) (res *ListDatabasesOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listDatabases"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/databases"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/databases"),
 	}
 
 	// Run stopwatch.
@@ -2873,14 +3091,14 @@ func (c *Client) sendListDatabases(ctx context.Context, params ListDatabasesPara
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ListDatabases",
+	ctx, span := c.cfg.Tracer.Start(ctx, ListDatabasesOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -2900,14 +3118,14 @@ func (c *Client) sendListDatabases(ctx context.Context, params ListDatabasesPara
 	var pathParts [3]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -2984,7 +3202,7 @@ func (c *Client) sendListDatabases(ctx context.Context, params ListDatabasesPara
 //
 // Returns a list of groups belonging to the organization or user.
 //
-// GET /v1/organizations/{organizationName}/groups
+// GET /v1/organizations/{organizationSlug}/groups
 func (c *Client) ListGroups(ctx context.Context, params ListGroupsParams) (*ListGroupsOK, error) {
 	res, err := c.sendListGroups(ctx, params)
 	return res, err
@@ -2993,8 +3211,8 @@ func (c *Client) ListGroups(ctx context.Context, params ListGroupsParams) (*List
 func (c *Client) sendListGroups(ctx context.Context, params ListGroupsParams) (res *ListGroupsOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listGroups"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/groups"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/groups"),
 	}
 
 	// Run stopwatch.
@@ -3002,14 +3220,14 @@ func (c *Client) sendListGroups(ctx context.Context, params ListGroupsParams) (r
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ListGroups",
+	ctx, span := c.cfg.Tracer.Start(ctx, ListGroupsOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -3029,14 +3247,14 @@ func (c *Client) sendListGroups(ctx context.Context, params ListGroupsParams) (r
 	var pathParts [3]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -3084,7 +3302,7 @@ func (c *Client) ListLocations(ctx context.Context) (*ListLocationsOK, error) {
 func (c *Client) sendListLocations(ctx context.Context) (res *ListLocationsOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listLocations"),
-		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/v1/locations"),
 	}
 
@@ -3093,14 +3311,14 @@ func (c *Client) sendListLocations(ctx context.Context) (res *ListLocationsOK, e
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ListLocations",
+	ctx, span := c.cfg.Tracer.Start(ctx, ListLocationsOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -3148,7 +3366,7 @@ func (c *Client) sendListLocations(ctx context.Context) (res *ListLocationsOK, e
 // Return the audit logs for the given organization, ordered by the `created_at` field in descending
 // order.
 //
-// GET /v1/organizations/{organizationName}/audit-logs
+// GET /v1/organizations/{organizationSlug}/audit-logs
 func (c *Client) ListOrganizationAuditLogs(ctx context.Context, params ListOrganizationAuditLogsParams) (*ListOrganizationAuditLogsOK, error) {
 	res, err := c.sendListOrganizationAuditLogs(ctx, params)
 	return res, err
@@ -3157,8 +3375,8 @@ func (c *Client) ListOrganizationAuditLogs(ctx context.Context, params ListOrgan
 func (c *Client) sendListOrganizationAuditLogs(ctx context.Context, params ListOrganizationAuditLogsParams) (res *ListOrganizationAuditLogsOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listOrganizationAuditLogs"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/audit-logs"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/audit-logs"),
 	}
 
 	// Run stopwatch.
@@ -3166,14 +3384,14 @@ func (c *Client) sendListOrganizationAuditLogs(ctx context.Context, params ListO
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ListOrganizationAuditLogs",
+	ctx, span := c.cfg.Tracer.Start(ctx, ListOrganizationAuditLogsOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -3193,14 +3411,14 @@ func (c *Client) sendListOrganizationAuditLogs(ctx context.Context, params ListO
 	var pathParts [3]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -3277,7 +3495,7 @@ func (c *Client) sendListOrganizationAuditLogs(ctx context.Context, params ListO
 //
 // Returns a list of invites for the organization.
 //
-// GET /v1/organizations/{organizationName}/invites
+// GET /v1/organizations/{organizationSlug}/invites
 func (c *Client) ListOrganizationInvites(ctx context.Context, params ListOrganizationInvitesParams) (*ListOrganizationInvitesOK, error) {
 	res, err := c.sendListOrganizationInvites(ctx, params)
 	return res, err
@@ -3286,8 +3504,8 @@ func (c *Client) ListOrganizationInvites(ctx context.Context, params ListOrganiz
 func (c *Client) sendListOrganizationInvites(ctx context.Context, params ListOrganizationInvitesParams) (res *ListOrganizationInvitesOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listOrganizationInvites"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/invites"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/invites"),
 	}
 
 	// Run stopwatch.
@@ -3295,14 +3513,14 @@ func (c *Client) sendListOrganizationInvites(ctx context.Context, params ListOrg
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ListOrganizationInvites",
+	ctx, span := c.cfg.Tracer.Start(ctx, ListOrganizationInvitesOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -3322,14 +3540,14 @@ func (c *Client) sendListOrganizationInvites(ctx context.Context, params ListOrg
 	var pathParts [3]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -3368,7 +3586,7 @@ func (c *Client) sendListOrganizationInvites(ctx context.Context, params ListOrg
 //
 // Returns a list of invoices for the organization.
 //
-// GET /v1/organizations/{organizationName}/invoices
+// GET /v1/organizations/{organizationSlug}/invoices
 func (c *Client) ListOrganizationInvoices(ctx context.Context, params ListOrganizationInvoicesParams) (*ListOrganizationInvoicesOK, error) {
 	res, err := c.sendListOrganizationInvoices(ctx, params)
 	return res, err
@@ -3377,8 +3595,8 @@ func (c *Client) ListOrganizationInvoices(ctx context.Context, params ListOrgani
 func (c *Client) sendListOrganizationInvoices(ctx context.Context, params ListOrganizationInvoicesParams) (res *ListOrganizationInvoicesOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listOrganizationInvoices"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/invoices"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/invoices"),
 	}
 
 	// Run stopwatch.
@@ -3386,14 +3604,14 @@ func (c *Client) sendListOrganizationInvoices(ctx context.Context, params ListOr
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ListOrganizationInvoices",
+	ctx, span := c.cfg.Tracer.Start(ctx, ListOrganizationInvoicesOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -3413,14 +3631,14 @@ func (c *Client) sendListOrganizationInvoices(ctx context.Context, params ListOr
 	var pathParts [3]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -3480,7 +3698,7 @@ func (c *Client) sendListOrganizationInvoices(ctx context.Context, params ListOr
 //
 // Returns a list of members part of the organization.
 //
-// GET /v1/organizations/{organizationName}/members
+// GET /v1/organizations/{organizationSlug}/members
 func (c *Client) ListOrganizationMembers(ctx context.Context, params ListOrganizationMembersParams) (*ListOrganizationMembersOK, error) {
 	res, err := c.sendListOrganizationMembers(ctx, params)
 	return res, err
@@ -3489,8 +3707,8 @@ func (c *Client) ListOrganizationMembers(ctx context.Context, params ListOrganiz
 func (c *Client) sendListOrganizationMembers(ctx context.Context, params ListOrganizationMembersParams) (res *ListOrganizationMembersOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listOrganizationMembers"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/members"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/members"),
 	}
 
 	// Run stopwatch.
@@ -3498,14 +3716,14 @@ func (c *Client) sendListOrganizationMembers(ctx context.Context, params ListOrg
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ListOrganizationMembers",
+	ctx, span := c.cfg.Tracer.Start(ctx, ListOrganizationMembersOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -3525,14 +3743,14 @@ func (c *Client) sendListOrganizationMembers(ctx context.Context, params ListOrg
 	var pathParts [3]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -3571,7 +3789,7 @@ func (c *Client) sendListOrganizationMembers(ctx context.Context, params ListOrg
 //
 // Returns a list of available plans and their quotas.
 //
-// GET /v1/organizations/{organizationName}/plans
+// GET /v1/organizations/{organizationSlug}/plans
 func (c *Client) ListOrganizationPlans(ctx context.Context, params ListOrganizationPlansParams) (*ListOrganizationPlansOK, error) {
 	res, err := c.sendListOrganizationPlans(ctx, params)
 	return res, err
@@ -3580,8 +3798,8 @@ func (c *Client) ListOrganizationPlans(ctx context.Context, params ListOrganizat
 func (c *Client) sendListOrganizationPlans(ctx context.Context, params ListOrganizationPlansParams) (res *ListOrganizationPlansOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listOrganizationPlans"),
-		semconv.HTTPMethodKey.String("GET"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/plans"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/plans"),
 	}
 
 	// Run stopwatch.
@@ -3589,14 +3807,14 @@ func (c *Client) sendListOrganizationPlans(ctx context.Context, params ListOrgan
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ListOrganizationPlans",
+	ctx, span := c.cfg.Tracer.Start(ctx, ListOrganizationPlansOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -3616,14 +3834,14 @@ func (c *Client) sendListOrganizationPlans(ctx context.Context, params ListOrgan
 	var pathParts [3]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -3671,7 +3889,7 @@ func (c *Client) ListOrganizations(ctx context.Context) ([]Organization, error) 
 func (c *Client) sendListOrganizations(ctx context.Context) (res []Organization, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("listOrganizations"),
-		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/v1/organizations"),
 	}
 
@@ -3680,14 +3898,14 @@ func (c *Client) sendListOrganizations(ctx context.Context) (res []Organization,
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ListOrganizations",
+	ctx, span := c.cfg.Tracer.Start(ctx, ListOrganizationsOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -3734,7 +3952,7 @@ func (c *Client) sendListOrganizations(ctx context.Context) (res []Organization,
 //
 // Removes a location from the specified group.
 //
-// DELETE /v1/organizations/{organizationName}/groups/{groupName}/locations/{location}
+// DELETE /v1/organizations/{organizationSlug}/groups/{groupName}/locations/{location}
 func (c *Client) RemoveLocationFromGroup(ctx context.Context, params RemoveLocationFromGroupParams) (RemoveLocationFromGroupRes, error) {
 	res, err := c.sendRemoveLocationFromGroup(ctx, params)
 	return res, err
@@ -3743,8 +3961,8 @@ func (c *Client) RemoveLocationFromGroup(ctx context.Context, params RemoveLocat
 func (c *Client) sendRemoveLocationFromGroup(ctx context.Context, params RemoveLocationFromGroupParams) (res RemoveLocationFromGroupRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("removeLocationFromGroup"),
-		semconv.HTTPMethodKey.String("DELETE"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/groups/{groupName}/locations/{location}"),
+		semconv.HTTPRequestMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/groups/{groupName}/locations/{location}"),
 	}
 
 	// Run stopwatch.
@@ -3752,14 +3970,14 @@ func (c *Client) sendRemoveLocationFromGroup(ctx context.Context, params RemoveL
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "RemoveLocationFromGroup",
+	ctx, span := c.cfg.Tracer.Start(ctx, RemoveLocationFromGroupOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -3779,14 +3997,14 @@ func (c *Client) sendRemoveLocationFromGroup(ctx context.Context, params RemoveL
 	var pathParts [6]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -3862,7 +4080,7 @@ func (c *Client) sendRemoveLocationFromGroup(ctx context.Context, params RemoveL
 //
 // Remove a user from the organization by username.
 //
-// DELETE /v1/organizations/{organizationName}/members/{username}
+// DELETE /v1/organizations/{organizationSlug}/members/{username}
 func (c *Client) RemoveOrganizationMember(ctx context.Context, params RemoveOrganizationMemberParams) (RemoveOrganizationMemberRes, error) {
 	res, err := c.sendRemoveOrganizationMember(ctx, params)
 	return res, err
@@ -3871,8 +4089,8 @@ func (c *Client) RemoveOrganizationMember(ctx context.Context, params RemoveOrga
 func (c *Client) sendRemoveOrganizationMember(ctx context.Context, params RemoveOrganizationMemberParams) (res RemoveOrganizationMemberRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("removeOrganizationMember"),
-		semconv.HTTPMethodKey.String("DELETE"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/members/{username}"),
+		semconv.HTTPRequestMethodKey.String("DELETE"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/members/{username}"),
 	}
 
 	// Run stopwatch.
@@ -3880,14 +4098,14 @@ func (c *Client) sendRemoveOrganizationMember(ctx context.Context, params Remove
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "RemoveOrganizationMember",
+	ctx, span := c.cfg.Tracer.Start(ctx, RemoveOrganizationMemberOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -3907,14 +4125,14 @@ func (c *Client) sendRemoveOrganizationMember(ctx context.Context, params Remove
 	var pathParts [4]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -3980,7 +4198,7 @@ func (c *Client) RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams
 func (c *Client) sendRevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (res jx.Raw, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("revokeAPIToken"),
-		semconv.HTTPMethodKey.String("DELETE"),
+		semconv.HTTPRequestMethodKey.String("DELETE"),
 		semconv.HTTPRouteKey.String("/v1/auth/api-tokens/{tokenName}"),
 	}
 
@@ -3989,14 +4207,14 @@ func (c *Client) sendRevokeAPIToken(ctx context.Context, params RevokeAPITokenPa
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "RevokeAPIToken",
+	ctx, span := c.cfg.Tracer.Start(ctx, RevokeAPITokenOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -4061,7 +4279,7 @@ func (c *Client) sendRevokeAPIToken(ctx context.Context, params RevokeAPITokenPa
 //
 // Transfer a group to another organization that you own or a member of.
 //
-// POST /v1/organizations/{organizationName}/groups/{groupName}/transfer
+// POST /v1/organizations/{organizationSlug}/groups/{groupName}/transfer
 func (c *Client) TransferGroup(ctx context.Context, request *TransferGroupReq, params TransferGroupParams) (TransferGroupRes, error) {
 	res, err := c.sendTransferGroup(ctx, request, params)
 	return res, err
@@ -4070,8 +4288,8 @@ func (c *Client) TransferGroup(ctx context.Context, request *TransferGroupReq, p
 func (c *Client) sendTransferGroup(ctx context.Context, request *TransferGroupReq, params TransferGroupParams) (res TransferGroupRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("transferGroup"),
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/groups/{groupName}/transfer"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/groups/{groupName}/transfer"),
 	}
 
 	// Run stopwatch.
@@ -4079,14 +4297,14 @@ func (c *Client) sendTransferGroup(ctx context.Context, request *TransferGroupRe
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "TransferGroup",
+	ctx, span := c.cfg.Tracer.Start(ctx, TransferGroupOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -4106,14 +4324,14 @@ func (c *Client) sendTransferGroup(ctx context.Context, request *TransferGroupRe
 	var pathParts [5]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -4174,7 +4392,7 @@ func (c *Client) sendTransferGroup(ctx context.Context, request *TransferGroupRe
 //
 // Unarchive a group that has been archived due to inactivity.
 //
-// POST /v1/organizations/{organizationName}/groups/{groupName}/unarchive
+// POST /v1/organizations/{organizationSlug}/groups/{groupName}/unarchive
 func (c *Client) UnarchiveGroup(ctx context.Context, params UnarchiveGroupParams) (UnarchiveGroupRes, error) {
 	res, err := c.sendUnarchiveGroup(ctx, params)
 	return res, err
@@ -4183,8 +4401,8 @@ func (c *Client) UnarchiveGroup(ctx context.Context, params UnarchiveGroupParams
 func (c *Client) sendUnarchiveGroup(ctx context.Context, params UnarchiveGroupParams) (res UnarchiveGroupRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("unarchiveGroup"),
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/groups/{groupName}/unarchive"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/groups/{groupName}/unarchive"),
 	}
 
 	// Run stopwatch.
@@ -4192,14 +4410,14 @@ func (c *Client) sendUnarchiveGroup(ctx context.Context, params UnarchiveGroupPa
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "UnarchiveGroup",
+	ctx, span := c.cfg.Tracer.Start(ctx, UnarchiveGroupOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -4219,14 +4437,14 @@ func (c *Client) sendUnarchiveGroup(ctx context.Context, params UnarchiveGroupPa
 	var pathParts [5]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -4284,7 +4502,7 @@ func (c *Client) sendUnarchiveGroup(ctx context.Context, params UnarchiveGroupPa
 //
 // Update a database configuration belonging to the organization or user.
 //
-// PATCH /v1/organizations/{organizationName}/databases/{databaseName}/configuration
+// PATCH /v1/organizations/{organizationSlug}/databases/{databaseName}/configuration
 func (c *Client) UpdateDatabaseConfiguration(ctx context.Context, request *DatabaseConfigurationInput, params UpdateDatabaseConfigurationParams) (*DatabaseConfigurationResponse, error) {
 	res, err := c.sendUpdateDatabaseConfiguration(ctx, request, params)
 	return res, err
@@ -4293,8 +4511,8 @@ func (c *Client) UpdateDatabaseConfiguration(ctx context.Context, request *Datab
 func (c *Client) sendUpdateDatabaseConfiguration(ctx context.Context, request *DatabaseConfigurationInput, params UpdateDatabaseConfigurationParams) (res *DatabaseConfigurationResponse, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateDatabaseConfiguration"),
-		semconv.HTTPMethodKey.String("PATCH"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/databases/{databaseName}/configuration"),
+		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/databases/{databaseName}/configuration"),
 	}
 
 	// Run stopwatch.
@@ -4302,14 +4520,14 @@ func (c *Client) sendUpdateDatabaseConfiguration(ctx context.Context, request *D
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "UpdateDatabaseConfiguration",
+	ctx, span := c.cfg.Tracer.Start(ctx, UpdateDatabaseConfigurationOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -4329,14 +4547,14 @@ func (c *Client) sendUpdateDatabaseConfiguration(ctx context.Context, request *D
 	var pathParts [5]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -4397,7 +4615,7 @@ func (c *Client) sendUpdateDatabaseConfiguration(ctx context.Context, request *D
 //
 // Updates all databases in the group to the latest libSQL version.
 //
-// POST /v1/organizations/{organizationName}/groups/{groupName}/update
+// POST /v1/organizations/{organizationSlug}/groups/{groupName}/update
 func (c *Client) UpdateGroupDatabases(ctx context.Context, params UpdateGroupDatabasesParams) (UpdateGroupDatabasesRes, error) {
 	res, err := c.sendUpdateGroupDatabases(ctx, params)
 	return res, err
@@ -4406,8 +4624,8 @@ func (c *Client) UpdateGroupDatabases(ctx context.Context, params UpdateGroupDat
 func (c *Client) sendUpdateGroupDatabases(ctx context.Context, params UpdateGroupDatabasesParams) (res UpdateGroupDatabasesRes, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateGroupDatabases"),
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/groups/{groupName}/update"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/groups/{groupName}/update"),
 	}
 
 	// Run stopwatch.
@@ -4415,14 +4633,14 @@ func (c *Client) sendUpdateGroupDatabases(ctx context.Context, params UpdateGrou
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "UpdateGroupDatabases",
+	ctx, span := c.cfg.Tracer.Start(ctx, UpdateGroupDatabasesOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -4442,14 +4660,14 @@ func (c *Client) sendUpdateGroupDatabases(ctx context.Context, params UpdateGrou
 	var pathParts [5]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -4503,11 +4721,124 @@ func (c *Client) sendUpdateGroupDatabases(ctx context.Context, params UpdateGrou
 	return result, nil
 }
 
+// UpdateMemberRole invokes updateMemberRole operation.
+//
+// Update the role of an organization member. Only organization admins or owners can perform this
+// action.
+//
+// PATCH /v1/organizations/{organizationSlug}/members/{username}
+func (c *Client) UpdateMemberRole(ctx context.Context, request *UpdateMemberRoleReq, params UpdateMemberRoleParams) (UpdateMemberRoleRes, error) {
+	res, err := c.sendUpdateMemberRole(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendUpdateMemberRole(ctx context.Context, request *UpdateMemberRoleReq, params UpdateMemberRoleParams) (res UpdateMemberRoleRes, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("updateMemberRole"),
+		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/members/{username}"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, UpdateMemberRoleOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [4]string
+	pathParts[0] = "/v1/organizations/"
+	{
+		// Encode "organizationSlug" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationSlug",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/members/"
+	{
+		// Encode "username" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "username",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.StringToString(params.Username))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[3] = encoded
+	}
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PATCH", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeUpdateMemberRoleRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeUpdateMemberRoleResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // UpdateOrganization invokes updateOrganization operation.
 //
 // Update an organization you own or are a member of.
 //
-// PATCH /v1/organizations/{organizationName}
+// PATCH /v1/organizations/{organizationSlug}
 func (c *Client) UpdateOrganization(ctx context.Context, request *UpdateOrganizationReq, params UpdateOrganizationParams) (*UpdateOrganizationOK, error) {
 	res, err := c.sendUpdateOrganization(ctx, request, params)
 	return res, err
@@ -4516,8 +4847,8 @@ func (c *Client) UpdateOrganization(ctx context.Context, request *UpdateOrganiza
 func (c *Client) sendUpdateOrganization(ctx context.Context, request *UpdateOrganizationReq, params UpdateOrganizationParams) (res *UpdateOrganizationOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("updateOrganization"),
-		semconv.HTTPMethodKey.String("PATCH"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}"),
+		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}"),
 	}
 
 	// Run stopwatch.
@@ -4525,14 +4856,14 @@ func (c *Client) sendUpdateOrganization(ctx context.Context, request *UpdateOrga
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "UpdateOrganization",
+	ctx, span := c.cfg.Tracer.Start(ctx, UpdateOrganizationOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -4552,14 +4883,14 @@ func (c *Client) sendUpdateOrganization(ctx context.Context, request *UpdateOrga
 	var pathParts [2]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -4601,7 +4932,7 @@ func (c *Client) sendUpdateOrganization(ctx context.Context, request *UpdateOrga
 // Upload a SQL dump to be used when [creating a new database](/api-reference/databases/create) from
 // seed.
 //
-// POST /v1/organizations/{organizationName}/databases/dumps
+// POST /v1/organizations/{organizationSlug}/databases/dumps
 func (c *Client) UploadDatabaseDump(ctx context.Context, request *UploadDatabaseDumpReq, params UploadDatabaseDumpParams) (*UploadDatabaseDumpOK, error) {
 	res, err := c.sendUploadDatabaseDump(ctx, request, params)
 	return res, err
@@ -4610,8 +4941,8 @@ func (c *Client) UploadDatabaseDump(ctx context.Context, request *UploadDatabase
 func (c *Client) sendUploadDatabaseDump(ctx context.Context, request *UploadDatabaseDumpReq, params UploadDatabaseDumpParams) (res *UploadDatabaseDumpOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("uploadDatabaseDump"),
-		semconv.HTTPMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationName}/databases/dumps"),
+		semconv.HTTPRequestMethodKey.String("POST"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/databases/dumps"),
 	}
 
 	// Run stopwatch.
@@ -4619,14 +4950,14 @@ func (c *Client) sendUploadDatabaseDump(ctx context.Context, request *UploadData
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "UploadDatabaseDump",
+	ctx, span := c.cfg.Tracer.Start(ctx, UploadDatabaseDumpOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)
@@ -4646,14 +4977,14 @@ func (c *Client) sendUploadDatabaseDump(ctx context.Context, request *UploadData
 	var pathParts [3]string
 	pathParts[0] = "/v1/organizations/"
 	{
-		// Encode "organizationName" parameter.
+		// Encode "organizationSlug" parameter.
 		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationName",
+			Param:   "organizationSlug",
 			Style:   uri.PathStyleSimple,
 			Explode: false,
 		})
 		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationName))
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
 		}(); err != nil {
 			return res, errors.Wrap(err, "encode path")
 		}
@@ -4704,7 +5035,7 @@ func (c *Client) ValidateAPIToken(ctx context.Context) (*ValidateAPITokenOK, err
 func (c *Client) sendValidateAPIToken(ctx context.Context) (res *ValidateAPITokenOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("validateAPIToken"),
-		semconv.HTTPMethodKey.String("GET"),
+		semconv.HTTPRequestMethodKey.String("GET"),
 		semconv.HTTPRouteKey.String("/v1/auth/validate"),
 	}
 
@@ -4713,14 +5044,14 @@ func (c *Client) sendValidateAPIToken(ctx context.Context) (res *ValidateAPIToke
 	defer func() {
 		// Use floating point division here for higher precision (instead of Millisecond method).
 		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(float64(elapsedDuration)/float64(time.Millisecond)), metric.WithAttributes(otelAttrs...))
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
 	}()
 
 	// Increment request counter.
 	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
 
 	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, "ValidateAPIToken",
+	ctx, span := c.cfg.Tracer.Start(ctx, ValidateAPITokenOperation,
 		trace.WithAttributes(otelAttrs...),
 		clientSpanKind,
 	)

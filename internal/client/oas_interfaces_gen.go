@@ -53,6 +53,14 @@ type GetGroupRes interface {
 	getGroupRes()
 }
 
+type GetOrganizationMemberRes interface {
+	getOrganizationMemberRes()
+}
+
+type GetOrganizationRes interface {
+	getOrganizationRes()
+}
+
 type InvalidateDatabaseTokensRes interface {
 	invalidateDatabaseTokensRes()
 }
@@ -79,4 +87,8 @@ type UnarchiveGroupRes interface {
 
 type UpdateGroupDatabasesRes interface {
 	updateGroupDatabasesRes()
+}
+
+type UpdateMemberRoleRes interface {
+	updateMemberRoleRes()
 }

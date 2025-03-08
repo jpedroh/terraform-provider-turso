@@ -19,7 +19,7 @@ var _ Handler = UnimplementedHandler{}
 //
 // Adds a location to the specified group.
 //
-// POST /v1/organizations/{organizationName}/groups/{groupName}/locations/{location}
+// POST /v1/organizations/{organizationSlug}/groups/{groupName}/locations/{location}
 func (UnimplementedHandler) AddLocationToGroup(ctx context.Context, params AddLocationToGroupParams) (r AddLocationToGroupRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -28,7 +28,7 @@ func (UnimplementedHandler) AddLocationToGroup(ctx context.Context, params AddLo
 //
 // Add an existing Turso user to an organization.
 //
-// POST /v1/organizations/{organizationName}/members
+// POST /v1/organizations/{organizationSlug}/members
 func (UnimplementedHandler) AddOrganizationMember(ctx context.Context, req *AddOrganizationMemberReq, params AddOrganizationMemberParams) (r AddOrganizationMemberRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -46,7 +46,7 @@ func (UnimplementedHandler) CreateAPIToken(ctx context.Context, params CreateAPI
 //
 // Creates a new database in a group for the organization or user.
 //
-// POST /v1/organizations/{organizationName}/databases
+// POST /v1/organizations/{organizationSlug}/databases
 func (UnimplementedHandler) CreateDatabase(ctx context.Context, req *CreateDatabaseInput, params CreateDatabaseParams) (r CreateDatabaseRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -55,7 +55,7 @@ func (UnimplementedHandler) CreateDatabase(ctx context.Context, req *CreateDatab
 //
 // Generates an authorization token for the specified database.
 //
-// POST /v1/organizations/{organizationName}/databases/{databaseName}/auth/tokens
+// POST /v1/organizations/{organizationSlug}/databases/{databaseName}/auth/tokens
 func (UnimplementedHandler) CreateDatabaseToken(ctx context.Context, req OptCreateTokenInput, params CreateDatabaseTokenParams) (r CreateDatabaseTokenRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -64,7 +64,7 @@ func (UnimplementedHandler) CreateDatabaseToken(ctx context.Context, req OptCrea
 //
 // Creates a new group for the organization or user.
 //
-// POST /v1/organizations/{organizationName}/groups
+// POST /v1/organizations/{organizationSlug}/groups
 func (UnimplementedHandler) CreateGroup(ctx context.Context, req *NewGroup, params CreateGroupParams) (r CreateGroupRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -73,7 +73,7 @@ func (UnimplementedHandler) CreateGroup(ctx context.Context, req *NewGroup, para
 //
 // Generates an authorization token for the specified group.
 //
-// POST /v1/organizations/{organizationName}/groups/{groupName}/auth/tokens
+// POST /v1/organizations/{organizationSlug}/groups/{groupName}/auth/tokens
 func (UnimplementedHandler) CreateGroupToken(ctx context.Context, req OptCreateTokenInput, params CreateGroupTokenParams) (r CreateGroupTokenRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -82,7 +82,7 @@ func (UnimplementedHandler) CreateGroupToken(ctx context.Context, req OptCreateT
 //
 // Delete a database belonging to the organization or user.
 //
-// DELETE /v1/organizations/{organizationName}/databases/{databaseName}
+// DELETE /v1/organizations/{organizationSlug}/databases/{databaseName}
 func (UnimplementedHandler) DeleteDatabase(ctx context.Context, params DeleteDatabaseParams) (r DeleteDatabaseRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -91,7 +91,7 @@ func (UnimplementedHandler) DeleteDatabase(ctx context.Context, params DeleteDat
 //
 // Delete a group belonging to the organization or user.
 //
-// DELETE /v1/organizations/{organizationName}/groups/{groupName}
+// DELETE /v1/organizations/{organizationSlug}/groups/{groupName}
 func (UnimplementedHandler) DeleteGroup(ctx context.Context, params DeleteGroupParams) (r DeleteGroupRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -100,7 +100,7 @@ func (UnimplementedHandler) DeleteGroup(ctx context.Context, params DeleteGroupP
 //
 // Delete an invite for the organization by email.
 //
-// DELETE /v1/organizations/{organizationName}/invites/{email}
+// DELETE /v1/organizations/{organizationSlug}/invites/{email}
 func (UnimplementedHandler) DeleteOrganizationInviteByEmail(ctx context.Context, params DeleteOrganizationInviteByEmailParams) (r DeleteOrganizationInviteByEmailRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -109,7 +109,7 @@ func (UnimplementedHandler) DeleteOrganizationInviteByEmail(ctx context.Context,
 //
 // Returns a database belonging to the organization or user.
 //
-// GET /v1/organizations/{organizationName}/databases/{databaseName}
+// GET /v1/organizations/{organizationSlug}/databases/{databaseName}
 func (UnimplementedHandler) GetDatabase(ctx context.Context, params GetDatabaseParams) (r GetDatabaseRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -118,7 +118,7 @@ func (UnimplementedHandler) GetDatabase(ctx context.Context, params GetDatabaseP
 //
 // Retrieve an individual database configuration belonging to the organization or user.
 //
-// GET /v1/organizations/{organizationName}/databases/{databaseName}/configuration
+// GET /v1/organizations/{organizationSlug}/databases/{databaseName}/configuration
 func (UnimplementedHandler) GetDatabaseConfiguration(ctx context.Context, params GetDatabaseConfigurationParams) (r *DatabaseConfigurationResponse, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -127,7 +127,7 @@ func (UnimplementedHandler) GetDatabaseConfiguration(ctx context.Context, params
 //
 // Return the individual database instance by name.
 //
-// GET /v1/organizations/{organizationName}/databases/{databaseName}/instances/{instanceName}
+// GET /v1/organizations/{organizationSlug}/databases/{databaseName}/instances/{instanceName}
 func (UnimplementedHandler) GetDatabaseInstance(ctx context.Context, params GetDatabaseInstanceParams) (r *GetDatabaseInstanceOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -136,7 +136,7 @@ func (UnimplementedHandler) GetDatabaseInstance(ctx context.Context, params GetD
 //
 // Fetch the top queries of a database, including the count of rows read and written.
 //
-// GET /v1/organizations/{organizationName}/databases/{databaseName}/stats
+// GET /v1/organizations/{organizationSlug}/databases/{databaseName}/stats
 func (UnimplementedHandler) GetDatabaseStats(ctx context.Context, params GetDatabaseStatsParams) (r GetDatabaseStatsRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -145,7 +145,7 @@ func (UnimplementedHandler) GetDatabaseStats(ctx context.Context, params GetData
 //
 // Fetch activity usage for a database in a given time period.
 //
-// GET /v1/organizations/{organizationName}/databases/{databaseName}/usage
+// GET /v1/organizations/{organizationSlug}/databases/{databaseName}/usage
 func (UnimplementedHandler) GetDatabaseUsage(ctx context.Context, params GetDatabaseUsageParams) (r GetDatabaseUsageRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -154,8 +154,26 @@ func (UnimplementedHandler) GetDatabaseUsage(ctx context.Context, params GetData
 //
 // Returns a group belonging to the organization or user.
 //
-// GET /v1/organizations/{organizationName}/groups/{groupName}
+// GET /v1/organizations/{organizationSlug}/groups/{groupName}
 func (UnimplementedHandler) GetGroup(ctx context.Context, params GetGroupParams) (r GetGroupRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// GetOrganization implements getOrganization operation.
+//
+// Retrieve details of a specific organization.
+//
+// GET /v1/organizations/{organizationSlug}
+func (UnimplementedHandler) GetOrganization(ctx context.Context, params GetOrganizationParams) (r GetOrganizationRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// GetOrganizationMember implements getOrganizationMember operation.
+//
+// Retrieve details of a specific member in the organization.
+//
+// GET /v1/organizations/{organizationSlug}/members/{username}
+func (UnimplementedHandler) GetOrganizationMember(ctx context.Context, params GetOrganizationMemberParams) (r GetOrganizationMemberRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -163,7 +181,7 @@ func (UnimplementedHandler) GetGroup(ctx context.Context, params GetGroupParams)
 //
 // Returns the current subscription details for the organization.
 //
-// GET /v1/organizations/{organizationName}/subscription
+// GET /v1/organizations/{organizationSlug}/subscription
 func (UnimplementedHandler) GetOrganizationSubscription(ctx context.Context, params GetOrganizationSubscriptionParams) (r *GetOrganizationSubscriptionOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -172,7 +190,7 @@ func (UnimplementedHandler) GetOrganizationSubscription(ctx context.Context, par
 //
 // Fetch current billing cycle usage for an organization.
 //
-// GET /v1/organizations/{organizationName}/usage
+// GET /v1/organizations/{organizationSlug}/usage
 func (UnimplementedHandler) GetOrganizationUsage(ctx context.Context, params GetOrganizationUsageParams) (r *GetOrganizationUsageOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -181,7 +199,7 @@ func (UnimplementedHandler) GetOrganizationUsage(ctx context.Context, params Get
 //
 // Invalidates all authorization tokens for the specified database.
 //
-// POST /v1/organizations/{organizationName}/databases/{databaseName}/auth/rotate
+// POST /v1/organizations/{organizationSlug}/databases/{databaseName}/auth/rotate
 func (UnimplementedHandler) InvalidateDatabaseTokens(ctx context.Context, params InvalidateDatabaseTokensParams) (r InvalidateDatabaseTokensRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -190,7 +208,7 @@ func (UnimplementedHandler) InvalidateDatabaseTokens(ctx context.Context, params
 //
 // Invalidates all authorization tokens for the specified group.
 //
-// POST /v1/organizations/{organizationName}/groups/{groupName}/auth/rotate
+// POST /v1/organizations/{organizationSlug}/groups/{groupName}/auth/rotate
 func (UnimplementedHandler) InvalidateGroupTokens(ctx context.Context, params InvalidateGroupTokensParams) (r InvalidateGroupTokensRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -199,7 +217,7 @@ func (UnimplementedHandler) InvalidateGroupTokens(ctx context.Context, params In
 //
 // Invite a user (who isn't already a Turso user) to an organization.
 //
-// POST /v1/organizations/{organizationName}/invites
+// POST /v1/organizations/{organizationSlug}/invites
 func (UnimplementedHandler) InviteOrganizationMember(ctx context.Context, req *InviteOrganizationMemberReq, params InviteOrganizationMemberParams) (r *InviteOrganizationMemberOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -218,7 +236,7 @@ func (UnimplementedHandler) ListAPITokens(ctx context.Context) (r *ListAPITokens
 // Returns a list of instances of a database. Instances are the individual primary or replica
 // databases in each region defined by the group.
 //
-// GET /v1/organizations/{organizationName}/databases/{databaseName}/instances
+// GET /v1/organizations/{organizationSlug}/databases/{databaseName}/instances
 func (UnimplementedHandler) ListDatabaseInstances(ctx context.Context, params ListDatabaseInstancesParams) (r *ListDatabaseInstancesOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -227,7 +245,7 @@ func (UnimplementedHandler) ListDatabaseInstances(ctx context.Context, params Li
 //
 // Returns a list of databases belonging to the organization or user.
 //
-// GET /v1/organizations/{organizationName}/databases
+// GET /v1/organizations/{organizationSlug}/databases
 func (UnimplementedHandler) ListDatabases(ctx context.Context, params ListDatabasesParams) (r *ListDatabasesOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -236,7 +254,7 @@ func (UnimplementedHandler) ListDatabases(ctx context.Context, params ListDataba
 //
 // Returns a list of groups belonging to the organization or user.
 //
-// GET /v1/organizations/{organizationName}/groups
+// GET /v1/organizations/{organizationSlug}/groups
 func (UnimplementedHandler) ListGroups(ctx context.Context, params ListGroupsParams) (r *ListGroupsOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -255,7 +273,7 @@ func (UnimplementedHandler) ListLocations(ctx context.Context) (r *ListLocations
 // Return the audit logs for the given organization, ordered by the `created_at` field in descending
 // order.
 //
-// GET /v1/organizations/{organizationName}/audit-logs
+// GET /v1/organizations/{organizationSlug}/audit-logs
 func (UnimplementedHandler) ListOrganizationAuditLogs(ctx context.Context, params ListOrganizationAuditLogsParams) (r *ListOrganizationAuditLogsOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -264,7 +282,7 @@ func (UnimplementedHandler) ListOrganizationAuditLogs(ctx context.Context, param
 //
 // Returns a list of invites for the organization.
 //
-// GET /v1/organizations/{organizationName}/invites
+// GET /v1/organizations/{organizationSlug}/invites
 func (UnimplementedHandler) ListOrganizationInvites(ctx context.Context, params ListOrganizationInvitesParams) (r *ListOrganizationInvitesOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -273,7 +291,7 @@ func (UnimplementedHandler) ListOrganizationInvites(ctx context.Context, params 
 //
 // Returns a list of invoices for the organization.
 //
-// GET /v1/organizations/{organizationName}/invoices
+// GET /v1/organizations/{organizationSlug}/invoices
 func (UnimplementedHandler) ListOrganizationInvoices(ctx context.Context, params ListOrganizationInvoicesParams) (r *ListOrganizationInvoicesOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -282,7 +300,7 @@ func (UnimplementedHandler) ListOrganizationInvoices(ctx context.Context, params
 //
 // Returns a list of members part of the organization.
 //
-// GET /v1/organizations/{organizationName}/members
+// GET /v1/organizations/{organizationSlug}/members
 func (UnimplementedHandler) ListOrganizationMembers(ctx context.Context, params ListOrganizationMembersParams) (r *ListOrganizationMembersOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -291,7 +309,7 @@ func (UnimplementedHandler) ListOrganizationMembers(ctx context.Context, params 
 //
 // Returns a list of available plans and their quotas.
 //
-// GET /v1/organizations/{organizationName}/plans
+// GET /v1/organizations/{organizationSlug}/plans
 func (UnimplementedHandler) ListOrganizationPlans(ctx context.Context, params ListOrganizationPlansParams) (r *ListOrganizationPlansOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -309,7 +327,7 @@ func (UnimplementedHandler) ListOrganizations(ctx context.Context) (r []Organiza
 //
 // Removes a location from the specified group.
 //
-// DELETE /v1/organizations/{organizationName}/groups/{groupName}/locations/{location}
+// DELETE /v1/organizations/{organizationSlug}/groups/{groupName}/locations/{location}
 func (UnimplementedHandler) RemoveLocationFromGroup(ctx context.Context, params RemoveLocationFromGroupParams) (r RemoveLocationFromGroupRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -318,7 +336,7 @@ func (UnimplementedHandler) RemoveLocationFromGroup(ctx context.Context, params 
 //
 // Remove a user from the organization by username.
 //
-// DELETE /v1/organizations/{organizationName}/members/{username}
+// DELETE /v1/organizations/{organizationSlug}/members/{username}
 func (UnimplementedHandler) RemoveOrganizationMember(ctx context.Context, params RemoveOrganizationMemberParams) (r RemoveOrganizationMemberRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -336,7 +354,7 @@ func (UnimplementedHandler) RevokeAPIToken(ctx context.Context, params RevokeAPI
 //
 // Transfer a group to another organization that you own or a member of.
 //
-// POST /v1/organizations/{organizationName}/groups/{groupName}/transfer
+// POST /v1/organizations/{organizationSlug}/groups/{groupName}/transfer
 func (UnimplementedHandler) TransferGroup(ctx context.Context, req *TransferGroupReq, params TransferGroupParams) (r TransferGroupRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -345,7 +363,7 @@ func (UnimplementedHandler) TransferGroup(ctx context.Context, req *TransferGrou
 //
 // Unarchive a group that has been archived due to inactivity.
 //
-// POST /v1/organizations/{organizationName}/groups/{groupName}/unarchive
+// POST /v1/organizations/{organizationSlug}/groups/{groupName}/unarchive
 func (UnimplementedHandler) UnarchiveGroup(ctx context.Context, params UnarchiveGroupParams) (r UnarchiveGroupRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -354,7 +372,7 @@ func (UnimplementedHandler) UnarchiveGroup(ctx context.Context, params Unarchive
 //
 // Update a database configuration belonging to the organization or user.
 //
-// PATCH /v1/organizations/{organizationName}/databases/{databaseName}/configuration
+// PATCH /v1/organizations/{organizationSlug}/databases/{databaseName}/configuration
 func (UnimplementedHandler) UpdateDatabaseConfiguration(ctx context.Context, req *DatabaseConfigurationInput, params UpdateDatabaseConfigurationParams) (r *DatabaseConfigurationResponse, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -363,8 +381,18 @@ func (UnimplementedHandler) UpdateDatabaseConfiguration(ctx context.Context, req
 //
 // Updates all databases in the group to the latest libSQL version.
 //
-// POST /v1/organizations/{organizationName}/groups/{groupName}/update
+// POST /v1/organizations/{organizationSlug}/groups/{groupName}/update
 func (UnimplementedHandler) UpdateGroupDatabases(ctx context.Context, params UpdateGroupDatabasesParams) (r UpdateGroupDatabasesRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// UpdateMemberRole implements updateMemberRole operation.
+//
+// Update the role of an organization member. Only organization admins or owners can perform this
+// action.
+//
+// PATCH /v1/organizations/{organizationSlug}/members/{username}
+func (UnimplementedHandler) UpdateMemberRole(ctx context.Context, req *UpdateMemberRoleReq, params UpdateMemberRoleParams) (r UpdateMemberRoleRes, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -372,7 +400,7 @@ func (UnimplementedHandler) UpdateGroupDatabases(ctx context.Context, params Upd
 //
 // Update an organization you own or are a member of.
 //
-// PATCH /v1/organizations/{organizationName}
+// PATCH /v1/organizations/{organizationSlug}
 func (UnimplementedHandler) UpdateOrganization(ctx context.Context, req *UpdateOrganizationReq, params UpdateOrganizationParams) (r *UpdateOrganizationOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
@@ -382,7 +410,7 @@ func (UnimplementedHandler) UpdateOrganization(ctx context.Context, req *UpdateO
 // Upload a SQL dump to be used when [creating a new database](/api-reference/databases/create) from
 // seed.
 //
-// POST /v1/organizations/{organizationName}/databases/dumps
+// POST /v1/organizations/{organizationSlug}/databases/dumps
 func (UnimplementedHandler) UploadDatabaseDump(ctx context.Context, req *UploadDatabaseDumpReq, params UploadDatabaseDumpParams) (r *UploadDatabaseDumpOK, _ error) {
 	return r, ht.ErrNotImplemented
 }

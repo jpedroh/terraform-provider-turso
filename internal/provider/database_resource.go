@@ -139,7 +139,7 @@ func (r *DatabaseResource) Create(ctx context.Context, req resource.CreateReques
 		Schema:    client.NewOptString(data.Schema.ValueString()),
 		IsSchema:  client.NewOptBool(data.IsSchema.ValueBool()),
 	}, client.CreateDatabaseParams{
-		OrganizationName: data.OrganizationName.ValueString(),
+		OrganizationSlug: data.OrganizationName.ValueString(),
 	})
 
 	if err != nil {
@@ -175,7 +175,7 @@ func (r *DatabaseResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 
 	res, err := r.client.GetDatabase(ctx, client.GetDatabaseParams{
-		OrganizationName: data.OrganizationName.ValueString(),
+		OrganizationSlug: data.OrganizationName.ValueString(),
 		DatabaseName:     data.Name.ValueString(),
 	})
 
@@ -207,7 +207,7 @@ func (r *DatabaseResource) Update(ctx context.Context, req resource.UpdateReques
 	_, err := r.client.UpdateDatabaseConfiguration(ctx, &client.DatabaseConfigurationInput{
 		SizeLimit: client.NewOptString(data.SizeLimit.ValueString()),
 	}, client.UpdateDatabaseConfigurationParams{
-		OrganizationName: data.OrganizationName.ValueString(),
+		OrganizationSlug: data.OrganizationName.ValueString(),
 		DatabaseName:     data.Name.ValueString(),
 	})
 
@@ -231,7 +231,7 @@ func (r *DatabaseResource) Delete(ctx context.Context, req resource.DeleteReques
 	}
 
 	_, err := r.client.DeleteDatabase(ctx, client.DeleteDatabaseParams{
-		OrganizationName: data.OrganizationName.ValueString(),
+		OrganizationSlug: data.OrganizationName.ValueString(),
 		DatabaseName:     data.Name.ValueString(),
 	})
 

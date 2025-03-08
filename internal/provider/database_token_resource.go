@@ -112,7 +112,7 @@ func (r *DatabaseTokenResource) Create(ctx context.Context, req resource.CreateR
 	}
 
 	res, err := r.client.CreateDatabaseToken(ctx, client.OptCreateTokenInput{}, client.CreateDatabaseTokenParams{
-		OrganizationName: data.OrganizationName.ValueString(),
+		OrganizationSlug: data.OrganizationName.ValueString(),
 		DatabaseName:     data.DatabaseName.ValueString(),
 		Expiration:       client.NewOptString(data.Expiration.ValueString()),
 	})

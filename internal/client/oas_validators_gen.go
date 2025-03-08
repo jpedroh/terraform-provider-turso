@@ -76,6 +76,8 @@ func (s AddOrganizationMemberReqRole) Validate() error {
 		return nil
 	case "member":
 		return nil
+	case "viewer":
+		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
@@ -290,8 +292,6 @@ func (s Extensions1Item) Validate() error {
 	switch s {
 	case "vector":
 		return nil
-	case "vss":
-		return nil
 	case "crypto":
 		return nil
 	case "fuzzy":
@@ -307,6 +307,8 @@ func (s Extensions1Item) Validate() error {
 	case "uuid":
 		return nil
 	case "regexp":
+		return nil
+	case "vec":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -334,6 +336,96 @@ func (s *GetDatabaseInstanceOK) Validate() error {
 	}(); err != nil {
 		failures = append(failures, validate.FieldError{
 			Name:  "instance",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *GetDatabaseStatsOK) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if value, ok := s.TopQueries.Get(); ok {
+			if err := func() error {
+				if value == nil {
+					return errors.New("nil is invalid value")
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "top_queries",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *GetOrganizationMemberOK) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if value, ok := s.Member.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "member",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *GetOrganizationOK) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if value, ok := s.Organization.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "organization",
 			Error: err,
 		})
 	}
@@ -498,6 +590,8 @@ func (s InviteOrganizationMemberReqRole) Validate() error {
 		return nil
 	case "member":
 		return nil
+	case "viewer":
+		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
@@ -508,6 +602,8 @@ func (s InviteRole) Validate() error {
 	case "admin":
 		return nil
 	case "member":
+		return nil
+	case "viewer":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -713,6 +809,8 @@ func (s MemberRole) Validate() error {
 		return nil
 	case "member":
 		return nil
+	case "viewer":
+		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
 	}
@@ -796,6 +894,117 @@ func (s Role) Validate() error {
 	case "admin":
 		return nil
 	case "member":
+		return nil
+	case "viewer":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
+func (s *UpdateMemberRoleOK) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if value, ok := s.Member.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "member",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s *UpdateMemberRoleOKMember) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if value, ok := s.Role.Get(); ok {
+			if err := func() error {
+				if err := value.Validate(); err != nil {
+					return err
+				}
+				return nil
+			}(); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "role",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s UpdateMemberRoleOKMemberRole) Validate() error {
+	switch s {
+	case "admin":
+		return nil
+	case "member":
+		return nil
+	case "viewer":
+		return nil
+	default:
+		return errors.Errorf("invalid value: %v", s)
+	}
+}
+
+func (s *UpdateMemberRoleReq) Validate() error {
+	if s == nil {
+		return validate.ErrNilPointer
+	}
+
+	var failures []validate.FieldError
+	if err := func() error {
+		if err := s.Role.Validate(); err != nil {
+			return err
+		}
+		return nil
+	}(); err != nil {
+		failures = append(failures, validate.FieldError{
+			Name:  "role",
+			Error: err,
+		})
+	}
+	if len(failures) > 0 {
+		return &validate.Error{Fields: failures}
+	}
+	return nil
+}
+
+func (s UpdateMemberRoleReqRole) Validate() error {
+	switch s {
+	case "admin":
+		return nil
+	case "member":
+		return nil
+	case "viewer":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)

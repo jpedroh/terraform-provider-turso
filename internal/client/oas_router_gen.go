@@ -199,7 +199,7 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 						break
 					}
 
-					// Param: "organizationName"
+					// Param: "organizationSlug"
 					// Match until "/"
 					idx := strings.IndexByte(elem, '/')
 					if idx < 0 {
@@ -210,12 +210,16 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 					if len(elem) == 0 {
 						switch r.Method {
+						case "GET":
+							s.handleGetOrganizationRequest([1]string{
+								args[0],
+							}, elemIsEscaped, w, r)
 						case "PATCH":
 							s.handleUpdateOrganizationRequest([1]string{
 								args[0],
 							}, elemIsEscaped, w, r)
 						default:
-							s.notAllowed(w, r, "PATCH")
+							s.notAllowed(w, r, "GET,PATCH")
 						}
 
 						return
@@ -970,8 +974,18 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 											args[0],
 											args[1],
 										}, elemIsEscaped, w, r)
+									case "GET":
+										s.handleGetOrganizationMemberRequest([2]string{
+											args[0],
+											args[1],
+										}, elemIsEscaped, w, r)
+									case "PATCH":
+										s.handleUpdateMemberRoleRequest([2]string{
+											args[0],
+											args[1],
+										}, elemIsEscaped, w, r)
 									default:
-										s.notAllowed(w, r, "DELETE")
+										s.notAllowed(w, r, "DELETE,GET,PATCH")
 									}
 
 									return
@@ -1177,7 +1191,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					if len(elem) == 0 {
 						switch method {
 						case "GET":
-							r.name = "ListAPITokens"
+							r.name = ListAPITokensOperation
 							r.summary = "List API Tokens"
 							r.operationID = "listAPITokens"
 							r.pathPattern = "/v1/auth/api-tokens"
@@ -1206,7 +1220,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							// Leaf node.
 							switch method {
 							case "DELETE":
-								r.name = "RevokeAPIToken"
+								r.name = RevokeAPITokenOperation
 								r.summary = "Revoke API Token"
 								r.operationID = "revokeAPIToken"
 								r.pathPattern = "/v1/auth/api-tokens/{tokenName}"
@@ -1214,7 +1228,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								r.count = 1
 								return r, true
 							case "POST":
-								r.name = "CreateAPIToken"
+								r.name = CreateAPITokenOperation
 								r.summary = "Create API Token"
 								r.operationID = "createAPIToken"
 								r.pathPattern = "/v1/auth/api-tokens/{tokenName}"
@@ -1242,7 +1256,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						// Leaf node.
 						switch method {
 						case "GET":
-							r.name = "ValidateAPIToken"
+							r.name = ValidateAPITokenOperation
 							r.summary = "Validate API Token"
 							r.operationID = "validateAPIToken"
 							r.pathPattern = "/v1/auth/validate"
@@ -1270,7 +1284,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 					// Leaf node.
 					switch method {
 					case "GET":
-						r.name = "ListLocations"
+						r.name = ListLocationsOperation
 						r.summary = "List Locations"
 						r.operationID = "listLocations"
 						r.pathPattern = "/v1/locations"
@@ -1294,7 +1308,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 				if len(elem) == 0 {
 					switch method {
 					case "GET":
-						r.name = "ListOrganizations"
+						r.name = ListOrganizationsOperation
 						r.summary = "List Organizations"
 						r.operationID = "listOrganizations"
 						r.pathPattern = "/v1/organizations"
@@ -1314,7 +1328,7 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 						break
 					}
 
-					// Param: "organizationName"
+					// Param: "organizationSlug"
 					// Match until "/"
 					idx := strings.IndexByte(elem, '/')
 					if idx < 0 {
@@ -1325,11 +1339,19 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 
 					if len(elem) == 0 {
 						switch method {
+						case "GET":
+							r.name = GetOrganizationOperation
+							r.summary = "Retrieve Organization"
+							r.operationID = "getOrganization"
+							r.pathPattern = "/v1/organizations/{organizationSlug}"
+							r.args = args
+							r.count = 1
+							return r, true
 						case "PATCH":
-							r.name = "UpdateOrganization"
+							r.name = UpdateOrganizationOperation
 							r.summary = "Update Organization"
 							r.operationID = "updateOrganization"
-							r.pathPattern = "/v1/organizations/{organizationName}"
+							r.pathPattern = "/v1/organizations/{organizationSlug}"
 							r.args = args
 							r.count = 1
 							return r, true
@@ -1362,10 +1384,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "GET":
-									r.name = "ListOrganizationAuditLogs"
+									r.name = ListOrganizationAuditLogsOperation
 									r.summary = "List Audit Logs"
 									r.operationID = "listOrganizationAuditLogs"
-									r.pathPattern = "/v1/organizations/{organizationName}/audit-logs"
+									r.pathPattern = "/v1/organizations/{organizationSlug}/audit-logs"
 									r.args = args
 									r.count = 1
 									return r, true
@@ -1386,18 +1408,18 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							if len(elem) == 0 {
 								switch method {
 								case "GET":
-									r.name = "ListDatabases"
+									r.name = ListDatabasesOperation
 									r.summary = "List Databases"
 									r.operationID = "listDatabases"
-									r.pathPattern = "/v1/organizations/{organizationName}/databases"
+									r.pathPattern = "/v1/organizations/{organizationSlug}/databases"
 									r.args = args
 									r.count = 1
 									return r, true
 								case "POST":
-									r.name = "CreateDatabase"
+									r.name = CreateDatabaseOperation
 									r.summary = "Create Database"
 									r.operationID = "createDatabase"
-									r.pathPattern = "/v1/organizations/{organizationName}/databases"
+									r.pathPattern = "/v1/organizations/{organizationSlug}/databases"
 									r.args = args
 									r.count = 1
 									return r, true
@@ -1430,10 +1452,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										// Leaf node.
 										switch method {
 										case "POST":
-											r.name = "UploadDatabaseDump"
+											r.name = UploadDatabaseDumpOperation
 											r.summary = "Upload SQLite Dump"
 											r.operationID = "uploadDatabaseDump"
-											r.pathPattern = "/v1/organizations/{organizationName}/databases/dumps"
+											r.pathPattern = "/v1/organizations/{organizationSlug}/databases/dumps"
 											r.args = args
 											r.count = 1
 											return r, true
@@ -1456,18 +1478,18 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								if len(elem) == 0 {
 									switch method {
 									case "DELETE":
-										r.name = "DeleteDatabase"
+										r.name = DeleteDatabaseOperation
 										r.summary = "Delete Database"
 										r.operationID = "deleteDatabase"
-										r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}"
+										r.pathPattern = "/v1/organizations/{organizationSlug}/databases/{databaseName}"
 										r.args = args
 										r.count = 2
 										return r, true
 									case "GET":
-										r.name = "GetDatabase"
+										r.name = GetDatabaseOperation
 										r.summary = "Retrieve Database"
 										r.operationID = "getDatabase"
-										r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}"
+										r.pathPattern = "/v1/organizations/{organizationSlug}/databases/{databaseName}"
 										r.args = args
 										r.count = 2
 										return r, true
@@ -1512,10 +1534,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 												// Leaf node.
 												switch method {
 												case "POST":
-													r.name = "InvalidateDatabaseTokens"
+													r.name = InvalidateDatabaseTokensOperation
 													r.summary = "Invalidate All Database Auth Tokens"
 													r.operationID = "invalidateDatabaseTokens"
-													r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}/auth/rotate"
+													r.pathPattern = "/v1/organizations/{organizationSlug}/databases/{databaseName}/auth/rotate"
 													r.args = args
 													r.count = 2
 													return r, true
@@ -1537,10 +1559,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 												// Leaf node.
 												switch method {
 												case "POST":
-													r.name = "CreateDatabaseToken"
+													r.name = CreateDatabaseTokenOperation
 													r.summary = "Generate Database Auth Token"
 													r.operationID = "createDatabaseToken"
-													r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}/auth/tokens"
+													r.pathPattern = "/v1/organizations/{organizationSlug}/databases/{databaseName}/auth/tokens"
 													r.args = args
 													r.count = 2
 													return r, true
@@ -1565,18 +1587,18 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 											// Leaf node.
 											switch method {
 											case "GET":
-												r.name = "GetDatabaseConfiguration"
+												r.name = GetDatabaseConfigurationOperation
 												r.summary = "Retrieve Database Configuration"
 												r.operationID = "getDatabaseConfiguration"
-												r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}/configuration"
+												r.pathPattern = "/v1/organizations/{organizationSlug}/databases/{databaseName}/configuration"
 												r.args = args
 												r.count = 2
 												return r, true
 											case "PATCH":
-												r.name = "UpdateDatabaseConfiguration"
+												r.name = UpdateDatabaseConfigurationOperation
 												r.summary = "Update Database Configuration"
 												r.operationID = "updateDatabaseConfiguration"
-												r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}/configuration"
+												r.pathPattern = "/v1/organizations/{organizationSlug}/databases/{databaseName}/configuration"
 												r.args = args
 												r.count = 2
 												return r, true
@@ -1597,10 +1619,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										if len(elem) == 0 {
 											switch method {
 											case "GET":
-												r.name = "ListDatabaseInstances"
+												r.name = ListDatabaseInstancesOperation
 												r.summary = "List Database Instances"
 												r.operationID = "listDatabaseInstances"
-												r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}/instances"
+												r.pathPattern = "/v1/organizations/{organizationSlug}/databases/{databaseName}/instances"
 												r.args = args
 												r.count = 2
 												return r, true
@@ -1626,10 +1648,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 												// Leaf node.
 												switch method {
 												case "GET":
-													r.name = "GetDatabaseInstance"
+													r.name = GetDatabaseInstanceOperation
 													r.summary = "Retrieve Database Instance"
 													r.operationID = "getDatabaseInstance"
-													r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}/instances/{instanceName}"
+													r.pathPattern = "/v1/organizations/{organizationSlug}/databases/{databaseName}/instances/{instanceName}"
 													r.args = args
 													r.count = 3
 													return r, true
@@ -1654,10 +1676,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 											// Leaf node.
 											switch method {
 											case "GET":
-												r.name = "GetDatabaseStats"
+												r.name = GetDatabaseStatsOperation
 												r.summary = "Retrieve Database Stats"
 												r.operationID = "getDatabaseStats"
-												r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}/stats"
+												r.pathPattern = "/v1/organizations/{organizationSlug}/databases/{databaseName}/stats"
 												r.args = args
 												r.count = 2
 												return r, true
@@ -1679,10 +1701,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 											// Leaf node.
 											switch method {
 											case "GET":
-												r.name = "GetDatabaseUsage"
+												r.name = GetDatabaseUsageOperation
 												r.summary = "Retrieve Database Usage"
 												r.operationID = "getDatabaseUsage"
-												r.pathPattern = "/v1/organizations/{organizationName}/databases/{databaseName}/usage"
+												r.pathPattern = "/v1/organizations/{organizationSlug}/databases/{databaseName}/usage"
 												r.args = args
 												r.count = 2
 												return r, true
@@ -1712,18 +1734,18 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							if len(elem) == 0 {
 								switch method {
 								case "GET":
-									r.name = "ListGroups"
+									r.name = ListGroupsOperation
 									r.summary = "List Groups"
 									r.operationID = "listGroups"
-									r.pathPattern = "/v1/organizations/{organizationName}/groups"
+									r.pathPattern = "/v1/organizations/{organizationSlug}/groups"
 									r.args = args
 									r.count = 1
 									return r, true
 								case "POST":
-									r.name = "CreateGroup"
+									r.name = CreateGroupOperation
 									r.summary = "Create Group"
 									r.operationID = "createGroup"
-									r.pathPattern = "/v1/organizations/{organizationName}/groups"
+									r.pathPattern = "/v1/organizations/{organizationSlug}/groups"
 									r.args = args
 									r.count = 1
 									return r, true
@@ -1752,18 +1774,18 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								if len(elem) == 0 {
 									switch method {
 									case "DELETE":
-										r.name = "DeleteGroup"
+										r.name = DeleteGroupOperation
 										r.summary = "Delete Group"
 										r.operationID = "deleteGroup"
-										r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}"
+										r.pathPattern = "/v1/organizations/{organizationSlug}/groups/{groupName}"
 										r.args = args
 										r.count = 2
 										return r, true
 									case "GET":
-										r.name = "GetGroup"
+										r.name = GetGroupOperation
 										r.summary = "Retrieve Group"
 										r.operationID = "getGroup"
-										r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}"
+										r.pathPattern = "/v1/organizations/{organizationSlug}/groups/{groupName}"
 										r.args = args
 										r.count = 2
 										return r, true
@@ -1808,10 +1830,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 												// Leaf node.
 												switch method {
 												case "POST":
-													r.name = "InvalidateGroupTokens"
+													r.name = InvalidateGroupTokensOperation
 													r.summary = "Invalidate All Group Auth Tokens"
 													r.operationID = "invalidateGroupTokens"
-													r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}/auth/rotate"
+													r.pathPattern = "/v1/organizations/{organizationSlug}/groups/{groupName}/auth/rotate"
 													r.args = args
 													r.count = 2
 													return r, true
@@ -1833,10 +1855,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 												// Leaf node.
 												switch method {
 												case "POST":
-													r.name = "CreateGroupToken"
+													r.name = CreateGroupTokenOperation
 													r.summary = "Create Group Auth Token"
 													r.operationID = "createGroupToken"
-													r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}/auth/tokens"
+													r.pathPattern = "/v1/organizations/{organizationSlug}/groups/{groupName}/auth/tokens"
 													r.args = args
 													r.count = 2
 													return r, true
@@ -1866,18 +1888,18 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 											// Leaf node.
 											switch method {
 											case "DELETE":
-												r.name = "RemoveLocationFromGroup"
+												r.name = RemoveLocationFromGroupOperation
 												r.summary = "Remove Location from Group"
 												r.operationID = "removeLocationFromGroup"
-												r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}/locations/{location}"
+												r.pathPattern = "/v1/organizations/{organizationSlug}/groups/{groupName}/locations/{location}"
 												r.args = args
 												r.count = 3
 												return r, true
 											case "POST":
-												r.name = "AddLocationToGroup"
+												r.name = AddLocationToGroupOperation
 												r.summary = "Add Location to Group"
 												r.operationID = "addLocationToGroup"
-												r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}/locations/{location}"
+												r.pathPattern = "/v1/organizations/{organizationSlug}/groups/{groupName}/locations/{location}"
 												r.args = args
 												r.count = 3
 												return r, true
@@ -1899,10 +1921,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 											// Leaf node.
 											switch method {
 											case "POST":
-												r.name = "TransferGroup"
+												r.name = TransferGroupOperation
 												r.summary = "Transfer Group"
 												r.operationID = "transferGroup"
-												r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}/transfer"
+												r.pathPattern = "/v1/organizations/{organizationSlug}/groups/{groupName}/transfer"
 												r.args = args
 												r.count = 2
 												return r, true
@@ -1936,10 +1958,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 												// Leaf node.
 												switch method {
 												case "POST":
-													r.name = "UnarchiveGroup"
+													r.name = UnarchiveGroupOperation
 													r.summary = "Unarchive Group"
 													r.operationID = "unarchiveGroup"
-													r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}/unarchive"
+													r.pathPattern = "/v1/organizations/{organizationSlug}/groups/{groupName}/unarchive"
 													r.args = args
 													r.count = 2
 													return r, true
@@ -1961,10 +1983,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 												// Leaf node.
 												switch method {
 												case "POST":
-													r.name = "UpdateGroupDatabases"
+													r.name = UpdateGroupDatabasesOperation
 													r.summary = "Update Databases in a Group"
 													r.operationID = "updateGroupDatabases"
-													r.pathPattern = "/v1/organizations/{organizationName}/groups/{groupName}/update"
+													r.pathPattern = "/v1/organizations/{organizationSlug}/groups/{groupName}/update"
 													r.args = args
 													r.count = 2
 													return r, true
@@ -2009,18 +2031,18 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								if len(elem) == 0 {
 									switch method {
 									case "GET":
-										r.name = "ListOrganizationInvites"
+										r.name = ListOrganizationInvitesOperation
 										r.summary = "List Invites"
 										r.operationID = "listOrganizationInvites"
-										r.pathPattern = "/v1/organizations/{organizationName}/invites"
+										r.pathPattern = "/v1/organizations/{organizationSlug}/invites"
 										r.args = args
 										r.count = 1
 										return r, true
 									case "POST":
-										r.name = "InviteOrganizationMember"
+										r.name = InviteOrganizationMemberOperation
 										r.summary = "Invite Organization Member"
 										r.operationID = "inviteOrganizationMember"
-										r.pathPattern = "/v1/organizations/{organizationName}/invites"
+										r.pathPattern = "/v1/organizations/{organizationSlug}/invites"
 										r.args = args
 										r.count = 1
 										return r, true
@@ -2046,10 +2068,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 										// Leaf node.
 										switch method {
 										case "DELETE":
-											r.name = "DeleteOrganizationInviteByEmail"
+											r.name = DeleteOrganizationInviteByEmailOperation
 											r.summary = "Delete Invite"
 											r.operationID = "deleteOrganizationInviteByEmail"
-											r.pathPattern = "/v1/organizations/{organizationName}/invites/{email}"
+											r.pathPattern = "/v1/organizations/{organizationSlug}/invites/{email}"
 											r.args = args
 											r.count = 2
 											return r, true
@@ -2074,10 +2096,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									// Leaf node.
 									switch method {
 									case "GET":
-										r.name = "ListOrganizationInvoices"
+										r.name = ListOrganizationInvoicesOperation
 										r.summary = "List Invoices"
 										r.operationID = "listOrganizationInvoices"
-										r.pathPattern = "/v1/organizations/{organizationName}/invoices"
+										r.pathPattern = "/v1/organizations/{organizationSlug}/invoices"
 										r.args = args
 										r.count = 1
 										return r, true
@@ -2101,18 +2123,18 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 							if len(elem) == 0 {
 								switch method {
 								case "GET":
-									r.name = "ListOrganizationMembers"
+									r.name = ListOrganizationMembersOperation
 									r.summary = "List Members"
 									r.operationID = "listOrganizationMembers"
-									r.pathPattern = "/v1/organizations/{organizationName}/members"
+									r.pathPattern = "/v1/organizations/{organizationSlug}/members"
 									r.args = args
 									r.count = 1
 									return r, true
 								case "POST":
-									r.name = "AddOrganizationMember"
+									r.name = AddOrganizationMemberOperation
 									r.summary = "Add Member"
 									r.operationID = "addOrganizationMember"
-									r.pathPattern = "/v1/organizations/{organizationName}/members"
+									r.pathPattern = "/v1/organizations/{organizationSlug}/members"
 									r.args = args
 									r.count = 1
 									return r, true
@@ -2138,10 +2160,26 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									// Leaf node.
 									switch method {
 									case "DELETE":
-										r.name = "RemoveOrganizationMember"
+										r.name = RemoveOrganizationMemberOperation
 										r.summary = "Remove Member"
 										r.operationID = "removeOrganizationMember"
-										r.pathPattern = "/v1/organizations/{organizationName}/members/{username}"
+										r.pathPattern = "/v1/organizations/{organizationSlug}/members/{username}"
+										r.args = args
+										r.count = 2
+										return r, true
+									case "GET":
+										r.name = GetOrganizationMemberOperation
+										r.summary = "Retrieve Member"
+										r.operationID = "getOrganizationMember"
+										r.pathPattern = "/v1/organizations/{organizationSlug}/members/{username}"
+										r.args = args
+										r.count = 2
+										return r, true
+									case "PATCH":
+										r.name = UpdateMemberRoleOperation
+										r.summary = "Update Member Role"
+										r.operationID = "updateMemberRole"
+										r.pathPattern = "/v1/organizations/{organizationSlug}/members/{username}"
 										r.args = args
 										r.count = 2
 										return r, true
@@ -2166,10 +2204,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "GET":
-									r.name = "ListOrganizationPlans"
+									r.name = ListOrganizationPlansOperation
 									r.summary = "List Plans"
 									r.operationID = "listOrganizationPlans"
-									r.pathPattern = "/v1/organizations/{organizationName}/plans"
+									r.pathPattern = "/v1/organizations/{organizationSlug}/plans"
 									r.args = args
 									r.count = 1
 									return r, true
@@ -2191,10 +2229,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "GET":
-									r.name = "GetOrganizationSubscription"
+									r.name = GetOrganizationSubscriptionOperation
 									r.summary = "Current Subscription"
 									r.operationID = "getOrganizationSubscription"
-									r.pathPattern = "/v1/organizations/{organizationName}/subscription"
+									r.pathPattern = "/v1/organizations/{organizationSlug}/subscription"
 									r.args = args
 									r.count = 1
 									return r, true
@@ -2216,10 +2254,10 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 								// Leaf node.
 								switch method {
 								case "GET":
-									r.name = "GetOrganizationUsage"
+									r.name = GetOrganizationUsageOperation
 									r.summary = "Organization Usage"
 									r.operationID = "getOrganizationUsage"
-									r.pathPattern = "/v1/organizations/{organizationName}/usage"
+									r.pathPattern = "/v1/organizations/{organizationSlug}/usage"
 									r.args = args
 									r.count = 1
 									return r, true
