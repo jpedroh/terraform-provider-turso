@@ -101,7 +101,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20.8.1
-      - run: npm i -g semantic-release @jortfal/semantic-release-terraform-config
+      - run: npm i -g semantic-release @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/github
       - run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
