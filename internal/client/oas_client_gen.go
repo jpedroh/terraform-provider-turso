@@ -9,7 +9,6 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
-	"github.com/go-faster/jx"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
@@ -46,7 +45,7 @@ type Invoker interface {
 	// Returns a new API token belonging to a user.
 	//
 	// POST /v1/auth/api-tokens/{tokenName}
-	CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (jx.Raw, error)
+	CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (*CreateAPITokenOK, error)
 	// CreateDatabase invokes createDatabase operation.
 	//
 	// Creates a new database in a group for the organization or user.
@@ -252,7 +251,7 @@ type Invoker interface {
 	// Revokes the provided API token belonging to a user.
 	//
 	// DELETE /v1/auth/api-tokens/{tokenName}
-	RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (jx.Raw, error)
+	RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (*RevokeAPITokenOK, error)
 	// TransferGroup invokes transferGroup operation.
 	//
 	// Transfer a group to another organization that you own or a member of.
@@ -575,12 +574,12 @@ func (c *Client) sendAddOrganizationMember(ctx context.Context, request *AddOrga
 // Returns a new API token belonging to a user.
 //
 // POST /v1/auth/api-tokens/{tokenName}
-func (c *Client) CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (jx.Raw, error) {
+func (c *Client) CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (*CreateAPITokenOK, error) {
 	res, err := c.sendCreateAPIToken(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendCreateAPIToken(ctx context.Context, params CreateAPITokenParams) (res jx.Raw, err error) {
+func (c *Client) sendCreateAPIToken(ctx context.Context, params CreateAPITokenParams) (res *CreateAPITokenOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createAPIToken"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -4190,12 +4189,12 @@ func (c *Client) sendRemoveOrganizationMember(ctx context.Context, params Remove
 // Revokes the provided API token belonging to a user.
 //
 // DELETE /v1/auth/api-tokens/{tokenName}
-func (c *Client) RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (jx.Raw, error) {
+func (c *Client) RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (*RevokeAPITokenOK, error) {
 	res, err := c.sendRevokeAPIToken(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendRevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (res jx.Raw, err error) {
+func (c *Client) sendRevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (res *RevokeAPITokenOK, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("revokeAPIToken"),
 		semconv.HTTPRequestMethodKey.String("DELETE"),

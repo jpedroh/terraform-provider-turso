@@ -430,6 +430,45 @@ func (s *AuditLogCode) UnmarshalText(data []byte) error {
 // The payload of the action performed.
 type AuditLogData struct{}
 
+type CreateAPITokenOK struct {
+	// The name given to the API Token.
+	Name OptString `json:"name"`
+	ID   OptID     `json:"id"`
+	// The actual token contents as a JWT. This is used with the `Bearer` header, see
+	// [Authentication](/authentication) for more details. **This token is never revealed again.**.
+	Token OptString `json:"token"`
+}
+
+// GetName returns the value of Name.
+func (s *CreateAPITokenOK) GetName() OptString {
+	return s.Name
+}
+
+// GetID returns the value of ID.
+func (s *CreateAPITokenOK) GetID() OptID {
+	return s.ID
+}
+
+// GetToken returns the value of Token.
+func (s *CreateAPITokenOK) GetToken() OptString {
+	return s.Token
+}
+
+// SetName sets the value of Name.
+func (s *CreateAPITokenOK) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetID sets the value of ID.
+func (s *CreateAPITokenOK) SetID(val OptID) {
+	s.ID = val
+}
+
+// SetToken sets the value of Token.
+func (s *CreateAPITokenOK) SetToken(val OptString) {
+	s.Token = val
+}
+
 type CreateDatabaseBadRequest struct {
 	// The error message.
 	Error OptString `json:"error"`
@@ -2133,6 +2172,8 @@ func (*GroupNotFoundResponse) unarchiveGroupRes()          {}
 func (*GroupNotFoundResponse) updateGroupDatabasesRes()    {}
 
 type Hostname string
+
+type ID string
 
 // Ref: #/components/schemas/Instance
 type Instance struct {
@@ -4004,6 +4045,52 @@ func (o OptHostname) Or(d Hostname) Hostname {
 	return d
 }
 
+// NewOptID returns new OptID with value set to v.
+func NewOptID(v ID) OptID {
+	return OptID{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptID is optional ID.
+type OptID struct {
+	Value ID
+	Set   bool
+}
+
+// IsSet returns true if OptID was set.
+func (o OptID) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptID) Reset() {
+	var v ID
+	o.Value = v
+	o.Set = false
+}
+
+// SetTo sets value to v.
+func (o *OptID) SetTo(v ID) {
+	o.Set = true
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptID) Get() (v ID, ok bool) {
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptID) Or(d ID) ID {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptInstance returns new OptInstance with value set to v.
 func NewOptInstance(v Instance) OptInstance {
 	return OptInstance{
@@ -5546,6 +5633,21 @@ func (s *RemoveOrganizationMemberOK) SetMember(val OptUsername) {
 }
 
 func (*RemoveOrganizationMemberOK) removeOrganizationMemberRes() {}
+
+type RevokeAPITokenOK struct {
+	// The revoked token name.
+	Token OptString `json:"token"`
+}
+
+// GetToken returns the value of Token.
+func (s *RevokeAPITokenOK) GetToken() OptString {
+	return s.Token
+}
+
+// SetToken sets the value of Token.
+func (s *RevokeAPITokenOK) SetToken(val OptString) {
+	s.Token = val
+}
 
 // The role assigned to the member.
 // Ref: #/components/schemas/Member/properties/role

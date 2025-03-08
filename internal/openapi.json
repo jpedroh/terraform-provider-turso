@@ -2062,9 +2062,12 @@
               "content": {
                 "application/json": {
                   "schema": {
+                    "type": "object",
                     "properties": {
                       "name": {
-                        "$ref": "#/components/schemas/APIToken/properties/name"
+                        "type": "string",
+                        "description": "The name given to the API Token.",
+                        "example": "my-token"
                       },
                       "id": {
                         "$ref": "#/components/schemas/APIToken/properties/id"
@@ -2096,6 +2099,7 @@
               "content": {
                 "application/json": {
                   "schema": {
+                    "type": "object",
                     "properties": {
                       "token": {
                         "type": "string",

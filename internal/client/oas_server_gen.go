@@ -4,8 +4,6 @@ package client
 
 import (
 	"context"
-
-	"github.com/go-faster/jx"
 )
 
 // Handler handles operations described by OpenAPI v3 specification.
@@ -27,7 +25,7 @@ type Handler interface {
 	// Returns a new API token belonging to a user.
 	//
 	// POST /v1/auth/api-tokens/{tokenName}
-	CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (jx.Raw, error)
+	CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (*CreateAPITokenOK, error)
 	// CreateDatabase implements createDatabase operation.
 	//
 	// Creates a new database in a group for the organization or user.
@@ -233,7 +231,7 @@ type Handler interface {
 	// Revokes the provided API token belonging to a user.
 	//
 	// DELETE /v1/auth/api-tokens/{tokenName}
-	RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (jx.Raw, error)
+	RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (*RevokeAPITokenOK, error)
 	// TransferGroup implements transferGroup operation.
 	//
 	// Transfer a group to another organization that you own or a member of.
