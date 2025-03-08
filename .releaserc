@@ -1,0 +1,3 @@
+{
+  "extends": "@jortfal/semantic-release-terraform-config"
+}
