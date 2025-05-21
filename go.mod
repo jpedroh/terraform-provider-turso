@@ -1,6 +1,7 @@
 module terraform-provider-turso
 
-go 1.22.7
+go 1.23.0
+
 toolchain go1.23.7
 
 require (
@@ -10,9 +11,9 @@ require (
 	github.com/hashicorp/terraform-plugin-framework v1.14.1
 	github.com/hashicorp/terraform-plugin-log v0.9.0
 	github.com/ogen-go/ogen v1.10.1
-	go.opentelemetry.io/otel v1.35.0
-	go.opentelemetry.io/otel/metric v1.35.0
-	go.opentelemetry.io/otel/trace v1.35.0
+	go.opentelemetry.io/otel v1.36.0
+	go.opentelemetry.io/otel/metric v1.36.0
+	go.opentelemetry.io/otel/trace v1.36.0
 	go.uber.org/multierr v1.11.0
 )
 
