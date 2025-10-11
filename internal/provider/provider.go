@@ -93,6 +93,7 @@ func (p *TursoProvider) Resources(ctx context.Context) []func() resource.Resourc
 	return []func() resource.Resource{
 		NewDatabaseResource,
 		NewDatabaseTokenResource,
+		NewDatabaseConfigurationResource,
 	}
 }
 
@@ -100,6 +101,7 @@ func (p *TursoProvider) DataSources(ctx context.Context) []func() datasource.Dat
 	return []func() datasource.DataSource{
 		NewDatabaseDataSource,
 		NewOrganizationDataSource,
+		NewDatabaseConfigurationDataSource,
 	}
 }
 
