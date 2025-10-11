@@ -80,25 +80,3 @@ jobs:
           TURSO_API_TOKEN: ${{ secrets.TURSO_API_TOKEN }}
         run: go test -v -cover ./internal/provider/
         timeout-minutes: 10
-  release:
-    permissions:
-      contents: write
-      issues: write
-      pull-requests: write
-      id-token: write
-    runs-on: ubuntu-latest
-    needs: [build, test, generate]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          persist-credentials: false
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.8.1
-      - run: npm i -g semantic-release @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/github
-      - run: npx semantic-release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
