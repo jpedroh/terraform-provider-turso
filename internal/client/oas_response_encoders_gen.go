@@ -103,13 +103,15 @@ func encodeAddOrganizationMemberResponse(response AddOrganizationMemberRes, w ht
 	}
 }
 
-func encodeCreateAPITokenResponse(response *CreateAPITokenOK, w http.ResponseWriter, span trace.Span) error {
+func encodeCreateAPITokenResponse(response jx.Raw, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
-	response.Encode(e)
+	if len(response) != 0 {
+		e.Raw(response)
+	}
 	if _, err := e.WriteTo(w); err != nil {
 		return errors.Wrap(err, "write")
 	}
@@ -553,6 +555,20 @@ func encodeGetGroupResponse(response GetGroupRes, w http.ResponseWriter, span tr
 	}
 }
 
+func encodeGetGroupConfigurationResponse(response *GroupConfigurationResponse, w http.ResponseWriter, span trace.Span) error {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(200)
+	span.SetStatus(codes.Ok, http.StatusText(200))
+
+	e := new(jx.Encoder)
+	response.Encode(e)
+	if _, err := e.WriteTo(w); err != nil {
+		return errors.Wrap(err, "write")
+	}
+
+	return nil
+}
+
 func encodeGetOrganizationResponse(response GetOrganizationRes, w http.ResponseWriter, span trace.Span) error {
 	switch response := response.(type) {
 	case *GetOrganizationOK:
@@ -950,13 +966,15 @@ func encodeRemoveOrganizationMemberResponse(response RemoveOrganizationMemberRes
 	}
 }
 
-func encodeRevokeAPITokenResponse(response *RevokeAPITokenOK, w http.ResponseWriter, span trace.Span) error {
+func encodeRevokeAPITokenResponse(response jx.Raw, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
 
 	e := new(jx.Encoder)
-	response.Encode(e)
+	if len(response) != 0 {
+		e.Raw(response)
+	}
 	if _, err := e.WriteTo(w); err != nil {
 		return errors.Wrap(err, "write")
 	}
@@ -1031,6 +1049,20 @@ func encodeUnarchiveGroupResponse(response UnarchiveGroupRes, w http.ResponseWri
 }
 
 func encodeUpdateDatabaseConfigurationResponse(response *DatabaseConfigurationResponse, w http.ResponseWriter, span trace.Span) error {
+	w.Header().Set("Content-Type", "application/json; charset=utf-8")
+	w.WriteHeader(200)
+	span.SetStatus(codes.Ok, http.StatusText(200))
+
+	e := new(jx.Encoder)
+	response.Encode(e)
+	if _, err := e.WriteTo(w); err != nil {
+		return errors.Wrap(err, "write")
+	}
+
+	return nil
+}
+
+func encodeUpdateGroupConfigurationResponse(response *GroupConfigurationResponse, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))
@@ -1130,20 +1162,6 @@ func encodeUpdateMemberRoleResponse(response UpdateMemberRoleRes, w http.Respons
 }
 
 func encodeUpdateOrganizationResponse(response *UpdateOrganizationOK, w http.ResponseWriter, span trace.Span) error {
-	w.Header().Set("Content-Type", "application/json; charset=utf-8")
-	w.WriteHeader(200)
-	span.SetStatus(codes.Ok, http.StatusText(200))
-
-	e := new(jx.Encoder)
-	response.Encode(e)
-	if _, err := e.WriteTo(w); err != nil {
-		return errors.Wrap(err, "write")
-	}
-
-	return nil
-}
-
-func encodeUploadDatabaseDumpResponse(response *UploadDatabaseDumpOK, w http.ResponseWriter, span trace.Span) error {
 	w.Header().Set("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(200)
 	span.SetStatus(codes.Ok, http.StatusText(200))

@@ -2194,6 +2194,126 @@ func decodeGetGroupParams(args [2]string, argsEscaped bool, r *http.Request) (pa
 	return params, nil
 }
 
+// GetGroupConfigurationParams is parameters of getGroupConfiguration operation.
+type GetGroupConfigurationParams struct {
+	// The slug of the organization or user account.
+	OrganizationSlug string
+	// The name of the group.
+	GroupName string
+}
+
+func unpackGetGroupConfigurationParams(packed middleware.Parameters) (params GetGroupConfigurationParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "organizationSlug",
+			In:   "path",
+		}
+		params.OrganizationSlug = packed[key].(string)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "groupName",
+			In:   "path",
+		}
+		params.GroupName = packed[key].(string)
+	}
+	return params
+}
+
+func decodeGetGroupConfigurationParams(args [2]string, argsEscaped bool, r *http.Request) (params GetGroupConfigurationParams, _ error) {
+	// Decode path: organizationSlug.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "organizationSlug",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.OrganizationSlug = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "organizationSlug",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: groupName.
+	if err := func() error {
+		param := args[1]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[1])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "groupName",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.GroupName = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "groupName",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // GetOrganizationParams is parameters of getOrganization operation.
 type GetOrganizationParams struct {
 	// The slug of the organization or user account.
@@ -2945,7 +3065,11 @@ type ListDatabasesParams struct {
 	// Filter databases by group name.
 	Group OptString
 	// The schema database name that can be used to get databases that belong to that parent schema.
+	//
+	// Deprecated: schema marks this parameter as deprecated.
 	Schema OptString
+	// Filter database branches by using their parent database ID.
+	Parent OptString
 }
 
 func unpackListDatabasesParams(packed middleware.Parameters) (params ListDatabasesParams) {
@@ -2972,6 +3096,15 @@ func unpackListDatabasesParams(packed middleware.Parameters) (params ListDatabas
 		}
 		if v, ok := packed[key]; ok {
 			params.Schema = v.(OptString)
+		}
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "parent",
+			In:   "query",
+		}
+		if v, ok := packed[key]; ok {
+			params.Parent = v.(OptString)
 		}
 	}
 	return params
@@ -3102,6 +3235,47 @@ func decodeListDatabasesParams(args [1]string, argsEscaped bool, r *http.Request
 	}(); err != nil {
 		return params, &ogenerrors.DecodeParamError{
 			Name: "schema",
+			In:   "query",
+			Err:  err,
+		}
+	}
+	// Decode query: parent.
+	if err := func() error {
+		cfg := uri.QueryParameterDecodingConfig{
+			Name:    "parent",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.HasParam(cfg); err == nil {
+			if err := q.DecodeParam(cfg, func(d uri.Decoder) error {
+				var paramsDotParentVal string
+				if err := func() error {
+					val, err := d.DecodeValue()
+					if err != nil {
+						return err
+					}
+
+					c, err := conv.ToString(val)
+					if err != nil {
+						return err
+					}
+
+					paramsDotParentVal = c
+					return nil
+				}(); err != nil {
+					return err
+				}
+				params.Parent.SetTo(paramsDotParentVal)
+				return nil
+			}); err != nil {
+				return err
+			}
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "parent",
 			In:   "query",
 			Err:  err,
 		}
@@ -4398,6 +4572,126 @@ func decodeUpdateDatabaseConfigurationParams(args [2]string, argsEscaped bool, r
 	return params, nil
 }
 
+// UpdateGroupConfigurationParams is parameters of updateGroupConfiguration operation.
+type UpdateGroupConfigurationParams struct {
+	// The slug of the organization or user account.
+	OrganizationSlug string
+	// The name of the group.
+	GroupName string
+}
+
+func unpackUpdateGroupConfigurationParams(packed middleware.Parameters) (params UpdateGroupConfigurationParams) {
+	{
+		key := middleware.ParameterKey{
+			Name: "organizationSlug",
+			In:   "path",
+		}
+		params.OrganizationSlug = packed[key].(string)
+	}
+	{
+		key := middleware.ParameterKey{
+			Name: "groupName",
+			In:   "path",
+		}
+		params.GroupName = packed[key].(string)
+	}
+	return params
+}
+
+func decodeUpdateGroupConfigurationParams(args [2]string, argsEscaped bool, r *http.Request) (params UpdateGroupConfigurationParams, _ error) {
+	// Decode path: organizationSlug.
+	if err := func() error {
+		param := args[0]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[0])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "organizationSlug",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.OrganizationSlug = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "organizationSlug",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	// Decode path: groupName.
+	if err := func() error {
+		param := args[1]
+		if argsEscaped {
+			unescaped, err := url.PathUnescape(args[1])
+			if err != nil {
+				return errors.Wrap(err, "unescape path")
+			}
+			param = unescaped
+		}
+		if len(param) > 0 {
+			d := uri.NewPathDecoder(uri.PathDecoderConfig{
+				Param:   "groupName",
+				Value:   param,
+				Style:   uri.PathStyleSimple,
+				Explode: false,
+			})
+
+			if err := func() error {
+				val, err := d.DecodeValue()
+				if err != nil {
+					return err
+				}
+
+				c, err := conv.ToString(val)
+				if err != nil {
+					return err
+				}
+
+				params.GroupName = c
+				return nil
+			}(); err != nil {
+				return err
+			}
+		} else {
+			return validate.ErrFieldRequired
+		}
+		return nil
+	}(); err != nil {
+		return params, &ogenerrors.DecodeParamError{
+			Name: "groupName",
+			In:   "path",
+			Err:  err,
+		}
+	}
+	return params, nil
+}
+
 // UpdateGroupDatabasesParams is parameters of updateGroupDatabases operation.
 type UpdateGroupDatabasesParams struct {
 	// The slug of the organization or user account.
@@ -4656,72 +4950,6 @@ func unpackUpdateOrganizationParams(packed middleware.Parameters) (params Update
 }
 
 func decodeUpdateOrganizationParams(args [1]string, argsEscaped bool, r *http.Request) (params UpdateOrganizationParams, _ error) {
-	// Decode path: organizationSlug.
-	if err := func() error {
-		param := args[0]
-		if argsEscaped {
-			unescaped, err := url.PathUnescape(args[0])
-			if err != nil {
-				return errors.Wrap(err, "unescape path")
-			}
-			param = unescaped
-		}
-		if len(param) > 0 {
-			d := uri.NewPathDecoder(uri.PathDecoderConfig{
-				Param:   "organizationSlug",
-				Value:   param,
-				Style:   uri.PathStyleSimple,
-				Explode: false,
-			})
-
-			if err := func() error {
-				val, err := d.DecodeValue()
-				if err != nil {
-					return err
-				}
-
-				c, err := conv.ToString(val)
-				if err != nil {
-					return err
-				}
-
-				params.OrganizationSlug = c
-				return nil
-			}(); err != nil {
-				return err
-			}
-		} else {
-			return validate.ErrFieldRequired
-		}
-		return nil
-	}(); err != nil {
-		return params, &ogenerrors.DecodeParamError{
-			Name: "organizationSlug",
-			In:   "path",
-			Err:  err,
-		}
-	}
-	return params, nil
-}
-
-// UploadDatabaseDumpParams is parameters of uploadDatabaseDump operation.
-type UploadDatabaseDumpParams struct {
-	// The slug of the organization or user account.
-	OrganizationSlug string
-}
-
-func unpackUploadDatabaseDumpParams(packed middleware.Parameters) (params UploadDatabaseDumpParams) {
-	{
-		key := middleware.ParameterKey{
-			Name: "organizationSlug",
-			In:   "path",
-		}
-		params.OrganizationSlug = packed[key].(string)
-	}
-	return params
-}
-
-func decodeUploadDatabaseDumpParams(args [1]string, argsEscaped bool, r *http.Request) (params UploadDatabaseDumpParams, _ error) {
 	// Decode path: organizationSlug.
 	if err := func() error {
 		param := args[0]

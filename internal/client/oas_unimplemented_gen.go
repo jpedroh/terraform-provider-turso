@@ -5,6 +5,8 @@ package client
 import (
 	"context"
 
+	"github.com/go-faster/jx"
+
 	ht "github.com/ogen-go/ogen/http"
 )
 
@@ -36,7 +38,7 @@ func (UnimplementedHandler) AddOrganizationMember(ctx context.Context, req *AddO
 // Returns a new API token belonging to a user.
 //
 // POST /v1/auth/api-tokens/{tokenName}
-func (UnimplementedHandler) CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (r *CreateAPITokenOK, _ error) {
+func (UnimplementedHandler) CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (r jx.Raw, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -154,6 +156,15 @@ func (UnimplementedHandler) GetDatabaseUsage(ctx context.Context, params GetData
 //
 // GET /v1/organizations/{organizationSlug}/groups/{groupName}
 func (UnimplementedHandler) GetGroup(ctx context.Context, params GetGroupParams) (r GetGroupRes, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
+// GetGroupConfiguration implements getGroupConfiguration operation.
+//
+// Retrieve an individual group configuration belonging to the organization or user.
+//
+// GET /v1/organizations/{organizationSlug}/groups/{groupName}/configuration
+func (UnimplementedHandler) GetGroupConfiguration(ctx context.Context, params GetGroupConfigurationParams) (r *GroupConfigurationResponse, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -344,7 +355,7 @@ func (UnimplementedHandler) RemoveOrganizationMember(ctx context.Context, params
 // Revokes the provided API token belonging to a user.
 //
 // DELETE /v1/auth/api-tokens/{tokenName}
-func (UnimplementedHandler) RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (r *RevokeAPITokenOK, _ error) {
+func (UnimplementedHandler) RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (r jx.Raw, _ error) {
 	return r, ht.ErrNotImplemented
 }
 
@@ -375,6 +386,15 @@ func (UnimplementedHandler) UpdateDatabaseConfiguration(ctx context.Context, req
 	return r, ht.ErrNotImplemented
 }
 
+// UpdateGroupConfiguration implements updateGroupConfiguration operation.
+//
+// Update a group configuration belonging to the organization or user.
+//
+// PATCH /v1/organizations/{organizationSlug}/groups/{groupName}/configuration
+func (UnimplementedHandler) UpdateGroupConfiguration(ctx context.Context, req *GroupConfigurationInput, params UpdateGroupConfigurationParams) (r *GroupConfigurationResponse, _ error) {
+	return r, ht.ErrNotImplemented
+}
+
 // UpdateGroupDatabases implements updateGroupDatabases operation.
 //
 // Updates all databases in the group to the latest libSQL version.
@@ -400,16 +420,6 @@ func (UnimplementedHandler) UpdateMemberRole(ctx context.Context, req *UpdateMem
 //
 // PATCH /v1/organizations/{organizationSlug}
 func (UnimplementedHandler) UpdateOrganization(ctx context.Context, req *UpdateOrganizationReq, params UpdateOrganizationParams) (r *UpdateOrganizationOK, _ error) {
-	return r, ht.ErrNotImplemented
-}
-
-// UploadDatabaseDump implements uploadDatabaseDump operation.
-//
-// Upload a SQL dump to be used when [creating a new database](/api-reference/databases/create) from
-// seed.
-//
-// POST /v1/organizations/{organizationSlug}/databases/dumps
-func (UnimplementedHandler) UploadDatabaseDump(ctx context.Context, req *UploadDatabaseDumpReq, params UploadDatabaseDumpParams) (r *UploadDatabaseDumpOK, _ error) {
 	return r, ht.ErrNotImplemented
 }
 

@@ -121,6 +121,16 @@ func (s AuditLogCode) Validate() error {
 		return nil
 	case "db-delete":
 		return nil
+	case "db-protect":
+		return nil
+	case "db-unprotect":
+		return nil
+	case "db-token-create":
+		return nil
+	case "group-token-create":
+		return nil
+	case "user-token-create":
+		return nil
 	case "instance-create":
 		return nil
 	case "instance-delete":
@@ -143,9 +153,15 @@ func (s AuditLogCode) Validate() error {
 		return nil
 	case "group-delete":
 		return nil
-	case "mfa-enable":
+	case "group-unarchive":
 		return nil
-	case "mfa-disable":
+	case "group-protect":
+		return nil
+	case "group-unprotect":
+		return nil
+	case "db-aunrchive":
+		return nil
+	case "user-delete":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)
@@ -216,7 +232,7 @@ func (s CreateDatabaseInputSeedType) Validate() error {
 	switch s {
 	case "database":
 		return nil
-	case "dump":
+	case "database_upload":
 		return nil
 	default:
 		return errors.Errorf("invalid value: %v", s)

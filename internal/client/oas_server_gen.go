@@ -4,6 +4,8 @@ package client
 
 import (
 	"context"
+
+	"github.com/go-faster/jx"
 )
 
 // Handler handles operations described by OpenAPI v3 specification.
@@ -25,7 +27,7 @@ type Handler interface {
 	// Returns a new API token belonging to a user.
 	//
 	// POST /v1/auth/api-tokens/{tokenName}
-	CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (*CreateAPITokenOK, error)
+	CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (jx.Raw, error)
 	// CreateDatabase implements createDatabase operation.
 	//
 	// Creates a new database in a group for the organization or user.
@@ -104,6 +106,12 @@ type Handler interface {
 	//
 	// GET /v1/organizations/{organizationSlug}/groups/{groupName}
 	GetGroup(ctx context.Context, params GetGroupParams) (GetGroupRes, error)
+	// GetGroupConfiguration implements getGroupConfiguration operation.
+	//
+	// Retrieve an individual group configuration belonging to the organization or user.
+	//
+	// GET /v1/organizations/{organizationSlug}/groups/{groupName}/configuration
+	GetGroupConfiguration(ctx context.Context, params GetGroupConfigurationParams) (*GroupConfigurationResponse, error)
 	// GetOrganization implements getOrganization operation.
 	//
 	// Retrieve details of a specific organization.
@@ -231,7 +239,7 @@ type Handler interface {
 	// Revokes the provided API token belonging to a user.
 	//
 	// DELETE /v1/auth/api-tokens/{tokenName}
-	RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (*RevokeAPITokenOK, error)
+	RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (jx.Raw, error)
 	// TransferGroup implements transferGroup operation.
 	//
 	// Transfer a group to another organization that you own or a member of.
@@ -250,6 +258,12 @@ type Handler interface {
 	//
 	// PATCH /v1/organizations/{organizationSlug}/databases/{databaseName}/configuration
 	UpdateDatabaseConfiguration(ctx context.Context, req *DatabaseConfigurationInput, params UpdateDatabaseConfigurationParams) (*DatabaseConfigurationResponse, error)
+	// UpdateGroupConfiguration implements updateGroupConfiguration operation.
+	//
+	// Update a group configuration belonging to the organization or user.
+	//
+	// PATCH /v1/organizations/{organizationSlug}/groups/{groupName}/configuration
+	UpdateGroupConfiguration(ctx context.Context, req *GroupConfigurationInput, params UpdateGroupConfigurationParams) (*GroupConfigurationResponse, error)
 	// UpdateGroupDatabases implements updateGroupDatabases operation.
 	//
 	// Updates all databases in the group to the latest libSQL version.
@@ -269,13 +283,6 @@ type Handler interface {
 	//
 	// PATCH /v1/organizations/{organizationSlug}
 	UpdateOrganization(ctx context.Context, req *UpdateOrganizationReq, params UpdateOrganizationParams) (*UpdateOrganizationOK, error)
-	// UploadDatabaseDump implements uploadDatabaseDump operation.
-	//
-	// Upload a SQL dump to be used when [creating a new database](/api-reference/databases/create) from
-	// seed.
-	//
-	// POST /v1/organizations/{organizationSlug}/databases/dumps
-	UploadDatabaseDump(ctx context.Context, req *UploadDatabaseDumpReq, params UploadDatabaseDumpParams) (*UploadDatabaseDumpOK, error)
 	// ValidateAPIToken implements validateAPIToken operation.
 	//
 	// Validates an API token belonging to a user.

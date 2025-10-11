@@ -293,34 +293,6 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 									break
 								}
 
-								if len(elem) == 0 {
-									break
-								}
-								switch elem[0] {
-								case 'd': // Prefix: "dumps"
-									origElem := elem
-									if l := len("dumps"); len(elem) >= l && elem[0:l] == "dumps" {
-										elem = elem[l:]
-									} else {
-										break
-									}
-
-									if len(elem) == 0 {
-										// Leaf node.
-										switch r.Method {
-										case "POST":
-											s.handleUploadDatabaseDumpRequest([1]string{
-												args[0],
-											}, elemIsEscaped, w, r)
-										default:
-											s.notAllowed(w, r, "POST")
-										}
-
-										return
-									}
-
-									elem = origElem
-								}
 								// Param: "databaseName"
 								// Match until "/"
 								idx := strings.IndexByte(elem, '/')
@@ -698,6 +670,35 @@ func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 											}
 
 											elem = origElem
+										}
+
+										elem = origElem
+									case 'c': // Prefix: "configuration"
+										origElem := elem
+										if l := len("configuration"); len(elem) >= l && elem[0:l] == "configuration" {
+											elem = elem[l:]
+										} else {
+											break
+										}
+
+										if len(elem) == 0 {
+											// Leaf node.
+											switch r.Method {
+											case "GET":
+												s.handleGetGroupConfigurationRequest([2]string{
+													args[0],
+													args[1],
+												}, elemIsEscaped, w, r)
+											case "PATCH":
+												s.handleUpdateGroupConfigurationRequest([2]string{
+													args[0],
+													args[1],
+												}, elemIsEscaped, w, r)
+											default:
+												s.notAllowed(w, r, "GET,PATCH")
+											}
+
+											return
 										}
 
 										elem = origElem
@@ -1436,36 +1437,6 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 									break
 								}
 
-								if len(elem) == 0 {
-									break
-								}
-								switch elem[0] {
-								case 'd': // Prefix: "dumps"
-									origElem := elem
-									if l := len("dumps"); len(elem) >= l && elem[0:l] == "dumps" {
-										elem = elem[l:]
-									} else {
-										break
-									}
-
-									if len(elem) == 0 {
-										// Leaf node.
-										switch method {
-										case "POST":
-											r.name = UploadDatabaseDumpOperation
-											r.summary = "Upload SQLite Dump"
-											r.operationID = "uploadDatabaseDump"
-											r.pathPattern = "/v1/organizations/{organizationSlug}/databases/dumps"
-											r.args = args
-											r.count = 1
-											return r, true
-										default:
-											return
-										}
-									}
-
-									elem = origElem
-								}
 								// Param: "databaseName"
 								// Match until "/"
 								idx := strings.IndexByte(elem, '/')
@@ -1868,6 +1839,39 @@ func (s *Server) FindPath(method string, u *url.URL) (r Route, _ bool) {
 											}
 
 											elem = origElem
+										}
+
+										elem = origElem
+									case 'c': // Prefix: "configuration"
+										origElem := elem
+										if l := len("configuration"); len(elem) >= l && elem[0:l] == "configuration" {
+											elem = elem[l:]
+										} else {
+											break
+										}
+
+										if len(elem) == 0 {
+											// Leaf node.
+											switch method {
+											case "GET":
+												r.name = GetGroupConfigurationOperation
+												r.summary = "Retrieve Group Configuration"
+												r.operationID = "getGroupConfiguration"
+												r.pathPattern = "/v1/organizations/{organizationSlug}/groups/{groupName}/configuration"
+												r.args = args
+												r.count = 2
+												return r, true
+											case "PATCH":
+												r.name = UpdateGroupConfigurationOperation
+												r.summary = "Update Group Configuration"
+												r.operationID = "updateGroupConfiguration"
+												r.pathPattern = "/v1/organizations/{organizationSlug}/groups/{groupName}/configuration"
+												r.args = args
+												r.count = 2
+												return r, true
+											default:
+												return
+											}
 										}
 
 										elem = origElem
