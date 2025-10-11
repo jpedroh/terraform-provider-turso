@@ -3,12 +3,9 @@
 package client
 
 import (
-	"net/url"
 	"time"
 
 	"github.com/go-faster/errors"
-
-	ht "github.com/ogen-go/ogen/http"
 )
 
 // Ref: #/components/schemas/APIToken
@@ -291,22 +288,30 @@ func (s *AuditLog) SetData(val *AuditLogData) {
 type AuditLogCode string
 
 const (
-	AuditLogCodeUserSignup     AuditLogCode = "user-signup"
-	AuditLogCodeDbCreate       AuditLogCode = "db-create"
-	AuditLogCodeDbDelete       AuditLogCode = "db-delete"
-	AuditLogCodeInstanceCreate AuditLogCode = "instance-create"
-	AuditLogCodeInstanceDelete AuditLogCode = "instance-delete"
-	AuditLogCodeOrgCreate      AuditLogCode = "org-create"
-	AuditLogCodeOrgDelete      AuditLogCode = "org-delete"
-	AuditLogCodeOrgMemberAdd   AuditLogCode = "org-member-add"
-	AuditLogCodeOrgMemberRm    AuditLogCode = "org-member-rm"
-	AuditLogCodeOrgMemberLeave AuditLogCode = "org-member-leave"
-	AuditLogCodeOrgPlanUpdate  AuditLogCode = "org-plan-update"
-	AuditLogCodeOrgSetOverages AuditLogCode = "org-set-overages"
-	AuditLogCodeGroupCreate    AuditLogCode = "group-create"
-	AuditLogCodeGroupDelete    AuditLogCode = "group-delete"
-	AuditLogCodeMfaEnable      AuditLogCode = "mfa-enable"
-	AuditLogCodeMfaDisable     AuditLogCode = "mfa-disable"
+	AuditLogCodeUserSignup       AuditLogCode = "user-signup"
+	AuditLogCodeDbCreate         AuditLogCode = "db-create"
+	AuditLogCodeDbDelete         AuditLogCode = "db-delete"
+	AuditLogCodeDbProtect        AuditLogCode = "db-protect"
+	AuditLogCodeDbUnprotect      AuditLogCode = "db-unprotect"
+	AuditLogCodeDbTokenCreate    AuditLogCode = "db-token-create"
+	AuditLogCodeGroupTokenCreate AuditLogCode = "group-token-create"
+	AuditLogCodeUserTokenCreate  AuditLogCode = "user-token-create"
+	AuditLogCodeInstanceCreate   AuditLogCode = "instance-create"
+	AuditLogCodeInstanceDelete   AuditLogCode = "instance-delete"
+	AuditLogCodeOrgCreate        AuditLogCode = "org-create"
+	AuditLogCodeOrgDelete        AuditLogCode = "org-delete"
+	AuditLogCodeOrgMemberAdd     AuditLogCode = "org-member-add"
+	AuditLogCodeOrgMemberRm      AuditLogCode = "org-member-rm"
+	AuditLogCodeOrgMemberLeave   AuditLogCode = "org-member-leave"
+	AuditLogCodeOrgPlanUpdate    AuditLogCode = "org-plan-update"
+	AuditLogCodeOrgSetOverages   AuditLogCode = "org-set-overages"
+	AuditLogCodeGroupCreate      AuditLogCode = "group-create"
+	AuditLogCodeGroupDelete      AuditLogCode = "group-delete"
+	AuditLogCodeGroupUnarchive   AuditLogCode = "group-unarchive"
+	AuditLogCodeGroupProtect     AuditLogCode = "group-protect"
+	AuditLogCodeGroupUnprotect   AuditLogCode = "group-unprotect"
+	AuditLogCodeDbAunrchive      AuditLogCode = "db-aunrchive"
+	AuditLogCodeUserDelete       AuditLogCode = "user-delete"
 )
 
 // AllValues returns all AuditLogCode values.
@@ -315,6 +320,11 @@ func (AuditLogCode) AllValues() []AuditLogCode {
 		AuditLogCodeUserSignup,
 		AuditLogCodeDbCreate,
 		AuditLogCodeDbDelete,
+		AuditLogCodeDbProtect,
+		AuditLogCodeDbUnprotect,
+		AuditLogCodeDbTokenCreate,
+		AuditLogCodeGroupTokenCreate,
+		AuditLogCodeUserTokenCreate,
 		AuditLogCodeInstanceCreate,
 		AuditLogCodeInstanceDelete,
 		AuditLogCodeOrgCreate,
@@ -326,8 +336,11 @@ func (AuditLogCode) AllValues() []AuditLogCode {
 		AuditLogCodeOrgSetOverages,
 		AuditLogCodeGroupCreate,
 		AuditLogCodeGroupDelete,
-		AuditLogCodeMfaEnable,
-		AuditLogCodeMfaDisable,
+		AuditLogCodeGroupUnarchive,
+		AuditLogCodeGroupProtect,
+		AuditLogCodeGroupUnprotect,
+		AuditLogCodeDbAunrchive,
+		AuditLogCodeUserDelete,
 	}
 }
 
@@ -339,6 +352,16 @@ func (s AuditLogCode) MarshalText() ([]byte, error) {
 	case AuditLogCodeDbCreate:
 		return []byte(s), nil
 	case AuditLogCodeDbDelete:
+		return []byte(s), nil
+	case AuditLogCodeDbProtect:
+		return []byte(s), nil
+	case AuditLogCodeDbUnprotect:
+		return []byte(s), nil
+	case AuditLogCodeDbTokenCreate:
+		return []byte(s), nil
+	case AuditLogCodeGroupTokenCreate:
+		return []byte(s), nil
+	case AuditLogCodeUserTokenCreate:
 		return []byte(s), nil
 	case AuditLogCodeInstanceCreate:
 		return []byte(s), nil
@@ -362,9 +385,15 @@ func (s AuditLogCode) MarshalText() ([]byte, error) {
 		return []byte(s), nil
 	case AuditLogCodeGroupDelete:
 		return []byte(s), nil
-	case AuditLogCodeMfaEnable:
+	case AuditLogCodeGroupUnarchive:
 		return []byte(s), nil
-	case AuditLogCodeMfaDisable:
+	case AuditLogCodeGroupProtect:
+		return []byte(s), nil
+	case AuditLogCodeGroupUnprotect:
+		return []byte(s), nil
+	case AuditLogCodeDbAunrchive:
+		return []byte(s), nil
+	case AuditLogCodeUserDelete:
 		return []byte(s), nil
 	default:
 		return nil, errors.Errorf("invalid value: %q", s)
@@ -382,6 +411,21 @@ func (s *AuditLogCode) UnmarshalText(data []byte) error {
 		return nil
 	case AuditLogCodeDbDelete:
 		*s = AuditLogCodeDbDelete
+		return nil
+	case AuditLogCodeDbProtect:
+		*s = AuditLogCodeDbProtect
+		return nil
+	case AuditLogCodeDbUnprotect:
+		*s = AuditLogCodeDbUnprotect
+		return nil
+	case AuditLogCodeDbTokenCreate:
+		*s = AuditLogCodeDbTokenCreate
+		return nil
+	case AuditLogCodeGroupTokenCreate:
+		*s = AuditLogCodeGroupTokenCreate
+		return nil
+	case AuditLogCodeUserTokenCreate:
+		*s = AuditLogCodeUserTokenCreate
 		return nil
 	case AuditLogCodeInstanceCreate:
 		*s = AuditLogCodeInstanceCreate
@@ -416,11 +460,20 @@ func (s *AuditLogCode) UnmarshalText(data []byte) error {
 	case AuditLogCodeGroupDelete:
 		*s = AuditLogCodeGroupDelete
 		return nil
-	case AuditLogCodeMfaEnable:
-		*s = AuditLogCodeMfaEnable
+	case AuditLogCodeGroupUnarchive:
+		*s = AuditLogCodeGroupUnarchive
 		return nil
-	case AuditLogCodeMfaDisable:
-		*s = AuditLogCodeMfaDisable
+	case AuditLogCodeGroupProtect:
+		*s = AuditLogCodeGroupProtect
+		return nil
+	case AuditLogCodeGroupUnprotect:
+		*s = AuditLogCodeGroupUnprotect
+		return nil
+	case AuditLogCodeDbAunrchive:
+		*s = AuditLogCodeDbAunrchive
+		return nil
+	case AuditLogCodeUserDelete:
+		*s = AuditLogCodeUserDelete
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
@@ -429,45 +482,6 @@ func (s *AuditLogCode) UnmarshalText(data []byte) error {
 
 // The payload of the action performed.
 type AuditLogData struct{}
-
-type CreateAPITokenOK struct {
-	// The name given to the API Token.
-	Name OptString `json:"name"`
-	ID   OptID     `json:"id"`
-	// The actual token contents as a JWT. This is used with the `Bearer` header, see
-	// [Authentication](/authentication) for more details. **This token is never revealed again.**.
-	Token OptString `json:"token"`
-}
-
-// GetName returns the value of Name.
-func (s *CreateAPITokenOK) GetName() OptString {
-	return s.Name
-}
-
-// GetID returns the value of ID.
-func (s *CreateAPITokenOK) GetID() OptID {
-	return s.ID
-}
-
-// GetToken returns the value of Token.
-func (s *CreateAPITokenOK) GetToken() OptString {
-	return s.Token
-}
-
-// SetName sets the value of Name.
-func (s *CreateAPITokenOK) SetName(val OptString) {
-	s.Name = val
-}
-
-// SetID sets the value of ID.
-func (s *CreateAPITokenOK) SetID(val OptID) {
-	s.ID = val
-}
-
-// SetToken sets the value of Token.
-func (s *CreateAPITokenOK) SetToken(val OptString) {
-	s.Token = val
-}
 
 type CreateDatabaseBadRequest struct {
 	// The error message.
@@ -514,12 +528,6 @@ type CreateDatabaseInput struct {
 	// The maximum size of the database in bytes. Values with units are also accepted, e.g. 1mb, 256mb,
 	// 1gb.
 	SizeLimit OptString `json:"size_limit"`
-	// Mark this database as the parent schema database that updates child databases with any schema
-	// changes. See [Multi-DB Schemas](/features/multi-db-schemas).
-	IsSchema OptBool `json:"is_schema"`
-	// The name of the parent database to use as the schema. See [Multi-DB
-	// Schemas](/features/multi-db-schemas).
-	Schema OptString `json:"schema"`
 }
 
 // GetName returns the value of Name.
@@ -542,16 +550,6 @@ func (s *CreateDatabaseInput) GetSizeLimit() OptString {
 	return s.SizeLimit
 }
 
-// GetIsSchema returns the value of IsSchema.
-func (s *CreateDatabaseInput) GetIsSchema() OptBool {
-	return s.IsSchema
-}
-
-// GetSchema returns the value of Schema.
-func (s *CreateDatabaseInput) GetSchema() OptString {
-	return s.Schema
-}
-
 // SetName sets the value of Name.
 func (s *CreateDatabaseInput) SetName(val string) {
 	s.Name = val
@@ -572,24 +570,11 @@ func (s *CreateDatabaseInput) SetSizeLimit(val OptString) {
 	s.SizeLimit = val
 }
 
-// SetIsSchema sets the value of IsSchema.
-func (s *CreateDatabaseInput) SetIsSchema(val OptBool) {
-	s.IsSchema = val
-}
-
-// SetSchema sets the value of Schema.
-func (s *CreateDatabaseInput) SetSchema(val OptString) {
-	s.Schema = val
-}
-
 type CreateDatabaseInputSeed struct {
 	// The type of seed to be used to create a new database.
 	Type OptCreateDatabaseInputSeedType `json:"type"`
 	// The name of the existing database when `database` is used as a seed type.
 	Name OptString `json:"name"`
-	// The URL returned by [upload dump](/api-reference/databases/upload-dump) can be used with the
-	// `dump` seed type.
-	URL OptString `json:"url"`
 	// A formatted [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) recovery point to create a database
 	// from. This must be within the last 24 hours, or 30 days on the scaler plan.
 	Timestamp OptString `json:"timestamp"`
@@ -603,11 +588,6 @@ func (s *CreateDatabaseInputSeed) GetType() OptCreateDatabaseInputSeedType {
 // GetName returns the value of Name.
 func (s *CreateDatabaseInputSeed) GetName() OptString {
 	return s.Name
-}
-
-// GetURL returns the value of URL.
-func (s *CreateDatabaseInputSeed) GetURL() OptString {
-	return s.URL
 }
 
 // GetTimestamp returns the value of Timestamp.
@@ -625,11 +605,6 @@ func (s *CreateDatabaseInputSeed) SetName(val OptString) {
 	s.Name = val
 }
 
-// SetURL sets the value of URL.
-func (s *CreateDatabaseInputSeed) SetURL(val OptString) {
-	s.URL = val
-}
-
 // SetTimestamp sets the value of Timestamp.
 func (s *CreateDatabaseInputSeed) SetTimestamp(val OptString) {
 	s.Timestamp = val
@@ -639,15 +614,15 @@ func (s *CreateDatabaseInputSeed) SetTimestamp(val OptString) {
 type CreateDatabaseInputSeedType string
 
 const (
-	CreateDatabaseInputSeedTypeDatabase CreateDatabaseInputSeedType = "database"
-	CreateDatabaseInputSeedTypeDump     CreateDatabaseInputSeedType = "dump"
+	CreateDatabaseInputSeedTypeDatabase       CreateDatabaseInputSeedType = "database"
+	CreateDatabaseInputSeedTypeDatabaseUpload CreateDatabaseInputSeedType = "database_upload"
 )
 
 // AllValues returns all CreateDatabaseInputSeedType values.
 func (CreateDatabaseInputSeedType) AllValues() []CreateDatabaseInputSeedType {
 	return []CreateDatabaseInputSeedType{
 		CreateDatabaseInputSeedTypeDatabase,
-		CreateDatabaseInputSeedTypeDump,
+		CreateDatabaseInputSeedTypeDatabaseUpload,
 	}
 }
 
@@ -656,7 +631,7 @@ func (s CreateDatabaseInputSeedType) MarshalText() ([]byte, error) {
 	switch s {
 	case CreateDatabaseInputSeedTypeDatabase:
 		return []byte(s), nil
-	case CreateDatabaseInputSeedTypeDump:
+	case CreateDatabaseInputSeedTypeDatabaseUpload:
 		return []byte(s), nil
 	default:
 		return nil, errors.Errorf("invalid value: %q", s)
@@ -669,8 +644,8 @@ func (s *CreateDatabaseInputSeedType) UnmarshalText(data []byte) error {
 	case CreateDatabaseInputSeedTypeDatabase:
 		*s = CreateDatabaseInputSeedTypeDatabase
 		return nil
-	case CreateDatabaseInputSeedTypeDump:
-		*s = CreateDatabaseInputSeedTypeDump
+	case CreateDatabaseInputSeedTypeDatabaseUpload:
+		*s = CreateDatabaseInputSeedTypeDatabaseUpload
 		return nil
 	default:
 		return errors.Errorf("invalid value: %q", data)
@@ -974,27 +949,17 @@ type Database struct {
 	BlockReads OptBool `json:"block_reads"`
 	// The current status for blocked writes.
 	BlockWrites OptBool `json:"block_writes"`
-	// The current status for allowing the database to be attached to another.
-	AllowAttach OptBool `json:"allow_attach"`
 	// A list of regions for the group the database belongs to.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	Regions []string `json:"regions"`
 	// The primary region location code the group the database belongs to.
 	PrimaryRegion OptString `json:"primaryRegion"`
-	// The string representing the object type.
-	Type OptString `json:"type"`
-	// The current libSQL version the database is running.
-	Version OptString `json:"version"`
 	// The name of the group the database belongs to.
 	Group OptString `json:"group"`
-	// If this database controls other child databases then this will be `true`. See [Multi-DB
-	// Schemas](/features/multi-db-schemas).
-	IsSchema OptBool `json:"is_schema"`
-	// The name of the parent database that owns the schema for this database. See [Multi-DB
-	// Schemas](/features/multi-db-schemas).
-	Schema OptNilString `json:"schema"`
-	// The current status of the database. If `true`, the database is archived and requires a manual
-	// unarchive step.
-	Archived OptBool `json:"archived"`
+	// The current status for delete protection. If enabled, the database cannot be deleted.
+	DeleteProtection OptBool              `json:"delete_protection"`
+	Parent           OptNilDatabaseParent `json:"parent"`
 }
 
 // GetName returns the value of Name.
@@ -1022,11 +987,6 @@ func (s *Database) GetBlockWrites() OptBool {
 	return s.BlockWrites
 }
 
-// GetAllowAttach returns the value of AllowAttach.
-func (s *Database) GetAllowAttach() OptBool {
-	return s.AllowAttach
-}
-
 // GetRegions returns the value of Regions.
 func (s *Database) GetRegions() []string {
 	return s.Regions
@@ -1037,34 +997,19 @@ func (s *Database) GetPrimaryRegion() OptString {
 	return s.PrimaryRegion
 }
 
-// GetType returns the value of Type.
-func (s *Database) GetType() OptString {
-	return s.Type
-}
-
-// GetVersion returns the value of Version.
-func (s *Database) GetVersion() OptString {
-	return s.Version
-}
-
 // GetGroup returns the value of Group.
 func (s *Database) GetGroup() OptString {
 	return s.Group
 }
 
-// GetIsSchema returns the value of IsSchema.
-func (s *Database) GetIsSchema() OptBool {
-	return s.IsSchema
+// GetDeleteProtection returns the value of DeleteProtection.
+func (s *Database) GetDeleteProtection() OptBool {
+	return s.DeleteProtection
 }
 
-// GetSchema returns the value of Schema.
-func (s *Database) GetSchema() OptNilString {
-	return s.Schema
-}
-
-// GetArchived returns the value of Archived.
-func (s *Database) GetArchived() OptBool {
-	return s.Archived
+// GetParent returns the value of Parent.
+func (s *Database) GetParent() OptNilDatabaseParent {
+	return s.Parent
 }
 
 // SetName sets the value of Name.
@@ -1092,11 +1037,6 @@ func (s *Database) SetBlockWrites(val OptBool) {
 	s.BlockWrites = val
 }
 
-// SetAllowAttach sets the value of AllowAttach.
-func (s *Database) SetAllowAttach(val OptBool) {
-	s.AllowAttach = val
-}
-
 // SetRegions sets the value of Regions.
 func (s *Database) SetRegions(val []string) {
 	s.Regions = val
@@ -1107,34 +1047,19 @@ func (s *Database) SetPrimaryRegion(val OptString) {
 	s.PrimaryRegion = val
 }
 
-// SetType sets the value of Type.
-func (s *Database) SetType(val OptString) {
-	s.Type = val
-}
-
-// SetVersion sets the value of Version.
-func (s *Database) SetVersion(val OptString) {
-	s.Version = val
-}
-
 // SetGroup sets the value of Group.
 func (s *Database) SetGroup(val OptString) {
 	s.Group = val
 }
 
-// SetIsSchema sets the value of IsSchema.
-func (s *Database) SetIsSchema(val OptBool) {
-	s.IsSchema = val
+// SetDeleteProtection sets the value of DeleteProtection.
+func (s *Database) SetDeleteProtection(val OptBool) {
+	s.DeleteProtection = val
 }
 
-// SetSchema sets the value of Schema.
-func (s *Database) SetSchema(val OptNilString) {
-	s.Schema = val
-}
-
-// SetArchived sets the value of Archived.
-func (s *Database) SetArchived(val OptBool) {
-	s.Archived = val
+// SetParent sets the value of Parent.
+func (s *Database) SetParent(val OptNilDatabaseParent) {
+	s.Parent = val
 }
 
 // Ref: #/components/schemas/DatabaseConfigurationInput
@@ -1143,11 +1068,15 @@ type DatabaseConfigurationInput struct {
 	// 1gb.
 	SizeLimit OptString `json:"size_limit"`
 	// Allow or disallow attaching databases to the current database.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	AllowAttach OptBool `json:"allow_attach"`
 	// Block all database reads.
 	BlockReads OptBool `json:"block_reads"`
 	// Block all database writes.
 	BlockWrites OptBool `json:"block_writes"`
+	// Prevent the database from being deleted.
+	DeleteProtection OptBool `json:"delete_protection"`
 }
 
 // GetSizeLimit returns the value of SizeLimit.
@@ -1170,6 +1099,11 @@ func (s *DatabaseConfigurationInput) GetBlockWrites() OptBool {
 	return s.BlockWrites
 }
 
+// GetDeleteProtection returns the value of DeleteProtection.
+func (s *DatabaseConfigurationInput) GetDeleteProtection() OptBool {
+	return s.DeleteProtection
+}
+
 // SetSizeLimit sets the value of SizeLimit.
 func (s *DatabaseConfigurationInput) SetSizeLimit(val OptString) {
 	s.SizeLimit = val
@@ -1190,17 +1124,26 @@ func (s *DatabaseConfigurationInput) SetBlockWrites(val OptBool) {
 	s.BlockWrites = val
 }
 
+// SetDeleteProtection sets the value of DeleteProtection.
+func (s *DatabaseConfigurationInput) SetDeleteProtection(val OptBool) {
+	s.DeleteProtection = val
+}
+
 // Ref: #/components/schemas/DatabaseConfigurationResponse
 type DatabaseConfigurationResponse struct {
 	// The maximum size of the database in bytes. Values with units are also accepted, e.g. 1mb, 256mb,
 	// 1gb.
 	SizeLimit OptString `json:"size_limit"`
 	// Allow or disallow attaching databases to the current database.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	AllowAttach OptBool `json:"allow_attach"`
 	// The current status for blocked reads.
 	BlockReads OptBool `json:"block_reads"`
 	// The current status for blocked writes.
 	BlockWrites OptBool `json:"block_writes"`
+	// Prevent the database from being deleted.
+	DeleteProtection OptBool `json:"delete_protection"`
 }
 
 // GetSizeLimit returns the value of SizeLimit.
@@ -1223,6 +1166,11 @@ func (s *DatabaseConfigurationResponse) GetBlockWrites() OptBool {
 	return s.BlockWrites
 }
 
+// GetDeleteProtection returns the value of DeleteProtection.
+func (s *DatabaseConfigurationResponse) GetDeleteProtection() OptBool {
+	return s.DeleteProtection
+}
+
 // SetSizeLimit sets the value of SizeLimit.
 func (s *DatabaseConfigurationResponse) SetSizeLimit(val OptString) {
 	s.SizeLimit = val
@@ -1241,6 +1189,11 @@ func (s *DatabaseConfigurationResponse) SetBlockReads(val OptBool) {
 // SetBlockWrites sets the value of BlockWrites.
 func (s *DatabaseConfigurationResponse) SetBlockWrites(val OptBool) {
 	s.BlockWrites = val
+}
+
+// SetDeleteProtection sets the value of DeleteProtection.
+func (s *DatabaseConfigurationResponse) SetDeleteProtection(val OptBool) {
+	s.DeleteProtection = val
 }
 
 type DatabaseNotFoundResponse struct {
@@ -1264,6 +1217,45 @@ func (*DatabaseNotFoundResponse) getDatabaseRes()              {}
 func (*DatabaseNotFoundResponse) getDatabaseStatsRes()         {}
 func (*DatabaseNotFoundResponse) getDatabaseUsageRes()         {}
 func (*DatabaseNotFoundResponse) invalidateDatabaseTokensRes() {}
+
+type DatabaseParent struct {
+	// The parent database identifier.
+	ID OptString `json:"id"`
+	// The name of the parent database.
+	Name OptString `json:"name"`
+	// The timestamp when the database was branched from the parent.
+	BranchedAt OptDateTime `json:"branched_at"`
+}
+
+// GetID returns the value of ID.
+func (s *DatabaseParent) GetID() OptString {
+	return s.ID
+}
+
+// GetName returns the value of Name.
+func (s *DatabaseParent) GetName() OptString {
+	return s.Name
+}
+
+// GetBranchedAt returns the value of BranchedAt.
+func (s *DatabaseParent) GetBranchedAt() OptDateTime {
+	return s.BranchedAt
+}
+
+// SetID sets the value of ID.
+func (s *DatabaseParent) SetID(val OptString) {
+	s.ID = val
+}
+
+// SetName sets the value of Name.
+func (s *DatabaseParent) SetName(val OptString) {
+	s.Name = val
+}
+
+// SetBranchedAt sets the value of BranchedAt.
+func (s *DatabaseParent) SetBranchedAt(val OptDateTime) {
+	s.BranchedAt = val
+}
 
 // Ref: #/components/schemas/DatabaseStatsOutput
 type DatabaseStatsOutput struct {
@@ -2073,15 +2065,20 @@ type Group struct {
 	// The group name, unique across your organization.
 	Name OptString `json:"name"`
 	// The current libSQL server version the databases in that group are running.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	Version OptString `json:"version"`
 	// The group universal unique identifier (UUID).
 	UUID OptString `json:"uuid"`
 	// An array of location keys the group is located.
+	//
+	// Deprecated: schema marks this property as deprecated.
 	Locations []string `json:"locations"`
 	// The primary location key.
 	Primary OptString `json:"primary"`
-	// Groups on the free tier get archived after some inactivity.
-	Archived OptBool `json:"archived"`
+	// The current status for delete protection. If enabled, the group and all its databases cannot be
+	// deleted.
+	DeleteProtection OptBool `json:"delete_protection"`
 }
 
 // GetName returns the value of Name.
@@ -2109,9 +2106,9 @@ func (s *Group) GetPrimary() OptString {
 	return s.Primary
 }
 
-// GetArchived returns the value of Archived.
-func (s *Group) GetArchived() OptBool {
-	return s.Archived
+// GetDeleteProtection returns the value of DeleteProtection.
+func (s *Group) GetDeleteProtection() OptBool {
+	return s.DeleteProtection
 }
 
 // SetName sets the value of Name.
@@ -2139,12 +2136,44 @@ func (s *Group) SetPrimary(val OptString) {
 	s.Primary = val
 }
 
-// SetArchived sets the value of Archived.
-func (s *Group) SetArchived(val OptBool) {
-	s.Archived = val
+// SetDeleteProtection sets the value of DeleteProtection.
+func (s *Group) SetDeleteProtection(val OptBool) {
+	s.DeleteProtection = val
 }
 
 func (*Group) transferGroupRes() {}
+
+// Ref: #/components/schemas/GroupConfigurationInput
+type GroupConfigurationInput struct {
+	// Prevent the group from being deleted.
+	DeleteProtection OptBool `json:"delete_protection"`
+}
+
+// GetDeleteProtection returns the value of DeleteProtection.
+func (s *GroupConfigurationInput) GetDeleteProtection() OptBool {
+	return s.DeleteProtection
+}
+
+// SetDeleteProtection sets the value of DeleteProtection.
+func (s *GroupConfigurationInput) SetDeleteProtection(val OptBool) {
+	s.DeleteProtection = val
+}
+
+// Ref: #/components/schemas/GroupConfigurationResponse
+type GroupConfigurationResponse struct {
+	// Prevent the group from being deleted.
+	DeleteProtection OptBool `json:"delete_protection"`
+}
+
+// GetDeleteProtection returns the value of DeleteProtection.
+func (s *GroupConfigurationResponse) GetDeleteProtection() OptBool {
+	return s.DeleteProtection
+}
+
+// SetDeleteProtection sets the value of DeleteProtection.
+func (s *GroupConfigurationResponse) SetDeleteProtection(val OptBool) {
+	s.DeleteProtection = val
+}
 
 type GroupNotFoundResponse struct {
 	// The error message.
@@ -2172,8 +2201,6 @@ func (*GroupNotFoundResponse) unarchiveGroupRes()          {}
 func (*GroupNotFoundResponse) updateGroupDatabasesRes()    {}
 
 type Hostname string
-
-type ID string
 
 // Ref: #/components/schemas/Instance
 type Instance struct {
@@ -4045,52 +4072,6 @@ func (o OptHostname) Or(d Hostname) Hostname {
 	return d
 }
 
-// NewOptID returns new OptID with value set to v.
-func NewOptID(v ID) OptID {
-	return OptID{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptID is optional ID.
-type OptID struct {
-	Value ID
-	Set   bool
-}
-
-// IsSet returns true if OptID was set.
-func (o OptID) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptID) Reset() {
-	var v ID
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptID) SetTo(v ID) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptID) Get() (v ID, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptID) Or(d ID) ID {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
 // NewOptInstance returns new OptInstance with value set to v.
 func NewOptInstance(v Instance) OptInstance {
 	return OptInstance{
@@ -4643,6 +4624,69 @@ func (o OptName) Or(d Name) Name {
 	return d
 }
 
+// NewOptNilDatabaseParent returns new OptNilDatabaseParent with value set to v.
+func NewOptNilDatabaseParent(v DatabaseParent) OptNilDatabaseParent {
+	return OptNilDatabaseParent{
+		Value: v,
+		Set:   true,
+	}
+}
+
+// OptNilDatabaseParent is optional nullable DatabaseParent.
+type OptNilDatabaseParent struct {
+	Value DatabaseParent
+	Set   bool
+	Null  bool
+}
+
+// IsSet returns true if OptNilDatabaseParent was set.
+func (o OptNilDatabaseParent) IsSet() bool { return o.Set }
+
+// Reset unsets value.
+func (o *OptNilDatabaseParent) Reset() {
+	var v DatabaseParent
+	o.Value = v
+	o.Set = false
+	o.Null = false
+}
+
+// SetTo sets value to v.
+func (o *OptNilDatabaseParent) SetTo(v DatabaseParent) {
+	o.Set = true
+	o.Null = false
+	o.Value = v
+}
+
+// IsSet returns true if value is Null.
+func (o OptNilDatabaseParent) IsNull() bool { return o.Null }
+
+// SetNull sets value to null.
+func (o *OptNilDatabaseParent) SetToNull() {
+	o.Set = true
+	o.Null = true
+	var v DatabaseParent
+	o.Value = v
+}
+
+// Get returns value and boolean that denotes whether value was set.
+func (o OptNilDatabaseParent) Get() (v DatabaseParent, ok bool) {
+	if o.Null {
+		return v, false
+	}
+	if !o.Set {
+		return v, false
+	}
+	return o.Value, true
+}
+
+// Or returns value if set, or given parameter if does not.
+func (o OptNilDatabaseParent) Or(d DatabaseParent) DatabaseParent {
+	if v, ok := o.Get(); ok {
+		return v
+	}
+	return d
+}
+
 // NewOptNilDatabaseStatsOutputArray returns new OptNilDatabaseStatsOutputArray with value set to v.
 func NewOptNilDatabaseStatsOutputArray(v []DatabaseStatsOutput) OptNilDatabaseStatsOutputArray {
 	return OptNilDatabaseStatsOutputArray{
@@ -4763,69 +4807,6 @@ func (o OptNilInt) Get() (v int, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptNilInt) Or(d int) int {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptNilString returns new OptNilString with value set to v.
-func NewOptNilString(v string) OptNilString {
-	return OptNilString{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptNilString is optional nullable string.
-type OptNilString struct {
-	Value string
-	Set   bool
-	Null  bool
-}
-
-// IsSet returns true if OptNilString was set.
-func (o OptNilString) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptNilString) Reset() {
-	var v string
-	o.Value = v
-	o.Set = false
-	o.Null = false
-}
-
-// SetTo sets value to v.
-func (o *OptNilString) SetTo(v string) {
-	o.Set = true
-	o.Null = false
-	o.Value = v
-}
-
-// IsSet returns true if value is Null.
-func (o OptNilString) IsNull() bool { return o.Null }
-
-// SetNull sets value to null.
-func (o *OptNilString) SetToNull() {
-	o.Set = true
-	o.Null = true
-	var v string
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptNilString) Get() (v string, ok bool) {
-	if o.Null {
-		return v, false
-	}
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptNilString) Or(d string) string {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -5056,52 +5037,6 @@ func (o OptString) Get() (v string, ok bool) {
 
 // Or returns value if set, or given parameter if does not.
 func (o OptString) Or(d string) string {
-	if v, ok := o.Get(); ok {
-		return v
-	}
-	return d
-}
-
-// NewOptURI returns new OptURI with value set to v.
-func NewOptURI(v url.URL) OptURI {
-	return OptURI{
-		Value: v,
-		Set:   true,
-	}
-}
-
-// OptURI is optional url.URL.
-type OptURI struct {
-	Value url.URL
-	Set   bool
-}
-
-// IsSet returns true if OptURI was set.
-func (o OptURI) IsSet() bool { return o.Set }
-
-// Reset unsets value.
-func (o *OptURI) Reset() {
-	var v url.URL
-	o.Value = v
-	o.Set = false
-}
-
-// SetTo sets value to v.
-func (o *OptURI) SetTo(v url.URL) {
-	o.Set = true
-	o.Value = v
-}
-
-// Get returns value and boolean that denotes whether value was set.
-func (o OptURI) Get() (v url.URL, ok bool) {
-	if !o.Set {
-		return v, false
-	}
-	return o.Value, true
-}
-
-// Or returns value if set, or given parameter if does not.
-func (o OptURI) Or(d url.URL) url.URL {
 	if v, ok := o.Get(); ok {
 		return v
 	}
@@ -5634,21 +5569,6 @@ func (s *RemoveOrganizationMemberOK) SetMember(val OptUsername) {
 
 func (*RemoveOrganizationMemberOK) removeOrganizationMemberRes() {}
 
-type RevokeAPITokenOK struct {
-	// The revoked token name.
-	Token OptString `json:"token"`
-}
-
-// GetToken returns the value of Token.
-func (s *RevokeAPITokenOK) GetToken() OptString {
-	return s.Token
-}
-
-// SetToken sets the value of Token.
-func (s *RevokeAPITokenOK) SetToken(val OptString) {
-	s.Token = val
-}
-
 // The role assigned to the member.
 // Ref: #/components/schemas/Member/properties/role
 type Role string
@@ -5990,36 +5910,6 @@ func (s *UpdateOrganizationReq) GetOverages() OptBool {
 // SetOverages sets the value of Overages.
 func (s *UpdateOrganizationReq) SetOverages(val OptBool) {
 	s.Overages = val
-}
-
-type UploadDatabaseDumpOK struct {
-	// URL of the uploaded database dump.
-	DumpURL OptURI `json:"dump_url"`
-}
-
-// GetDumpURL returns the value of DumpURL.
-func (s *UploadDatabaseDumpOK) GetDumpURL() OptURI {
-	return s.DumpURL
-}
-
-// SetDumpURL sets the value of DumpURL.
-func (s *UploadDatabaseDumpOK) SetDumpURL(val OptURI) {
-	s.DumpURL = val
-}
-
-type UploadDatabaseDumpReq struct {
-	// Database dump file.
-	File ht.MultipartFile `json:"file"`
-}
-
-// GetFile returns the value of File.
-func (s *UploadDatabaseDumpReq) GetFile() ht.MultipartFile {
-	return s.File
-}
-
-// SetFile sets the value of File.
-func (s *UploadDatabaseDumpReq) SetFile(val ht.MultipartFile) {
-	s.File = val
 }
 
 type Username string

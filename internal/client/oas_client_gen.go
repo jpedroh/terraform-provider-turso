@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
+	"github.com/go-faster/jx"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
@@ -45,7 +46,7 @@ type Invoker interface {
 	// Returns a new API token belonging to a user.
 	//
 	// POST /v1/auth/api-tokens/{tokenName}
-	CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (*CreateAPITokenOK, error)
+	CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (jx.Raw, error)
 	// CreateDatabase invokes createDatabase operation.
 	//
 	// Creates a new database in a group for the organization or user.
@@ -124,6 +125,12 @@ type Invoker interface {
 	//
 	// GET /v1/organizations/{organizationSlug}/groups/{groupName}
 	GetGroup(ctx context.Context, params GetGroupParams) (GetGroupRes, error)
+	// GetGroupConfiguration invokes getGroupConfiguration operation.
+	//
+	// Retrieve an individual group configuration belonging to the organization or user.
+	//
+	// GET /v1/organizations/{organizationSlug}/groups/{groupName}/configuration
+	GetGroupConfiguration(ctx context.Context, params GetGroupConfigurationParams) (*GroupConfigurationResponse, error)
 	// GetOrganization invokes getOrganization operation.
 	//
 	// Retrieve details of a specific organization.
@@ -251,7 +258,7 @@ type Invoker interface {
 	// Revokes the provided API token belonging to a user.
 	//
 	// DELETE /v1/auth/api-tokens/{tokenName}
-	RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (*RevokeAPITokenOK, error)
+	RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (jx.Raw, error)
 	// TransferGroup invokes transferGroup operation.
 	//
 	// Transfer a group to another organization that you own or a member of.
@@ -270,6 +277,12 @@ type Invoker interface {
 	//
 	// PATCH /v1/organizations/{organizationSlug}/databases/{databaseName}/configuration
 	UpdateDatabaseConfiguration(ctx context.Context, request *DatabaseConfigurationInput, params UpdateDatabaseConfigurationParams) (*DatabaseConfigurationResponse, error)
+	// UpdateGroupConfiguration invokes updateGroupConfiguration operation.
+	//
+	// Update a group configuration belonging to the organization or user.
+	//
+	// PATCH /v1/organizations/{organizationSlug}/groups/{groupName}/configuration
+	UpdateGroupConfiguration(ctx context.Context, request *GroupConfigurationInput, params UpdateGroupConfigurationParams) (*GroupConfigurationResponse, error)
 	// UpdateGroupDatabases invokes updateGroupDatabases operation.
 	//
 	// Updates all databases in the group to the latest libSQL version.
@@ -289,13 +302,6 @@ type Invoker interface {
 	//
 	// PATCH /v1/organizations/{organizationSlug}
 	UpdateOrganization(ctx context.Context, request *UpdateOrganizationReq, params UpdateOrganizationParams) (*UpdateOrganizationOK, error)
-	// UploadDatabaseDump invokes uploadDatabaseDump operation.
-	//
-	// Upload a SQL dump to be used when [creating a new database](/api-reference/databases/create) from
-	// seed.
-	//
-	// POST /v1/organizations/{organizationSlug}/databases/dumps
-	UploadDatabaseDump(ctx context.Context, request *UploadDatabaseDumpReq, params UploadDatabaseDumpParams) (*UploadDatabaseDumpOK, error)
 	// ValidateAPIToken invokes validateAPIToken operation.
 	//
 	// Validates an API token belonging to a user.
@@ -574,12 +580,12 @@ func (c *Client) sendAddOrganizationMember(ctx context.Context, request *AddOrga
 // Returns a new API token belonging to a user.
 //
 // POST /v1/auth/api-tokens/{tokenName}
-func (c *Client) CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (*CreateAPITokenOK, error) {
+func (c *Client) CreateAPIToken(ctx context.Context, params CreateAPITokenParams) (jx.Raw, error) {
 	res, err := c.sendCreateAPIToken(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendCreateAPIToken(ctx context.Context, params CreateAPITokenParams) (res *CreateAPITokenOK, err error) {
+func (c *Client) sendCreateAPIToken(ctx context.Context, params CreateAPITokenParams) (res jx.Raw, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("createAPIToken"),
 		semconv.HTTPRequestMethodKey.String("POST"),
@@ -2190,6 +2196,116 @@ func (c *Client) sendGetGroup(ctx context.Context, params GetGroupParams) (res G
 	return result, nil
 }
 
+// GetGroupConfiguration invokes getGroupConfiguration operation.
+//
+// Retrieve an individual group configuration belonging to the organization or user.
+//
+// GET /v1/organizations/{organizationSlug}/groups/{groupName}/configuration
+func (c *Client) GetGroupConfiguration(ctx context.Context, params GetGroupConfigurationParams) (*GroupConfigurationResponse, error) {
+	res, err := c.sendGetGroupConfiguration(ctx, params)
+	return res, err
+}
+
+func (c *Client) sendGetGroupConfiguration(ctx context.Context, params GetGroupConfigurationParams) (res *GroupConfigurationResponse, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("getGroupConfiguration"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/groups/{groupName}/configuration"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, GetGroupConfigurationOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [5]string
+	pathParts[0] = "/v1/organizations/"
+	{
+		// Encode "organizationSlug" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationSlug",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/groups/"
+	{
+		// Encode "groupName" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "groupName",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.StringToString(params.GroupName))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[3] = encoded
+	}
+	pathParts[4] = "/configuration"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "GET", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeGetGroupConfigurationResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // GetOrganization invokes getOrganization operation.
 //
 // Retrieve details of a specific organization.
@@ -3166,6 +3282,23 @@ func (c *Client) sendListDatabases(ctx context.Context, params ListDatabasesPara
 
 		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
 			if val, ok := params.Schema.Get(); ok {
+				return e.EncodeValue(conv.StringToString(val))
+			}
+			return nil
+		}); err != nil {
+			return res, errors.Wrap(err, "encode query")
+		}
+	}
+	{
+		// Encode "parent" parameter.
+		cfg := uri.QueryParameterEncodingConfig{
+			Name:    "parent",
+			Style:   uri.QueryStyleForm,
+			Explode: true,
+		}
+
+		if err := q.EncodeParam(cfg, func(e uri.Encoder) error {
+			if val, ok := params.Parent.Get(); ok {
 				return e.EncodeValue(conv.StringToString(val))
 			}
 			return nil
@@ -4189,12 +4322,12 @@ func (c *Client) sendRemoveOrganizationMember(ctx context.Context, params Remove
 // Revokes the provided API token belonging to a user.
 //
 // DELETE /v1/auth/api-tokens/{tokenName}
-func (c *Client) RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (*RevokeAPITokenOK, error) {
+func (c *Client) RevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (jx.Raw, error) {
 	res, err := c.sendRevokeAPIToken(ctx, params)
 	return res, err
 }
 
-func (c *Client) sendRevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (res *RevokeAPITokenOK, err error) {
+func (c *Client) sendRevokeAPIToken(ctx context.Context, params RevokeAPITokenParams) (res jx.Raw, err error) {
 	otelAttrs := []attribute.KeyValue{
 		otelogen.OperationID("revokeAPIToken"),
 		semconv.HTTPRequestMethodKey.String("DELETE"),
@@ -4610,6 +4743,119 @@ func (c *Client) sendUpdateDatabaseConfiguration(ctx context.Context, request *D
 	return result, nil
 }
 
+// UpdateGroupConfiguration invokes updateGroupConfiguration operation.
+//
+// Update a group configuration belonging to the organization or user.
+//
+// PATCH /v1/organizations/{organizationSlug}/groups/{groupName}/configuration
+func (c *Client) UpdateGroupConfiguration(ctx context.Context, request *GroupConfigurationInput, params UpdateGroupConfigurationParams) (*GroupConfigurationResponse, error) {
+	res, err := c.sendUpdateGroupConfiguration(ctx, request, params)
+	return res, err
+}
+
+func (c *Client) sendUpdateGroupConfiguration(ctx context.Context, request *GroupConfigurationInput, params UpdateGroupConfigurationParams) (res *GroupConfigurationResponse, err error) {
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("updateGroupConfiguration"),
+		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/groups/{groupName}/configuration"),
+	}
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		elapsedDuration := time.Since(startTime)
+		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
+	}()
+
+	// Increment request counter.
+	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+
+	// Start a span for this request.
+	ctx, span := c.cfg.Tracer.Start(ctx, UpdateGroupConfigurationOperation,
+		trace.WithAttributes(otelAttrs...),
+		clientSpanKind,
+	)
+	// Track stage for error reporting.
+	var stage string
+	defer func() {
+		if err != nil {
+			span.RecordError(err)
+			span.SetStatus(codes.Error, stage)
+			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
+		}
+		span.End()
+	}()
+
+	stage = "BuildURL"
+	u := uri.Clone(c.requestURL(ctx))
+	var pathParts [5]string
+	pathParts[0] = "/v1/organizations/"
+	{
+		// Encode "organizationSlug" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "organizationSlug",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[1] = encoded
+	}
+	pathParts[2] = "/groups/"
+	{
+		// Encode "groupName" parameter.
+		e := uri.NewPathEncoder(uri.PathEncoderConfig{
+			Param:   "groupName",
+			Style:   uri.PathStyleSimple,
+			Explode: false,
+		})
+		if err := func() error {
+			return e.EncodeValue(conv.StringToString(params.GroupName))
+		}(); err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		encoded, err := e.Result()
+		if err != nil {
+			return res, errors.Wrap(err, "encode path")
+		}
+		pathParts[3] = encoded
+	}
+	pathParts[4] = "/configuration"
+	uri.AddPathParts(u, pathParts[:]...)
+
+	stage = "EncodeRequest"
+	r, err := ht.NewRequest(ctx, "PATCH", u)
+	if err != nil {
+		return res, errors.Wrap(err, "create request")
+	}
+	if err := encodeUpdateGroupConfigurationRequest(request, r); err != nil {
+		return res, errors.Wrap(err, "encode request")
+	}
+
+	stage = "SendRequest"
+	resp, err := c.cfg.Client.Do(r)
+	if err != nil {
+		return res, errors.Wrap(err, "do request")
+	}
+	defer resp.Body.Close()
+
+	stage = "DecodeResponse"
+	result, err := decodeUpdateGroupConfigurationResponse(resp)
+	if err != nil {
+		return res, errors.Wrap(err, "decode response")
+	}
+
+	return result, nil
+}
+
 // UpdateGroupDatabases invokes updateGroupDatabases operation.
 //
 // Updates all databases in the group to the latest libSQL version.
@@ -4919,101 +5165,6 @@ func (c *Client) sendUpdateOrganization(ctx context.Context, request *UpdateOrga
 
 	stage = "DecodeResponse"
 	result, err := decodeUpdateOrganizationResponse(resp)
-	if err != nil {
-		return res, errors.Wrap(err, "decode response")
-	}
-
-	return result, nil
-}
-
-// UploadDatabaseDump invokes uploadDatabaseDump operation.
-//
-// Upload a SQL dump to be used when [creating a new database](/api-reference/databases/create) from
-// seed.
-//
-// POST /v1/organizations/{organizationSlug}/databases/dumps
-func (c *Client) UploadDatabaseDump(ctx context.Context, request *UploadDatabaseDumpReq, params UploadDatabaseDumpParams) (*UploadDatabaseDumpOK, error) {
-	res, err := c.sendUploadDatabaseDump(ctx, request, params)
-	return res, err
-}
-
-func (c *Client) sendUploadDatabaseDump(ctx context.Context, request *UploadDatabaseDumpReq, params UploadDatabaseDumpParams) (res *UploadDatabaseDumpOK, err error) {
-	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("uploadDatabaseDump"),
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/databases/dumps"),
-	}
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		elapsedDuration := time.Since(startTime)
-		c.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), metric.WithAttributes(otelAttrs...))
-	}()
-
-	// Increment request counter.
-	c.requests.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-
-	// Start a span for this request.
-	ctx, span := c.cfg.Tracer.Start(ctx, UploadDatabaseDumpOperation,
-		trace.WithAttributes(otelAttrs...),
-		clientSpanKind,
-	)
-	// Track stage for error reporting.
-	var stage string
-	defer func() {
-		if err != nil {
-			span.RecordError(err)
-			span.SetStatus(codes.Error, stage)
-			c.errors.Add(ctx, 1, metric.WithAttributes(otelAttrs...))
-		}
-		span.End()
-	}()
-
-	stage = "BuildURL"
-	u := uri.Clone(c.requestURL(ctx))
-	var pathParts [3]string
-	pathParts[0] = "/v1/organizations/"
-	{
-		// Encode "organizationSlug" parameter.
-		e := uri.NewPathEncoder(uri.PathEncoderConfig{
-			Param:   "organizationSlug",
-			Style:   uri.PathStyleSimple,
-			Explode: false,
-		})
-		if err := func() error {
-			return e.EncodeValue(conv.StringToString(params.OrganizationSlug))
-		}(); err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		encoded, err := e.Result()
-		if err != nil {
-			return res, errors.Wrap(err, "encode path")
-		}
-		pathParts[1] = encoded
-	}
-	pathParts[2] = "/databases/dumps"
-	uri.AddPathParts(u, pathParts[:]...)
-
-	stage = "EncodeRequest"
-	r, err := ht.NewRequest(ctx, "POST", u)
-	if err != nil {
-		return res, errors.Wrap(err, "create request")
-	}
-	if err := encodeUploadDatabaseDumpRequest(request, r); err != nil {
-		return res, errors.Wrap(err, "encode request")
-	}
-
-	stage = "SendRequest"
-	resp, err := c.cfg.Client.Do(r)
-	if err != nil {
-		return res, errors.Wrap(err, "do request")
-	}
-	defer resp.Body.Close()
-
-	stage = "DecodeResponse"
-	result, err := decodeUploadDatabaseDumpResponse(resp)
 	if err != nil {
 		return res, errors.Wrap(err, "decode response")
 	}

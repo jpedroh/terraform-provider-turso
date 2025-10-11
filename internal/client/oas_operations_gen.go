@@ -22,6 +22,7 @@ const (
 	GetDatabaseStatsOperation                OperationName = "GetDatabaseStats"
 	GetDatabaseUsageOperation                OperationName = "GetDatabaseUsage"
 	GetGroupOperation                        OperationName = "GetGroup"
+	GetGroupConfigurationOperation           OperationName = "GetGroupConfiguration"
 	GetOrganizationOperation                 OperationName = "GetOrganization"
 	GetOrganizationMemberOperation           OperationName = "GetOrganizationMember"
 	GetOrganizationSubscriptionOperation     OperationName = "GetOrganizationSubscription"
@@ -46,9 +47,9 @@ const (
 	TransferGroupOperation                   OperationName = "TransferGroup"
 	UnarchiveGroupOperation                  OperationName = "UnarchiveGroup"
 	UpdateDatabaseConfigurationOperation     OperationName = "UpdateDatabaseConfiguration"
+	UpdateGroupConfigurationOperation        OperationName = "UpdateGroupConfiguration"
 	UpdateGroupDatabasesOperation            OperationName = "UpdateGroupDatabases"
 	UpdateMemberRoleOperation                OperationName = "UpdateMemberRole"
 	UpdateOrganizationOperation              OperationName = "UpdateOrganization"
-	UploadDatabaseDumpOperation              OperationName = "UploadDatabaseDump"
 	ValidateAPITokenOperation                OperationName = "ValidateAPIToken"
 )

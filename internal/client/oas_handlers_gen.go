@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/go-faster/errors"
+	"github.com/go-faster/jx"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/codes"
 	"go.opentelemetry.io/otel/metric"
@@ -414,7 +415,7 @@ func (s *Server) handleCreateAPITokenRequest(args [1]string, argsEscaped bool, w
 		return
 	}
 
-	var response *CreateAPITokenOK
+	var response jx.Raw
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -434,7 +435,7 @@ func (s *Server) handleCreateAPITokenRequest(args [1]string, argsEscaped bool, w
 		type (
 			Request  = struct{}
 			Params   = CreateAPITokenParams
-			Response = *CreateAPITokenOK
+			Response = jx.Raw
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -2393,6 +2394,148 @@ func (s *Server) handleGetGroupRequest(args [2]string, argsEscaped bool, w http.
 	}
 }
 
+// handleGetGroupConfigurationRequest handles getGroupConfiguration operation.
+//
+// Retrieve an individual group configuration belonging to the organization or user.
+//
+// GET /v1/organizations/{organizationSlug}/groups/{groupName}/configuration
+func (s *Server) handleGetGroupConfigurationRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("getGroupConfiguration"),
+		semconv.HTTPRequestMethodKey.String("GET"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/groups/{groupName}/configuration"),
+	}
+
+	// Start a span for this request.
+	ctx, span := s.cfg.Tracer.Start(r.Context(), GetGroupConfigurationOperation,
+		trace.WithAttributes(otelAttrs...),
+		serverSpanKind,
+	)
+	defer span.End()
+
+	// Add Labeler to context.
+	labeler := &Labeler{attrs: otelAttrs}
+	ctx = contextWithLabeler(ctx, labeler)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+
+		attrSet := labeler.AttributeSet()
+		attrs := attrSet.ToSlice()
+		code := statusWriter.status
+		if code != 0 {
+			codeAttr := semconv.HTTPResponseStatusCode(code)
+			attrs = append(attrs, codeAttr)
+			span.SetAttributes(codeAttr)
+		}
+		attrOpt := metric.WithAttributes(attrs...)
+
+		// Increment request counter.
+		s.requests.Add(ctx, 1, attrOpt)
+
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		s.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), attrOpt)
+	}()
+
+	var (
+		recordError = func(stage string, err error) {
+			span.RecordError(err)
+
+			// https://opentelemetry.io/docs/specs/semconv/http/http-spans/#status
+			// Span Status MUST be left unset if HTTP status code was in the 1xx, 2xx or 3xx ranges,
+			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
+			// max redirects exceeded), in which case status MUST be set to Error.
+			code := statusWriter.status
+			if code >= 100 && code < 500 {
+				span.SetStatus(codes.Error, stage)
+			}
+
+			attrSet := labeler.AttributeSet()
+			attrs := attrSet.ToSlice()
+			if code != 0 {
+				attrs = append(attrs, semconv.HTTPResponseStatusCode(code))
+			}
+
+			s.errors.Add(ctx, 1, metric.WithAttributes(attrs...))
+		}
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: GetGroupConfigurationOperation,
+			ID:   "getGroupConfiguration",
+		}
+	)
+	params, err := decodeGetGroupConfigurationParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	var response *GroupConfigurationResponse
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    GetGroupConfigurationOperation,
+			OperationSummary: "Retrieve Group Configuration",
+			OperationID:      "getGroupConfiguration",
+			Body:             nil,
+			Params: middleware.Parameters{
+				{
+					Name: "organizationSlug",
+					In:   "path",
+				}: params.OrganizationSlug,
+				{
+					Name: "groupName",
+					In:   "path",
+				}: params.GroupName,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = struct{}
+			Params   = GetGroupConfigurationParams
+			Response = *GroupConfigurationResponse
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackGetGroupConfigurationParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.GetGroupConfiguration(ctx, params)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.GetGroupConfiguration(ctx, params)
+	}
+	if err != nil {
+		defer recordError("Internal", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	if err := encodeGetGroupConfigurationResponse(response, w, span); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
 // handleGetOrganizationRequest handles getOrganization operation.
 //
 // Retrieve details of a specific organization.
@@ -3754,6 +3897,10 @@ func (s *Server) handleListDatabasesRequest(args [1]string, argsEscaped bool, w 
 					Name: "schema",
 					In:   "query",
 				}: params.Schema,
+				{
+					Name: "parent",
+					In:   "query",
+				}: params.Parent,
 			},
 			Raw: r,
 		}
@@ -5246,7 +5393,7 @@ func (s *Server) handleRevokeAPITokenRequest(args [1]string, argsEscaped bool, w
 		return
 	}
 
-	var response *RevokeAPITokenOK
+	var response jx.Raw
 	if m := s.cfg.Middleware; m != nil {
 		mreq := middleware.Request{
 			Context:          ctx,
@@ -5266,7 +5413,7 @@ func (s *Server) handleRevokeAPITokenRequest(args [1]string, argsEscaped bool, w
 		type (
 			Request  = struct{}
 			Params   = RevokeAPITokenParams
-			Response = *RevokeAPITokenOK
+			Response = jx.Raw
 		)
 		response, err = middleware.HookMiddleware[
 			Request,
@@ -5755,6 +5902,163 @@ func (s *Server) handleUpdateDatabaseConfigurationRequest(args [2]string, argsEs
 	}
 }
 
+// handleUpdateGroupConfigurationRequest handles updateGroupConfiguration operation.
+//
+// Update a group configuration belonging to the organization or user.
+//
+// PATCH /v1/organizations/{organizationSlug}/groups/{groupName}/configuration
+func (s *Server) handleUpdateGroupConfigurationRequest(args [2]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
+	statusWriter := &codeRecorder{ResponseWriter: w}
+	w = statusWriter
+	otelAttrs := []attribute.KeyValue{
+		otelogen.OperationID("updateGroupConfiguration"),
+		semconv.HTTPRequestMethodKey.String("PATCH"),
+		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/groups/{groupName}/configuration"),
+	}
+
+	// Start a span for this request.
+	ctx, span := s.cfg.Tracer.Start(r.Context(), UpdateGroupConfigurationOperation,
+		trace.WithAttributes(otelAttrs...),
+		serverSpanKind,
+	)
+	defer span.End()
+
+	// Add Labeler to context.
+	labeler := &Labeler{attrs: otelAttrs}
+	ctx = contextWithLabeler(ctx, labeler)
+
+	// Run stopwatch.
+	startTime := time.Now()
+	defer func() {
+		elapsedDuration := time.Since(startTime)
+
+		attrSet := labeler.AttributeSet()
+		attrs := attrSet.ToSlice()
+		code := statusWriter.status
+		if code != 0 {
+			codeAttr := semconv.HTTPResponseStatusCode(code)
+			attrs = append(attrs, codeAttr)
+			span.SetAttributes(codeAttr)
+		}
+		attrOpt := metric.WithAttributes(attrs...)
+
+		// Increment request counter.
+		s.requests.Add(ctx, 1, attrOpt)
+
+		// Use floating point division here for higher precision (instead of Millisecond method).
+		s.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), attrOpt)
+	}()
+
+	var (
+		recordError = func(stage string, err error) {
+			span.RecordError(err)
+
+			// https://opentelemetry.io/docs/specs/semconv/http/http-spans/#status
+			// Span Status MUST be left unset if HTTP status code was in the 1xx, 2xx or 3xx ranges,
+			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
+			// max redirects exceeded), in which case status MUST be set to Error.
+			code := statusWriter.status
+			if code >= 100 && code < 500 {
+				span.SetStatus(codes.Error, stage)
+			}
+
+			attrSet := labeler.AttributeSet()
+			attrs := attrSet.ToSlice()
+			if code != 0 {
+				attrs = append(attrs, semconv.HTTPResponseStatusCode(code))
+			}
+
+			s.errors.Add(ctx, 1, metric.WithAttributes(attrs...))
+		}
+		err          error
+		opErrContext = ogenerrors.OperationContext{
+			Name: UpdateGroupConfigurationOperation,
+			ID:   "updateGroupConfiguration",
+		}
+	)
+	params, err := decodeUpdateGroupConfigurationParams(args, argsEscaped, r)
+	if err != nil {
+		err = &ogenerrors.DecodeParamsError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeParams", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+	request, close, err := s.decodeUpdateGroupConfigurationRequest(r)
+	if err != nil {
+		err = &ogenerrors.DecodeRequestError{
+			OperationContext: opErrContext,
+			Err:              err,
+		}
+		defer recordError("DecodeRequest", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+	defer func() {
+		if err := close(); err != nil {
+			recordError("CloseRequest", err)
+		}
+	}()
+
+	var response *GroupConfigurationResponse
+	if m := s.cfg.Middleware; m != nil {
+		mreq := middleware.Request{
+			Context:          ctx,
+			OperationName:    UpdateGroupConfigurationOperation,
+			OperationSummary: "Update Group Configuration",
+			OperationID:      "updateGroupConfiguration",
+			Body:             request,
+			Params: middleware.Parameters{
+				{
+					Name: "organizationSlug",
+					In:   "path",
+				}: params.OrganizationSlug,
+				{
+					Name: "groupName",
+					In:   "path",
+				}: params.GroupName,
+			},
+			Raw: r,
+		}
+
+		type (
+			Request  = *GroupConfigurationInput
+			Params   = UpdateGroupConfigurationParams
+			Response = *GroupConfigurationResponse
+		)
+		response, err = middleware.HookMiddleware[
+			Request,
+			Params,
+			Response,
+		](
+			m,
+			mreq,
+			unpackUpdateGroupConfigurationParams,
+			func(ctx context.Context, request Request, params Params) (response Response, err error) {
+				response, err = s.h.UpdateGroupConfiguration(ctx, request, params)
+				return response, err
+			},
+		)
+	} else {
+		response, err = s.h.UpdateGroupConfiguration(ctx, request, params)
+	}
+	if err != nil {
+		defer recordError("Internal", err)
+		s.cfg.ErrorHandler(ctx, w, r, err)
+		return
+	}
+
+	if err := encodeUpdateGroupConfigurationResponse(response, w, span); err != nil {
+		defer recordError("EncodeResponse", err)
+		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
+			s.cfg.ErrorHandler(ctx, w, r, err)
+		}
+		return
+	}
+}
+
 // handleUpdateGroupDatabasesRequest handles updateGroupDatabases operation.
 //
 // Updates all databases in the group to the latest libSQL version.
@@ -6200,160 +6504,6 @@ func (s *Server) handleUpdateOrganizationRequest(args [1]string, argsEscaped boo
 	}
 
 	if err := encodeUpdateOrganizationResponse(response, w, span); err != nil {
-		defer recordError("EncodeResponse", err)
-		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
-			s.cfg.ErrorHandler(ctx, w, r, err)
-		}
-		return
-	}
-}
-
-// handleUploadDatabaseDumpRequest handles uploadDatabaseDump operation.
-//
-// Upload a SQL dump to be used when [creating a new database](/api-reference/databases/create) from
-// seed.
-//
-// POST /v1/organizations/{organizationSlug}/databases/dumps
-func (s *Server) handleUploadDatabaseDumpRequest(args [1]string, argsEscaped bool, w http.ResponseWriter, r *http.Request) {
-	statusWriter := &codeRecorder{ResponseWriter: w}
-	w = statusWriter
-	otelAttrs := []attribute.KeyValue{
-		otelogen.OperationID("uploadDatabaseDump"),
-		semconv.HTTPRequestMethodKey.String("POST"),
-		semconv.HTTPRouteKey.String("/v1/organizations/{organizationSlug}/databases/dumps"),
-	}
-
-	// Start a span for this request.
-	ctx, span := s.cfg.Tracer.Start(r.Context(), UploadDatabaseDumpOperation,
-		trace.WithAttributes(otelAttrs...),
-		serverSpanKind,
-	)
-	defer span.End()
-
-	// Add Labeler to context.
-	labeler := &Labeler{attrs: otelAttrs}
-	ctx = contextWithLabeler(ctx, labeler)
-
-	// Run stopwatch.
-	startTime := time.Now()
-	defer func() {
-		elapsedDuration := time.Since(startTime)
-
-		attrSet := labeler.AttributeSet()
-		attrs := attrSet.ToSlice()
-		code := statusWriter.status
-		if code != 0 {
-			codeAttr := semconv.HTTPResponseStatusCode(code)
-			attrs = append(attrs, codeAttr)
-			span.SetAttributes(codeAttr)
-		}
-		attrOpt := metric.WithAttributes(attrs...)
-
-		// Increment request counter.
-		s.requests.Add(ctx, 1, attrOpt)
-
-		// Use floating point division here for higher precision (instead of Millisecond method).
-		s.duration.Record(ctx, float64(elapsedDuration)/float64(time.Millisecond), attrOpt)
-	}()
-
-	var (
-		recordError = func(stage string, err error) {
-			span.RecordError(err)
-
-			// https://opentelemetry.io/docs/specs/semconv/http/http-spans/#status
-			// Span Status MUST be left unset if HTTP status code was in the 1xx, 2xx or 3xx ranges,
-			// unless there was another error (e.g., network error receiving the response body; or 3xx codes with
-			// max redirects exceeded), in which case status MUST be set to Error.
-			code := statusWriter.status
-			if code >= 100 && code < 500 {
-				span.SetStatus(codes.Error, stage)
-			}
-
-			attrSet := labeler.AttributeSet()
-			attrs := attrSet.ToSlice()
-			if code != 0 {
-				attrs = append(attrs, semconv.HTTPResponseStatusCode(code))
-			}
-
-			s.errors.Add(ctx, 1, metric.WithAttributes(attrs...))
-		}
-		err          error
-		opErrContext = ogenerrors.OperationContext{
-			Name: UploadDatabaseDumpOperation,
-			ID:   "uploadDatabaseDump",
-		}
-	)
-	params, err := decodeUploadDatabaseDumpParams(args, argsEscaped, r)
-	if err != nil {
-		err = &ogenerrors.DecodeParamsError{
-			OperationContext: opErrContext,
-			Err:              err,
-		}
-		defer recordError("DecodeParams", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
-	request, close, err := s.decodeUploadDatabaseDumpRequest(r)
-	if err != nil {
-		err = &ogenerrors.DecodeRequestError{
-			OperationContext: opErrContext,
-			Err:              err,
-		}
-		defer recordError("DecodeRequest", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
-	defer func() {
-		if err := close(); err != nil {
-			recordError("CloseRequest", err)
-		}
-	}()
-
-	var response *UploadDatabaseDumpOK
-	if m := s.cfg.Middleware; m != nil {
-		mreq := middleware.Request{
-			Context:          ctx,
-			OperationName:    UploadDatabaseDumpOperation,
-			OperationSummary: "Upload SQLite Dump",
-			OperationID:      "uploadDatabaseDump",
-			Body:             request,
-			Params: middleware.Parameters{
-				{
-					Name: "organizationSlug",
-					In:   "path",
-				}: params.OrganizationSlug,
-			},
-			Raw: r,
-		}
-
-		type (
-			Request  = *UploadDatabaseDumpReq
-			Params   = UploadDatabaseDumpParams
-			Response = *UploadDatabaseDumpOK
-		)
-		response, err = middleware.HookMiddleware[
-			Request,
-			Params,
-			Response,
-		](
-			m,
-			mreq,
-			unpackUploadDatabaseDumpParams,
-			func(ctx context.Context, request Request, params Params) (response Response, err error) {
-				response, err = s.h.UploadDatabaseDump(ctx, request, params)
-				return response, err
-			},
-		)
-	} else {
-		response, err = s.h.UploadDatabaseDump(ctx, request, params)
-	}
-	if err != nil {
-		defer recordError("Internal", err)
-		s.cfg.ErrorHandler(ctx, w, r, err)
-		return
-	}
-
-	if err := encodeUploadDatabaseDumpResponse(response, w, span); err != nil {
 		defer recordError("EncodeResponse", err)
 		if !errors.Is(err, ht.ErrInternalServerErrorResponse) {
 			s.cfg.ErrorHandler(ctx, w, r, err)

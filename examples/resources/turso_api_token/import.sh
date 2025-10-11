@@ -1,1 +1,0 @@
-terraform import turso_api_token.example_api_token example_api_token/token_value

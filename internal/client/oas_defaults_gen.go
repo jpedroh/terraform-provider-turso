@@ -11,14 +11,6 @@ func (s *AddOrganizationMemberReq) setDefaults() {
 }
 
 // setDefaults set default value of fields.
-func (s *Database) setDefaults() {
-	{
-		val := string("logical")
-		s.Type.SetTo(val)
-	}
-}
-
-// setDefaults set default value of fields.
 func (s *InviteOrganizationMemberReq) setDefaults() {
 	{
 		val := InviteOrganizationMemberReqRole("member")
