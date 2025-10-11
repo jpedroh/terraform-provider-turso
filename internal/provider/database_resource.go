@@ -252,6 +252,27 @@ func (r *DatabaseResource) ImportState(ctx context.Context, req resource.ImportS
 		return
 	}
 
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_name"), idParts[0])...)
-	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), idParts[1])...)
+	organization_name := idParts[0]
+	name := idParts[1]
+
+	tflog.Debug(ctx, fmt.Sprintf("Importing database %s/%s", organization_name, name))
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("organization_name"), organization_name)...)
+	resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("name"), name)...)
+
+	res, err := r.client.GetDatabase(ctx, client.GetDatabaseParams{
+		OrganizationSlug: organization_name,
+		DatabaseName:     name,
+	})
+
+	if err != nil {
+		resp.Diagnostics.AddError("Client Error", fmt.Sprintf("Unable to read database, got error: %s", err.Error()))
+		return
+	}
+
+	switch p := res.(type) {
+	case *client.GetDatabaseOK:
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group"), types.StringValue(string(p.Database.Value.Group.Value)))...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("db_id"), types.StringValue(string(p.Database.Value.DbId.Value)))...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("hostname"), types.StringValue(string(p.Database.Value.Hostname.Value)))...)
+	}
 }
