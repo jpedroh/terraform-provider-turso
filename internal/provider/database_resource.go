@@ -271,8 +271,8 @@ func (r *DatabaseResource) ImportState(ctx context.Context, req resource.ImportS
 
 	switch p := res.(type) {
 	case *client.GetDatabaseOK:
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group"), types.StringValue(string(p.Database.Value.Group.Value)))...)
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("db_id"), types.StringValue(string(p.Database.Value.DbId.Value)))...)
-		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("hostname"), types.StringValue(string(p.Database.Value.Hostname.Value)))...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("group"), types.StringValue(p.Database.Value.Group.Value))...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("db_id"), types.StringValue(p.Database.Value.DbId.Value))...)
+		resp.Diagnostics.Append(resp.State.SetAttribute(ctx, path.Root("hostname"), types.StringValue(p.Database.Value.Hostname.Value))...)
 	}
 }
