@@ -102,6 +102,7 @@ func (p *TursoProvider) DataSources(ctx context.Context) []func() datasource.Dat
 		NewDatabaseDataSource,
 		NewOrganizationDataSource,
 		NewDatabaseConfigurationDataSource,
+		NewDatabaseInstanceDataSource,
 	}
 }
 
