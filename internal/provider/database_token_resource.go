@@ -8,6 +8,7 @@ import (
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
+	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringdefault"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/stringplanmodifier"
 	"github.com/hashicorp/terraform-plugin-framework/types"
 	"github.com/hashicorp/terraform-plugin-log/tflog"
@@ -66,6 +67,8 @@ func (r *DatabaseTokenResource) Schema(ctx context.Context, req resource.SchemaR
 			"authorization": schema.StringAttribute{
 				MarkdownDescription: "Authorization level for the token (full-access or read-only).",
 				Optional:            true,
+				Computed:            true,
+				Default:             stringdefault.StaticString("full-access"),
 				PlanModifiers: []planmodifier.String{
 					stringplanmodifier.RequiresReplace(),
 				},
@@ -111,10 +114,16 @@ func (r *DatabaseTokenResource) Create(ctx context.Context, req resource.CreateR
 		return
 	}
 
+	authorization := client.CreateDatabaseTokenAuthorizationFullAccess
+	if data.Authorization.ValueString() == "read-only" {
+		authorization = client.CreateDatabaseTokenAuthorizationReadOnly
+	}
+
 	res, err := r.client.CreateDatabaseToken(ctx, client.OptCreateTokenInput{}, client.CreateDatabaseTokenParams{
 		OrganizationSlug: data.OrganizationName.ValueString(),
 		DatabaseName:     data.DatabaseName.ValueString(),
 		Expiration:       client.NewOptString(data.Expiration.ValueString()),
+		Authorization:    client.NewOptCreateDatabaseTokenAuthorization(authorization),
 	})
 
 	if err != nil {
@@ -125,6 +134,7 @@ func (r *DatabaseTokenResource) Create(ctx context.Context, req resource.CreateR
 	switch p := res.(type) {
 	case *client.CreateDatabaseTokenOK:
 		data.JWT = types.StringValue(p.Jwt.Value)
+		data.Authorization = types.StringValue(string(authorization))
 	}
 
 	// Write logs using the tflog package
